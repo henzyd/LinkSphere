@@ -1,7 +1,7 @@
 {
-  "name": "chatbuzz",
+  "name": "vibrachat",
   "version": "1.0.0",
-  "description": "this is a clone of chatbuzz api",
+  "description": "this is a clone of vibrachat api",
   "main": "dist/index.js",
   "scripts": {
     "start:dev": "nodemon src/index.ts",
