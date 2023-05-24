@@ -1,7 +1,7 @@
 {
-  "name": "vibrachat",
+  "name": "linksphere",
   "version": "1.0.0",
-  "description": "this is a clone of vibrachat api",
+  "description": "this is a clone of linksphere api",
   "main": "dist/index.js",
   "scripts": {
     "start:dev": "nodemon src/index.ts",
