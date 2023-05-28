@@ -1,10 +1,46 @@
+import { Routes, Route } from "react-router-dom";
 import "./App.css";
+import { Home, Login, Signup } from "./pages";
+import { Suspense } from "react";
+import LazyLoader from "./components/LazyLoader";
+import NotFound from "./pages/NotFound";
+import AuthLayout from "./layouts/AuthLayout";
 
 function App() {
   return (
-    <>
-      <div className=" text-purple-600 font-black">Uche</div>
-    </>
+    <div className="App">
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <Suspense fallback={<LazyLoader />}>
+              <Home />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/login"
+          element={
+            <Suspense fallback={<LazyLoader />}>
+              <AuthLayout>
+                <Login />
+              </AuthLayout>
+            </Suspense>
+          }
+        />
+        <Route
+          path="/signup"
+          element={
+            <Suspense fallback={<LazyLoader />}>
+              <AuthLayout>
+                <Signup />
+              </AuthLayout>
+            </Suspense>
+          }
+        />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </div>
   );
 }
 

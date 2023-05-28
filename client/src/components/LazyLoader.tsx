@@ -1,0 +1,10 @@
+const LazyLoader = () => {
+  return (
+    <div className=" min-h-[60vh] flex justify-center flex-col items-center">
+      <span className="LazyLoader"></span>
+      <p className=" text-black font-medium text-lg">Loading...</p>
+    </div>
+  );
+};
+
+export default LazyLoader;
