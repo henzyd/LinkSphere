@@ -4,7 +4,7 @@ const Signup = () => {
   return (
     <>
       <Seo title="Signup" description="Signup to your LinkSphere account" />
-      <div>Signup</div>
+      <section className=""></section>
     </>
   );
 };

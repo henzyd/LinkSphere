@@ -3,6 +3,12 @@ export default {
   content: ["./src/**/*.{html,js,jsx,ts,tsx}"],
   theme: {
     extend: {
+      colors: {
+        Primary: "#0055FF",
+        Secondary: "#10D876",
+        Tertiary: "#343a40",
+        TextBlack: "#111",
+      },
       screens: {
         SmallPhones: { min: " 220px", max: "380px" },
         // => @media (min-width: 320px) { ... }

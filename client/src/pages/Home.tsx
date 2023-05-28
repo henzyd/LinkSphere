@@ -1,4 +1,3 @@
-import LazyLoader from "../components/LazyLoader";
 import Seo from "../utils/Seo";
 
 const Home = () => {

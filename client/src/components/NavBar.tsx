@@ -6,7 +6,7 @@ import Logo from "./Logo";
 
 const NavBar = () => {
   return (
-    <div>
+    <nav>
       <Logo />
 
       <Input
@@ -21,7 +21,7 @@ const NavBar = () => {
       <div>
         <IoMdNotificationsOutline />
       </div>
-    </div>
+    </nav>
   );
 };
 

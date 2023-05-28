@@ -4,6 +4,7 @@ import { Home, Login, Signup } from "./pages";
 import { Suspense } from "react";
 import LazyLoader from "./components/LazyLoader";
 import NotFound from "./pages/NotFound";
+import AuthLayout from "./layouts/AuthLayout";
 
 function App() {
   return (
@@ -21,7 +22,9 @@ function App() {
           path="/login"
           element={
             <Suspense fallback={<LazyLoader />}>
-              <Login />
+              <AuthLayout>
+                <Login />
+              </AuthLayout>
             </Suspense>
           }
         />
@@ -29,7 +32,9 @@ function App() {
           path="/signup"
           element={
             <Suspense fallback={<LazyLoader />}>
-              <Signup />
+              <AuthLayout>
+                <Signup />
+              </AuthLayout>
             </Suspense>
           }
         />
