@@ -1,14 +1,26 @@
 import express from "express";
+import morgan from "morgan";
+import AppError from "./utils/appError";
+import globalErrorHandler from "./controllers/errorController";
 
 const app = express();
 
+if (process.env.NODE_ENV === "development") {
+  app.use(morgan("dev"));
+}
+
+app.use(express.json());
 app.get("/", (req, res) => {
-  res.send("Hello World!");
+  res.status(200).json({
+    status: "success",
+    message: "Welcome to the LinkSphere server",
+  });
 });
 
-const PORT = 5010;
-app.listen(PORT, () => {
-  console.log(`Server running on port http://localhost:${PORT}/v1`);
+app.all("*", (req, res, next) => {
+  next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });
+
+app.use(globalErrorHandler);
 
 export default app;
