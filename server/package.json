@@ -1,17 +1,20 @@
 {
   "name": "linksphere",
   "version": "1.0.0",
-  "description": "this is a clone of linksphere api",
+  "description": "This is a social networking webapp.",
   "main": "dist/index.js",
   "scripts": {
-    "start:dev": "nodemon src/index.ts",
-    "start:prod": "node dist/index.js",
+    "start:dev": "set NODE_ENV=development&& nodemon src/index.ts",
+    "start:prod": "set NODE_ENV=production&& node dist/index.js",
+    "prismaStudio:dev": "dotenv -e .env.development -- npx prisma studio",
+    "prismaStudio:prod": "dotenv -e .env.production -- npx prisma studio",
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "henzyd",
   "license": "ISC",
   "devDependencies": {
+    "@types/cors": "^2.8.13",
     "@types/dotenv": "^8.2.0",
     "@types/express": "^4.17.17",
     "@types/morgan": "^1.9.4",
@@ -24,7 +27,10 @@
   },
   "dependencies": {
     "@prisma/client": "^4.14.1",
+    "cors": "^2.8.5",
     "dotenv": "^16.0.3",
-    "express": "^4.18.2"
+    "dotenv-cli": "^7.2.1",
+    "express": "^4.18.2",
+    "express-validator": "^7.0.1"
   }
 }

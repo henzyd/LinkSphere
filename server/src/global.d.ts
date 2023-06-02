@@ -3,7 +3,7 @@ declare global {
     interface ProcessEnv {
       NODE_ENV: "development" | "production";
       DATABASE_URL: string;
-      PORT: number;
+      PORT: string;
       // JWT_SECRET_KEY: string;
       // JWT_EXPIRE_IN: string;
       // ADMIN_HASH_ROUTE: string;
@@ -11,4 +11,8 @@ declare global {
   }
 }
 
+export interface CustomError {
+  field: string;
+  message: string;
+}
 export {};
