@@ -6,11 +6,11 @@ import { Response, Request, NextFunction } from "express";
 //   return new AppError(message, 400);
 // }
 
-// function handleDuplicateFieldDB(err) {
-//   const value = err.errmsg.match(/(["'])(\\?.)*?\1/)[0];
-//   const message = `Duplicate field value: ${value}. Please use another value`;
-//   return new AppError(message, 400);
-// }
+function handleDuplicateFieldDB(err: any) {
+  const value = err.meta.target[err.meta.target.length - 1]; //? Get the last element of the target array
+  const message = `Duplicate field value: ${value}.`;
+  return new AppError(message, 400);
+}
 
 // function handleValidationErrorDB(err) {
 //   const errors = Object.values(err.errors).map((el) => el.message);
@@ -40,6 +40,7 @@ function sendErrorProd(err: AppError, res: Response) {
     res.status(err.statusCode).json({
       status: err.status,
       message: err.message,
+      validationErrors: err.validationErrors,
     });
   } else {
     //? Programming or other unknown error: don't leak error details
@@ -52,7 +53,7 @@ function sendErrorProd(err: AppError, res: Response) {
 }
 
 function globalErrorHandler(
-  err: AppError,
+  err: any,
   req: Request,
   res: Response,
   next: NextFunction
@@ -61,15 +62,16 @@ function globalErrorHandler(
   err.status = err.status || "error";
 
   if (process.env.NODE_ENV === "development") {
-    sendErrorDev(err, res);
+    return sendErrorDev(err, res);
   } else if (process.env.NODE_ENV === "production") {
-    let error = structuredClone(err);
+    let error = JSON.parse(JSON.stringify(err));
+
+    if (error.code === "P2002") {
+      error = handleDuplicateFieldDB(error);
+    }
 
     // if (err instanceof mongoose.Error.CastError) {
     //   error = handleCastingErrorDB(err);
-    // }
-    // if (err.code === 11000) {
-    //   error = handleDuplicateFieldDB(err);
     // }
     // if (err instanceof mongoose.Error.ValidationError) {
     //   error = handleValidationErrorDB(err);
@@ -80,7 +82,7 @@ function globalErrorHandler(
     // if (err.name === "TokenExpiredError") {
     //   error = handleJWTExpiredError(err);
     // }
-    sendErrorProd(error, res);
+    return sendErrorProd(error, res);
   }
 }
 

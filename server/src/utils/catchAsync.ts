@@ -16,7 +16,7 @@ const catchAsync = (
    * @param next - Express next function.
    */
   return (req, res, next) => {
-    fn(req, res, next).catch((err: Error) => next(err));
+    fn(req, res, next).catch((err: any) => next(err));
   };
 };
 
