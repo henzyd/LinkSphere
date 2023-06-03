@@ -5,6 +5,7 @@ import globalErrorHandler from "./controllers/errorController";
 import authRoute from "./routes/authRoute";
 // import fs from "fs";
 import cors from "cors";
+import prisma from "./db";
 
 const app = express();
 
@@ -24,6 +25,16 @@ app.get("/", (req, res) => {
     message: `Welcome to the LinkSphere server <${process.env.NODE_ENV}>`,
   });
 });
+//? Delete all users
+// app.delete("/users", (req, res) => {
+//   prisma.user.deleteMany().then(() => {
+//     res.status(200).json({
+//       status: "success",
+//       message: "All users deleted",
+//     });
+//   });
+// });
+//?
 // app.post("/test", (req, res) => {
 //   console.log(req.body);
 
