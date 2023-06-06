@@ -5,6 +5,7 @@ import catchAsync from "../utils/catchAsync";
 import { customErrorFormatter } from "../utils/helper";
 import prisma from "../db";
 import AppError from "../utils/appError";
+import { signAccessToken, signRefreshToken } from "../utils/jwt";
 
 const signup = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -78,11 +79,16 @@ const login = catchAsync(
       },
     });
 
+    const accessToken = signAccessToken(user.id);
+    const refreshToken = signRefreshToken(user.id);
+
     res.status(200).json({
       status: "success",
       message: "User logged in successfully",
       data: {
         ...updatedUser,
+        accessToken,
+        refreshToken,
       },
     });
   }
