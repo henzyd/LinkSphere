@@ -10,15 +10,27 @@ const Button: React.FC<{
   endIcon?: ButtonProps["endIcon"];
   disabled?: ButtonProps["disabled"];
   loading?: boolean;
-}> = ({ children, color, variant, startIcon, endIcon, disabled, loading }) => {
-  const className: ButtonProps["className"] = `!text-base !p-4 !rounded-lg !px-6`;
+  type?: ButtonProps["type"];
+  className?: ButtonProps["className"];
+}> = ({
+  children,
+  color,
+  variant,
+  startIcon,
+  endIcon,
+  disabled,
+  loading,
+  type,
+  className,
+}) => {
+  const classNameStyles: ButtonProps["className"] = `!text-base !p-4 !rounded-lg !px-6 !text-white`;
 
   if (loading) {
     return (
       <LoadingButton
         loading
         startIcon={<SaveIcon />}
-        className={`${className} cursor-not-allowed`}
+        className={`${classNameStyles} cursor-not-allowed `}
       >
         <span>Loading...</span>
       </LoadingButton>
@@ -28,10 +40,11 @@ const Button: React.FC<{
       <MuiButton
         variant={variant || "contained"}
         color={color || "primary"}
-        className={`${className}`}
+        className={`${classNameStyles} ${className}`}
         startIcon={startIcon || null}
         endIcon={endIcon || null}
         disabled={disabled || false}
+        type={type || "button"}
       >
         {children}
       </MuiButton>

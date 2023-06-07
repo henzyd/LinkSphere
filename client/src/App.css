@@ -5,6 +5,12 @@
   padding: 0;
   box-sizing: border-box;
   font-family: "EB Garamond", serif !important;
+  color: #111 !important;
+  font-weight: 500 !important;
+}
+
+.App {
+  min-height: 100vh;
 }
 
 .LazyLoader {
