@@ -37,14 +37,14 @@ const Input: React.FC<InputProps> = ({
         type={type || "text"}
         value={value}
         onChange={onChange}
-        className={` w-full !placeholder:text-2xl ${className}`}
+        className={` w-full !placeholder:text-base ${className}`}
         error={error || false}
         id={id}
         label={label}
         endAdornment={endAdornment || null}
       />
       <FormHelperText
-        className={`!text-red-500 !font-semibold !text-sm ${
+        className={`!text-red-500 !font-medium !text-xs ${
           error ? "visible" : "invisible"
         }`}
         error={error || false}

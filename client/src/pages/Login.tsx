@@ -4,6 +4,7 @@ import { Checkbox, FormControlLabel } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { FcGoogle } from "react-icons/fc";
 import Seo from "../utils/Seo";
 import LoginIllustration from "../assets/illustrations/login.png";
 import Input from "../components/Input";
@@ -59,93 +60,116 @@ const Login = () => {
   return (
     <>
       <Seo title="Login" description="Login to your LinkSphere account" />
-      <main className=" grid grid-cols-2 h-[inherit] mb-8">
-        <figure className="w-full p-4 grid place-content-center">
+      <main className=" max-w-[2560px] mx-auto grid grid-cols-2 TabletAndBelow:grid-cols-1 h-[inherit] pb-8 mt-1 w-full">
+        <figure className="w-full p-2 grid place-content-center TabletAndBelow:hidden">
           <img src={LoginIllustration} alt="login-illustration" />
         </figure>
+        <div className="max-w-[90%] TabletAndBelow:max-w-none p-4 flex flex-col justify-center items-center w-full TabletAndBelow:p-8 MediumPhones:!p-4 MediumPhones:!pt-8">
+          <form
+            onSubmit={handleSubmit}
+            className="flex flex-col justify-center items-center w-full gap-[1rem]"
+          >
+            <h1 className="text-[1.5rem] font-bold mb-2 text-center">
+              Login into your account
+            </h1>
 
-        <form
-          onSubmit={handleSubmit}
-          className="flex flex-col justify-center items-center p-8 w-full max-w-[80%] gap-4"
-        >
-          <h1 className="text-4xl font-bold mb-6">Login into your account</h1>
-
-          <Input
-            type="email"
-            onChange={(e) =>
-              setUserInput((prev) => ({
-                ...prev,
-                email: {
-                  ...prev.email,
-                  value: e.target.value,
-                },
-              }))
-            }
-            value={userInput.email.value}
-            id="login-email-input"
-            label={"Email"}
-            error={userInput.email.error}
-            helperText={"Email is required"}
-          />
-          <Input
-            type={showPassword ? "text" : "password"}
-            value={userInput.password.value}
-            error={userInput.password.error}
-            onChange={(e) =>
-              setUserInput((prev) => ({
-                ...prev,
-                password: {
-                  ...prev.password,
-                  value: e.target.value,
-                },
-              }))
-            }
-            id="login-password-input"
-            label={"Password"}
-            helperText={
-              "Password is required and must be at least 8 characters"
-            }
-            endAdornment={
-              <IconButton
-                aria-label="toggle password visibility"
-                onClick={() => setShowPassword((prev) => !prev)}
-                edge="end"
-              >
-                {showPassword ? <Visibility /> : <VisibilityOff />}
-              </IconButton>
-            }
-          />
-
-          <div className="flex items-center justify-between w-full">
-            <FormControlLabel
-              control={
-                <Checkbox
-                  onChange={(e) =>
-                    setUserInput((prev) => ({
-                      ...prev,
-                      rememberMe: e.target.checked,
-                    }))
-                  }
-                  checked={userInput.rememberMe}
-                  color="secondary"
-                />
+            <Input
+              type="email"
+              onChange={(e) =>
+                setUserInput((prev) => ({
+                  ...prev,
+                  email: {
+                    ...prev.email,
+                    value: e.target.value,
+                  },
+                }))
               }
-              label="Remember me"
+              value={userInput.email.value}
+              id="login-email-input"
+              label={"Email"}
+              error={userInput.email.error}
+              helperText={"Email is required"}
             />
-            <Link to="/forgot-password">
-              <p>Forgot your password?</p>
-            </Link>
-          </div>
+            <Input
+              type={showPassword ? "text" : "password"}
+              value={userInput.password.value}
+              error={userInput.password.error}
+              onChange={(e) =>
+                setUserInput((prev) => ({
+                  ...prev,
+                  password: {
+                    ...prev.password,
+                    value: e.target.value,
+                  },
+                }))
+              }
+              id="login-password-input"
+              label={"Password"}
+              helperText={
+                "Password is required and must be at least 8 characters"
+              }
+              endAdornment={
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  edge="end"
+                >
+                  {showPassword ? <Visibility /> : <VisibilityOff />}
+                </IconButton>
+              }
+            />
 
+            <div className="flex items-center justify-between w-full">
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    onChange={(e) =>
+                      setUserInput((prev) => ({
+                        ...prev,
+                        rememberMe: e.target.checked,
+                      }))
+                    }
+                    checked={userInput.rememberMe}
+                    color="secondary"
+                  />
+                }
+                className="text-sm"
+                label="Remember me"
+              />
+              <Link to="/forgot-password">
+                <p className=" text-sm">Forgot your password?</p>
+              </Link>
+            </div>
+
+            <Button
+              variant="contained"
+              color="info"
+              type="submit"
+              className="w-full mt-12 !p-4"
+            >
+              Login
+            </Button>
+          </form>
+          <p className="text-sm mt-4 self-start">
+            Don't have an account?{" "}
+            <Link to="/signup" className=" !text-Primary !font-bold">
+              Signup
+            </Link>
+          </p>
+          <p className="text-sm mt-4 mb-6">
+            Or, Sign in with your social account
+          </p>
           <Button
             variant="contained"
-            color="info"
-            type="submit"
-            className="w-full mt-12"
+            color="primary"
+            className="flex item-center gap-[1.3rem] !p-3 !px-[0.8rem]"
           >
-            Login
+            <div className="bg-white p-[0.5rem] rounded">
+              <FcGoogle className=" text-xl" />
+            </div>
+            <p className=" !text-white">Sign in with Google</p>
           </Button>
-        </form>
+        </div>
       </main>
     </>
   );

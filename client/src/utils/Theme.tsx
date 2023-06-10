@@ -20,9 +20,16 @@ const theme = createTheme({
     MuiCheckbox: {
       styleOverrides: {
         root: {
-          // "&:hover": {
-          //   border: "1px solid red",
-          // },
+          "& .MuiFormControlLabel-root .MuiTypography-root": {
+            fontSize: "0.4rem !important",
+          },
+        },
+      },
+    },
+    MuiTypography: {
+      styleOverrides: {
+        body1: {
+          fontSize: "0.875rem",
         },
       },
     },

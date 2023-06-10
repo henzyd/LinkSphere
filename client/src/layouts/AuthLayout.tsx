@@ -8,17 +8,25 @@ const AuthLayout: React.FC<{
 }> = ({ children }) => {
   return (
     <div className="h-screen flex flex-col">
-      <nav className=" flex items-center justify-between p-8 py-6">
+      <nav className=" flex items-center justify-between p-8 py-6 MediumPhones:p-4">
         <Logo />
         <div className="flex items-center gap-4">
           <Link to="/login">
-            <Button variant="contained" color="info">
+            <Button
+              className="MediumPhones:!p-2 MediumPhones:!rounded MediumPhones:!text-xs"
+              variant="contained"
+              color="info"
+            >
               Login
             </Button>
           </Link>
           <Link to="/signup">
-            <Button variant="contained" color="primary">
-              Register
+            <Button
+              className="MediumPhones:!p-2 MediumPhones:!rounded MediumPhones:!text-xs"
+              variant="contained"
+              color="primary"
+            >
+              Signup
             </Button>
           </Link>
         </div>

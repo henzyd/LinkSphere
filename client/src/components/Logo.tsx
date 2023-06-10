@@ -4,7 +4,11 @@ import LinkSphereLogo from "../assets/icons/logo.svg";
 const Logo = () => {
   return (
     <Link to={"/"}>
-      <img className="w-52" src={LinkSphereLogo} alt="linksphere-logo" />
+      <img
+        className="w-[10rem] TabletAndBelow:w-[9rem]"
+        src={LinkSphereLogo}
+        alt="linksphere-logo"
+      />
     </Link>
   );
 };

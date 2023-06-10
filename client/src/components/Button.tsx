@@ -23,14 +23,14 @@ const Button: React.FC<{
   type,
   className,
 }) => {
-  const classNameStyles: ButtonProps["className"] = `!text-base !p-4 !rounded-lg !px-6 !text-white`;
+  const classNameStyles: ButtonProps["className"] = `!text-xs LaptopAndAbove:!text-sm !p-3 !rounded-md !px-5 !text-white`;
 
   if (loading) {
     return (
       <LoadingButton
         loading
         startIcon={<SaveIcon />}
-        className={`${classNameStyles} cursor-not-allowed `}
+        className={`${classNameStyles} cursor-not-allowed`}
       >
         <span>Loading...</span>
       </LoadingButton>
