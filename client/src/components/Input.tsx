@@ -1,15 +1,22 @@
 import React from "react";
-import { TextField, TextFieldProps } from "@mui/material";
+import {
+  OutlinedInput,
+  FormControl,
+  InputLabel,
+  FormHelperText,
+  OutlinedInputProps,
+} from "@mui/material";
 
 interface InputProps {
-  id: TextFieldProps["id"];
-  label: TextFieldProps["label"];
-  type: TextFieldProps["type"];
-  error?: TextFieldProps["error"];
-  helperText?: TextFieldProps["helperText"];
-  className?: TextFieldProps["className"];
-  value: TextFieldProps["value"];
-  onChange: TextFieldProps["onChange"];
+  id: OutlinedInputProps["id"];
+  label: OutlinedInputProps["label"];
+  type: OutlinedInputProps["type"];
+  error?: OutlinedInputProps["error"];
+  helperText?: string;
+  className?: OutlinedInputProps["className"];
+  value: OutlinedInputProps["value"];
+  onChange: OutlinedInputProps["onChange"];
+  endAdornment?: OutlinedInputProps["endAdornment"];
 }
 
 const Input: React.FC<InputProps> = ({
@@ -21,18 +28,30 @@ const Input: React.FC<InputProps> = ({
   className,
   value,
   onChange,
+  endAdornment,
 }) => {
   return (
-    <TextField
-      type={type || "text"}
-      value={value}
-      onChange={onChange}
-      className={` w-full !placeholder:text-2xl ${className}`}
-      error={error || false}
-      id={id}
-      label={label}
-      helperText={helperText || "Incorrect entry."}
-    />
+    <FormControl className="w-full" variant="outlined">
+      <InputLabel htmlFor={id}>{label}</InputLabel>
+      <OutlinedInput
+        type={type || "text"}
+        value={value}
+        onChange={onChange}
+        className={` w-full !placeholder:text-2xl ${className}`}
+        error={error || false}
+        id={id}
+        label={label}
+        endAdornment={endAdornment || null}
+      />
+      <FormHelperText
+        className={`!text-red-500 !font-semibold !text-sm ${
+          error ? "visible" : "invisible"
+        }`}
+        error={error || false}
+      >
+        {helperText || "Incorrect entry."}
+      </FormHelperText>
+    </FormControl>
   );
 };
 
