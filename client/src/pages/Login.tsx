@@ -99,7 +99,7 @@ const Login = () => {
                   ...prev,
                   password: {
                     ...prev.password,
-                    value: e.target.value,
+                    value: e.target.value.trim(),
                   },
                 }))
               }

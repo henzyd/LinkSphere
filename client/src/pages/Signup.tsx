@@ -145,7 +145,7 @@ const Signup = () => {
                   ...prev,
                   password: {
                     ...prev.password,
-                    value: e.target.value,
+                    value: e.target.value.trim(),
                   },
                 }))
               }
@@ -178,7 +178,7 @@ const Signup = () => {
                   ...prev,
                   confirmPassword: {
                     ...prev.confirmPassword,
-                    value: e.target.value,
+                    value: e.target.value.trim(),
                   },
                 }))
               }
