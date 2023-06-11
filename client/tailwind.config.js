@@ -10,20 +10,23 @@ export default {
         TextBlack: "#111",
       },
       screens: {
-        SmallPhones: { min: " 220px", max: "380px" },
-        // => @media (min-width: 320px) { ... }
+        SmallPhones: { max: "380px" },
+        // => @media (max-width: 380px) { ... }
 
-        MediumPhones: { min: "375px", max: "425px" },
-        // => @media (min-width: 375px) { ... }
+        MediumPhones: { max: "450px" },
+        // => @media (max-width: 425px) { ... }
 
-        LargePhones: { min: "425px", max: "767px" },
-        // => @media (min-width: 425px) { ... }
+        LargePhones: { max: "767px" },
+        // => @media (max-width: 767px) { ... }
 
-        RangeForPhone: { min: "200px", max: "1023px" },
-        // => @media (min-width: 200px) and (max-width:1023px) { ... }
+        Tablet: { max: "1023px" },
+        // => @media (max-width: 1023px) { ... }
 
-        Tablet: { min: "768px", max: "1023px" },
-        // => @media (min-width: 768px) { ... }
+        TabletAndBelow: { max: "1023px" },
+        // => @media (max-width:1023px) { ... }
+
+        LaptopAndAbove: { min: "1023px" },
+        // => @media (min-width:1023px) { ... }
 
         Laptop: { min: "1024px", max: "1439px" },
         // => @media (min-width: 1024px) { ... }
