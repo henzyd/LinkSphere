@@ -60,14 +60,14 @@ const Login = () => {
   return (
     <>
       <Seo title="Login" description="Login to your LinkSphere account" />
-      <main className=" max-w-[2560px] mx-auto grid grid-cols-2 TabletAndBelow:grid-cols-1 h-[inherit] pb-8 mt-1 w-full">
+      <main className=" max-w-[2560px] mx-auto grid grid-cols-2 TabletAndBelow:grid-cols-1 min-h-[inherit] pb-8 mt-1 w-full">
         <figure className="w-full p-2 grid place-content-center TabletAndBelow:hidden">
           <img src={LoginIllustration} alt="login-illustration" />
         </figure>
-        <div className="max-w-[90%] TabletAndBelow:max-w-none p-4 flex flex-col justify-center items-center w-full TabletAndBelow:p-8 MediumPhones:!p-4 MediumPhones:!pt-8">
+        <section className="max-w-[90%] TabletAndBelow:max-w-none p-4 flex flex-col justify-center items-center w-full TabletAndBelow:p-8 MediumPhones:!p-4 MediumPhones:!pt-8">
           <form
             onSubmit={handleSubmit}
-            className="flex flex-col justify-center items-center w-full gap-[1rem]"
+            className="flex flex-col justify-center items-center w-full gap-[0.55rem]"
           >
             <h1 className="text-[1.5rem] font-bold mb-2 text-center">
               Login into your account
@@ -145,7 +145,7 @@ const Login = () => {
               variant="contained"
               color="info"
               type="submit"
-              className="w-full mt-12 !p-4"
+              className="w-full !p-4"
             >
               Login
             </Button>
@@ -157,7 +157,7 @@ const Login = () => {
             </Link>
           </p>
           <p className="text-sm mt-4 mb-6">
-            Or, Sign in with your social account
+            Or, Login in with your social account
           </p>
           <Button
             variant="contained"
@@ -167,9 +167,9 @@ const Login = () => {
             <div className="bg-white p-[0.5rem] rounded">
               <FcGoogle className=" text-xl" />
             </div>
-            <p className=" !text-white">Sign in with Google</p>
+            <p className=" !text-white">Login in with Google</p>
           </Button>
-        </div>
+        </section>
       </main>
     </>
   );
