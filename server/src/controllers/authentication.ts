@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { validationResult } from "express-validator";
 import bcrypt from "bcryptjs";
+import { verify as JwtVerify } from "jsonwebtoken";
 import catchAsync from "../utils/catchAsync";
 import { customErrorFormatter } from "../utils/helper";
 import prisma from "../db";
@@ -94,4 +95,34 @@ const login = catchAsync(
   }
 );
 
-export { signup, login };
+const logout = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const errors = validationResult(req).formatWith(customErrorFormatter);
+    if (!errors.isEmpty()) {
+      return next(new AppError("Invalid credentials", 400, errors.array()));
+    }
+    const { refreshToken } = req.body;
+
+    try {
+      const decoded = JwtVerify(refreshToken, process.env.JWT_SECRET);
+      console.log(decoded);
+    } catch (error) {
+      console.log(error, "error");
+      return next(new AppError("Invalid token", 400));
+    }
+
+    const blacklistedToken = await prisma.blacklistedToken.create({
+      data: {
+        token: refreshToken,
+      },
+    });
+    console.log(blacklistedToken);
+
+    res.status(200).json({
+      status: "success",
+      message: "User logged out successfully",
+    });
+  }
+);
+
+export { signup, login, logout };

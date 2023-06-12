@@ -1,6 +1,6 @@
 import express from "express";
 import { body } from "express-validator";
-import { login, signup } from "../controllers/authController";
+import { login, signup, logout } from "../controllers/authentication";
 
 const router = express.Router();
 
@@ -22,7 +22,16 @@ router.post(
   ],
   signup
 );
-
 router.post("/login", [emailVaidator(), passwordValidator()], login);
+router.post(
+  "/logout",
+  [
+    body("refreshToken")
+      .trim()
+      .notEmpty()
+      .withMessage("Refresh token is required"),
+  ],
+  logout
+);
 
 export default router;
