@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { validationResult } from "express-validator";
 import bcrypt from "bcryptjs";
+import { JwtPayload, verify as JwtVerify } from "jsonwebtoken";
 import catchAsync from "../utils/catchAsync";
 import { customErrorFormatter } from "../utils/helper";
 import prisma from "../db";
@@ -37,7 +38,7 @@ const login = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req).formatWith(customErrorFormatter);
     if (!errors.isEmpty()) {
-      return next(new AppError("Invalid credentials", 400, errors.array()));
+      return next(new AppError("Invalid request data", 400, errors.array()));
     }
 
     const { email, password } = req.body;
@@ -94,4 +95,81 @@ const login = catchAsync(
   }
 );
 
-export { signup, login };
+const logout = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const errors = validationResult(req).formatWith(customErrorFormatter);
+    if (!errors.isEmpty()) {
+      return next(new AppError("Invalid request data", 400, errors.array()));
+    }
+
+    const { refreshToken } = req.body;
+
+    try {
+      JwtVerify(refreshToken, process.env.JWT_SECRET);
+    } catch (error) {
+      return next(new AppError("Invalid token", 400));
+    }
+
+    await prisma.blacklistedToken.create({
+      data: {
+        token: refreshToken,
+      },
+    });
+    res.status(200).json({
+      status: "success",
+      message: "User logged out successfully",
+    });
+  }
+);
+
+const refreshAccessToken = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const errors = validationResult(req).formatWith(customErrorFormatter);
+    if (!errors.isEmpty()) {
+      return next(new AppError("Invalid request data", 400, errors.array()));
+    }
+
+    const { refreshToken } = req.body;
+
+    let decoded: JwtPayload | string;
+    try {
+      decoded = JwtVerify(refreshToken, process.env.JWT_SECRET);
+    } catch (error) {
+      return next(new AppError("Invalid token", 400));
+    }
+
+    // Check if the token is blacklisted
+    const blacklistedToken = await prisma.blacklistedToken.findUnique({
+      where: {
+        token: refreshToken,
+      },
+    });
+    if (blacklistedToken) {
+      return next(new AppError("Not authorized", 401));
+    }
+
+    const { userId } = decoded as { userId: string; iat: number; exp: number };
+
+    const user = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
+
+    if (!user) {
+      return next(new AppError("Invalid token", 400));
+    }
+
+    const accessToken = signAccessToken(user.id);
+
+    res.status(200).json({
+      status: "success",
+      message: "Access token refreshed successfully",
+      data: {
+        accessToken,
+      },
+    });
+  }
+);
+
+export { signup, login, logout, refreshAccessToken };

@@ -5,8 +5,8 @@ import jwt from "jsonwebtoken";
  * @description Sign an access token
  */
 function signAccessToken(id: string) {
-  return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: "1d", // 1 day changed to 3 minute for production
+  return jwt.sign({ userId: id }, process.env.JWT_SECRET, {
+    expiresIn: "3m", // 1 day changed to 3 minute for production
   });
 }
 
@@ -15,7 +15,7 @@ function signAccessToken(id: string) {
  * @description Sign an refresh token
  */
 function signRefreshToken(id: string) {
-  return jwt.sign({ id }, process.env.JWT_SECRET, {
+  return jwt.sign({ userId: id }, process.env.JWT_SECRET, {
     expiresIn: "30d",
   });
 }

@@ -1,6 +1,12 @@
 import express from "express";
 import { body } from "express-validator";
-import { login, signup } from "../controllers/authController";
+import {
+  login,
+  signup,
+  logout,
+  refreshAccessToken,
+} from "../controllers/authentication";
+import { authorization } from "../middleware/authentication";
 
 const router = express.Router();
 
@@ -13,6 +19,12 @@ const passwordValidator = () =>
     .isLength({ min: 8 })
     .withMessage("Password must be at least 8 characters long");
 
+const refreshTokenValidator = () =>
+  body("refreshToken")
+    .trim()
+    .notEmpty()
+    .withMessage("Refresh token is required");
+
 router.post(
   "/signup",
   [
@@ -22,7 +34,8 @@ router.post(
   ],
   signup
 );
-
-router.post("/login", [emailVaidator(), passwordValidator()], login);
+router.post("/login", [(emailVaidator(), passwordValidator())], login);
+router.post("/logout", authorization, [refreshTokenValidator()], logout);
+router.post("/refresh-token", [refreshTokenValidator()], refreshAccessToken);
 
 export default router;

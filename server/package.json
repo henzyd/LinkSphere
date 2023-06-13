@@ -9,7 +9,7 @@
     "prismaStudio:dev": "dotenv -e .env.development -- npx prisma studio",
     "prismaStudio:prod": "dotenv -e .env.production -- npx prisma studio",
     "prismaMigrate:dev": "dotenv -e .env.development -- npx prisma migrate dev",
-    "prismaMigrate:prod": "dotenv -e .env.production -- npx prisma migrate dev --name init",
+    "prismaMigrate:prod": "dotenv -e .env.production -- npx prisma migrate dev",
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
