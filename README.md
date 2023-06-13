@@ -13,8 +13,7 @@
 ### Backend tools:
 
 - Express.js
-- SQlite for development
-- PostgreSQL for Production
+- PostgreSQL
 - TypeScript
 - Prisma
 
