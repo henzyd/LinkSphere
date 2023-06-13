@@ -37,17 +37,6 @@ const authorization = catchAsync(
       return next(new AppError("Not authorized", 401));
     }
 
-    // Check if the token is blacklisted
-    const blacklistedToken = await prisma.blacklistedToken.findUnique({
-      where: {
-        token,
-      },
-    });
-    console.log(blacklistedToken, "blacklistedToken");
-    if (blacklistedToken) {
-      return next(new AppError("Not authorized", 401));
-    }
-
     let decoded: JwtPayload | string;
     try {
       decoded = JwtVerify(token, process.env.JWT_SECRET);
