@@ -27,13 +27,11 @@ interface AuthenticatedRequest extends Request {
 const authorization = catchAsync(
   async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     const authHeader = req.headers.authorization;
-    console.log(authHeader, "authHeader");
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return next(new AppError("Not authorized", 401));
     }
 
     const token = authHeader.split(" ")[1];
-    console.log(token, "token");
 
     if (!token) {
       return next(new AppError("Not authorized", 401));
@@ -55,7 +53,6 @@ const authorization = catchAsync(
       decoded = JwtVerify(token, process.env.JWT_SECRET);
       console.log(decoded, "decoded");
     } catch (error) {
-      console.log(error, "error");
       return next(new AppError("Invalid token", 400));
     }
 

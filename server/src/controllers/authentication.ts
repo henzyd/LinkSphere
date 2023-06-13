@@ -104,20 +104,16 @@ const logout = catchAsync(
     const { refreshToken } = req.body;
 
     try {
-      const decoded = JwtVerify(refreshToken, process.env.JWT_SECRET);
-      console.log(decoded);
+      JwtVerify(refreshToken, process.env.JWT_SECRET);
     } catch (error) {
-      console.log(error, "error");
       return next(new AppError("Invalid token", 400));
     }
 
-    const blacklistedToken = await prisma.blacklistedToken.create({
+    await prisma.blacklistedToken.create({
       data: {
         token: refreshToken,
       },
     });
-    console.log(blacklistedToken);
-
     res.status(200).json({
       status: "success",
       message: "User logged out successfully",

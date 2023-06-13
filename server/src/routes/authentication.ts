@@ -1,6 +1,7 @@
 import express from "express";
 import { body } from "express-validator";
 import { login, signup, logout } from "../controllers/authentication";
+import { authorization } from "../middleware/authentication";
 
 const router = express.Router();
 
@@ -22,9 +23,10 @@ router.post(
   ],
   signup
 );
-router.post("/login", [emailVaidator(), passwordValidator()], login);
+router.post("/login", [(emailVaidator(), passwordValidator())], login);
 router.post(
   "/logout",
+  authorization,
   [
     body("refreshToken")
       .trim()
