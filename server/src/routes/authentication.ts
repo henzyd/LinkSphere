@@ -5,6 +5,7 @@ import {
   signup,
   logout,
   refreshAccessToken,
+  resetPassword,
 } from "../controllers/authentication";
 import { authorization } from "../middleware/authentication";
 
@@ -34,8 +35,9 @@ router.post(
   ],
   signup
 );
-router.post("/login", [(emailVaidator(), passwordValidator())], login);
+router.post("/login", [emailVaidator(), passwordValidator()], login);
 router.post("/logout", authorization, [refreshTokenValidator()], logout);
 router.post("/refresh-token", [refreshTokenValidator()], refreshAccessToken);
+router.post("/reset-password", [emailVaidator()], resetPassword);
 
 export default router;

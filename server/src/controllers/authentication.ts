@@ -7,6 +7,7 @@ import { customErrorFormatter } from "../utils/helper";
 import prisma from "../db";
 import AppError from "../utils/appError";
 import { signAccessToken, signRefreshToken } from "../utils/jwt";
+import crypto from "crypto";
 
 const signup = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -172,4 +173,50 @@ const refreshAccessToken = catchAsync(
   }
 );
 
-export { signup, login, logout, refreshAccessToken };
+const resetPassword = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const errors = validationResult(req).formatWith(customErrorFormatter);
+    if (!errors.isEmpty()) {
+      return next(new AppError("Invalid request data", 400, errors.array()));
+    }
+
+    const { email } = req.body;
+
+    const user = await prisma.user.findUnique({
+      where: {
+        email,
+      },
+    });
+
+    if (!user) {
+      return next(new AppError("User does not exist", 404));
+    }
+
+    //? Generate a reset token and send it to the user's email
+    const token = crypto.randomBytes(32).toString("hex");
+
+    const TOKEN_EXPIRATION = 24 * 60 * 60 * 1000; // 24 hours
+
+    const tokenExpiration = Date.now() + TOKEN_EXPIRATION;
+
+    const resetPasswordToken = await prisma.resetPasswordToken.create({
+      data: {
+        token,
+        expiresAt: new Date(tokenExpiration),
+        user: {
+          connect: {
+            id: user.id,
+          },
+        },
+      },
+    });
+    console.log(resetPasswordToken);
+
+    res.status(200).json({
+      status: "success",
+      message: "Reset token sent successfully",
+    });
+  }
+);
+
+export { signup, login, logout, refreshAccessToken, resetPassword };
