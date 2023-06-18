@@ -2,12 +2,13 @@ import { Request, Response, NextFunction } from "express";
 import { validationResult } from "express-validator";
 import bcrypt from "bcryptjs";
 import { JwtPayload, verify as JwtVerify } from "jsonwebtoken";
+import crypto from "crypto";
 import catchAsync from "../utils/catchAsync";
 import { customErrorFormatter, hashPasswordHandler } from "../utils/helper";
 import prisma from "../db";
 import AppError from "../utils/appError";
 import { signAccessToken, signRefreshToken } from "../utils/jwt";
-import crypto from "crypto";
+import { sendWelcomeMail } from "../utils/email";
 
 const signup = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -20,13 +21,22 @@ const signup = catchAsync(
 
     const hashedPassword = await hashPasswordHandler(password);
 
-    await prisma.user.create({
+    const user = await prisma.user.create({
       data: {
         username,
         email,
         password: hashedPassword,
       },
     });
+
+    try {
+      await sendWelcomeMail(email, {
+        name: user.username,
+        email: user.email,
+      });
+    } catch (error) {
+      return next(new AppError("Failed to send email", 500));
+    }
 
     res.status(200).json({
       status: "success",

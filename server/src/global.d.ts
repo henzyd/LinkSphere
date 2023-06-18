@@ -6,8 +6,13 @@ declare global {
       PORT: string;
       JWT_SECRET: string;
       PASSWORD_SALT: string;
-      // JWT_EXPIRE_IN: string;
-      // ADMIN_HASH_ROUTE: string;
+      AUTH_EMAIL: string;
+      EMAIL_HOST: string;
+      EMAIL_PORT: string;
+      EMAIL_USERNAME: string;
+      EMAIL_PASSWORD: string;
+      GMAIL_EMAIL: string;
+      GMAIL_PASSWORD: string;
     }
   }
 }
