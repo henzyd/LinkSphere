@@ -1,10 +1,10 @@
-import nodemailer, { Transporter } from "nodemailer";
+import nodemailer, { Transporter as nodemailerTransporter } from "nodemailer";
 import hbs, {
   NodemailerExpressHandlebarsOptions,
 } from "nodemailer-express-handlebars";
 import path from "path";
 
-let transporter: Transporter;
+let transporter: nodemailerTransporter;
 if (process.env.NODE_ENV === "production") {
   transporter = nodemailer.createTransport({
     service: "gmail",
@@ -51,7 +51,7 @@ async function sendWelcomeMail(
   }
 ) {
   const mailOptions = {
-    from: process.env.AUTH_EMAIL,
+    // from: process.env.GMAIL_EMAIL,
     to: email,
     subject: "Welcome to LinkSphere",
     template: "welcome",

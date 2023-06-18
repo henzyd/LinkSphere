@@ -10,7 +10,7 @@
     "prismaStudio:prod": "dotenv -e .env.production -- npx prisma studio",
     "prismaMigrate:dev": "dotenv -e .env.development -- npx prisma migrate dev",
     "prismaMigrate:prod": "dotenv -e .env.production -- npx prisma migrate dev",
-    "build": "tsc",
+    "build": "tsc && cpy \"src/templates/**/*\" \"dist/templates\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "henzyd",
@@ -25,6 +25,7 @@
     "@types/node": "^18.16.3",
     "@types/nodemailer": "^6.4.8",
     "@types/nodemailer-express-handlebars": "^4.0.2",
+    "cpy-cli": "^4.2.0",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.22",
     "prisma": "^4.14.1",
@@ -43,5 +44,9 @@
     "jsonwebtoken": "^9.0.0",
     "nodemailer": "^6.9.3",
     "nodemailer-express-handlebars": "^6.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/henzyd/LinkSphere"
   }
 }

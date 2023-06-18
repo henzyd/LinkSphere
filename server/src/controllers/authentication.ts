@@ -35,6 +35,7 @@ const signup = catchAsync(
         email: user.email,
       });
     } catch (error) {
+      console.log(error);
       return next(new AppError("Failed to send email", 500));
     }
 
