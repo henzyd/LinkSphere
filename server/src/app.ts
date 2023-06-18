@@ -5,7 +5,8 @@ import globalErrorHandler from "./controllers/errorHandler";
 import authRoute from "./routes/authentication";
 import cors from "cors";
 import prisma from "./db";
-import { authorization } from "./middleware/authentication";
+// import { authorization } from "./middleware/authentication";
+// import fs from "fs";
 
 const app = express();
 
@@ -36,6 +37,24 @@ app.delete("/users", (req, res) => {
 });
 //?
 app.use("/auth", authRoute);
+// app.post("/cert", (req, res) => {
+//   console.log(req.body.tempData);
+
+//   fs.writeFile("test.json", JSON.stringify(req.body.tempData), (err) => {
+//     if (err) {
+//       console.error(err);
+//       return res.status(500).json({
+//         status: "error",
+//         message: "Failed to write the file",
+//       });
+//     }
+
+//     res.status(200).json({
+//       status: "success",
+//       message: "File written successfully",
+//     });
+//   });
+// });
 app.all("*", (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });

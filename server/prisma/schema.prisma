@@ -8,17 +8,28 @@ datasource db {
 }
 
 model User {
-  id        String    @id @default(uuid())
-  username  String    @unique
-  email     String    @unique
-  password  String
-  lastLogin DateTime?
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  id         String               @id @default(uuid())
+  username   String               @unique
+  email      String               @unique
+  password   String
+  lastLogin  DateTime?
+  createdAt  DateTime             @default(now())
+  updatedAt  DateTime             @updatedAt
+  resetToken ResetPasswordToken[] @relation("resetToken")
 }
 
 model BlacklistedToken {
   id            String   @id @default(uuid())
   token         String   @unique
   blacklistedAt DateTime @default(now())
+}
+
+model ResetPasswordToken {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation("resetToken", fields: [userId], references: [id])
+  userId    String
 }
