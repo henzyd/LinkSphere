@@ -10,7 +10,7 @@
     "prismaStudio:prod": "dotenv -e .env.production -- npx prisma studio",
     "prismaMigrate:dev": "dotenv -e .env.development -- npx prisma migrate dev",
     "prismaMigrate:prod": "dotenv -e .env.production -- npx prisma migrate dev",
-    "build": "tsc && cpy \"src/templates/**/*\" \"dist/templates\"",
+    "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "henzyd",
