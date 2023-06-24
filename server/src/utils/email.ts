@@ -33,7 +33,7 @@ transporter.verify((error, success) => {
 
 const handlebarOptions: NodemailerExpressHandlebarsOptions = {
   viewEngine: {
-    // defaultLayout: false,
+    // defaultLayout: false, //! research this option Note: this is not working in deployment
     extname: ".hbs",
     partialsDir: path.resolve(__dirname, "..", "templates/email"),
   },

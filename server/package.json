@@ -48,5 +48,8 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/henzyd/LinkSphere"
+  },
+  "engines": {
+    "node": "16.13.2"
   }
 }
