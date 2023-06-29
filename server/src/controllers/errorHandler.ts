@@ -18,20 +18,30 @@ function handleDuplicateFieldDB(err: any) {
 //   return new AppError(message, 400);
 // }
 
-// function handleJWTError(err) {
-//   return new AppError("Invalid Token", 401);
-// }
+function handleJWTError(err: any) {
+  return new AppError("Invalid Token", 401);
+}
 
-// function handleJWTExpiredError(err) {
-//   return new AppError("Token has expired", 401);
-// }
+function handleJWTExpiredError(err: any) {
+  return new AppError("Token has expired", 401);
+}
 
-function sendErrorDev(err: AppError, res: Response) {
+function sendErrorDev(err: AppError, prodError: AppError, res: Response) {
   res.status(err.statusCode).json({
     status: err.status,
     message: err.message,
     error: err,
     stack: err.stack,
+    productionError: prodError.isOperational
+      ? {
+          status: prodError.status,
+          message: prodError.message,
+          validationErrors: prodError.validationErrors,
+        }
+      : {
+          status: "error",
+          message: "Something went very wrong!",
+        },
   });
 }
 
@@ -61,28 +71,29 @@ function globalErrorHandler(
   err.statusCode = err.statusCode || 500;
   err.status = err.status || "error";
 
+  let prodError = JSON.parse(JSON.stringify(err));
+
+  if (prodError.code === "P2002") {
+    prodError = handleDuplicateFieldDB(prodError);
+  }
+
+  // if (err instanceof mongoose.Error.CastError) {
+  //   prodError = handleCastingErrorDB(err);
+  // }
+  // if (err instanceof mongoose.Error.ValidationError) {
+  //   prodError = handleValidationErrorDB(err);
+  // }
+  if (err.name === "JsonWebTokenError") {
+    prodError = handleJWTError(err);
+  }
+  if (err.name === "TokenExpiredError") {
+    prodError = handleJWTExpiredError(err);
+  }
+
   if (process.env.NODE_ENV === "development") {
-    return sendErrorDev(err, res);
+    return sendErrorDev(err, prodError, res);
   } else if (process.env.NODE_ENV === "production") {
-    let error = JSON.parse(JSON.stringify(err));
-
-    if (error.code === "P2002") {
-      error = handleDuplicateFieldDB(error);
-    }
-
-    // if (err instanceof mongoose.Error.CastError) {
-    //   error = handleCastingErrorDB(err);
-    // }
-    // if (err instanceof mongoose.Error.ValidationError) {
-    //   error = handleValidationErrorDB(err);
-    // }
-    // if (err.name === "JsonWebTokenError") {
-    //   error = handleJWTError(err);
-    // }
-    // if (err.name === "TokenExpiredError") {
-    //   error = handleJWTExpiredError(err);
-    // }
-    return sendErrorProd(error, res);
+    return sendErrorProd(prodError, res);
   }
 }
 

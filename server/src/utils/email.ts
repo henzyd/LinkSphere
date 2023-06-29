@@ -33,7 +33,7 @@ transporter.verify((error, success) => {
 
 const handlebarOptions: NodemailerExpressHandlebarsOptions = {
   viewEngine: {
-    // defaultLayout: false, //! research this option Note: this is not working in deployment
+    defaultLayout: "", //! research this option
     extname: ".hbs",
     partialsDir: path.resolve(__dirname, "..", "templates/email"),
   },
@@ -51,9 +51,13 @@ async function sendWelcomeMail(
   }
 ) {
   const mailOptions = {
-    // from: process.env.GMAIL_EMAIL,
+    from: `${
+      process.env.NODE_ENV === "production"
+        ? process.env.GMAIL_EMAIL
+        : process.env.EMAIL_USERNAME
+    }`,
     to: email,
-    subject: "Welcome to LinkSphere",
+    subject: "Welcome to LinkSphere - Let's Connect and Get Creative!",
     template: "welcome",
     context: {
       name: data.name,
