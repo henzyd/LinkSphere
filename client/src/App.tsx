@@ -1,6 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import "./App.css";
-import { Home, Login, Signup } from "./pages";
+import { ForgotPassword, Home, Login, Signup } from "./pages";
 import { Suspense } from "react";
 import LazyLoader from "./components/LazyLoader";
 import NotFound from "./pages/NotFound";
@@ -35,6 +35,14 @@ function App() {
               <AuthLayout>
                 <Signup />
               </AuthLayout>
+            </Suspense>
+          }
+        />
+        <Route
+          path="/forgot-password"
+          element={
+            <Suspense fallback={<LazyLoader />}>
+              <ForgotPassword />
             </Suspense>
           }
         />

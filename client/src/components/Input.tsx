@@ -10,6 +10,7 @@ import {
 interface InputProps {
   id: OutlinedInputProps["id"];
   label: OutlinedInputProps["label"];
+  name: OutlinedInputProps["name"];
   type: OutlinedInputProps["type"];
   error?: OutlinedInputProps["error"];
   helperText?: string;
@@ -22,6 +23,7 @@ interface InputProps {
 const Input: React.FC<InputProps> = ({
   id,
   label,
+  name,
   type,
   error,
   helperText,
@@ -36,6 +38,7 @@ const Input: React.FC<InputProps> = ({
       <OutlinedInput
         type={type || "text"}
         value={value}
+        name={name}
         onChange={onChange}
         className={` w-full !placeholder:text-base ${className}`}
         error={error || false}

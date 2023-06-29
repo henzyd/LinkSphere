@@ -25,7 +25,7 @@ const Button: React.FC<{
   className,
   onClick,
 }) => {
-  const classNameStyles: ButtonProps["className"] = `!text-xs LaptopAndAbove:!text-sm !p-3 !rounded-md !px-5 !text-white MediumPhones:!p-2 MediumPhones:!px-3 MediumPhones:!rounded MediumPhones:!text-xs`;
+  const classNameStyles: ButtonProps["className"] = `!text-xs LaptopAndAbove:!text-sm !p-3 !rounded-md !px-5 !text-white MediumPhones:!p-2 MediumPhones:!py-[0.85rem] MediumPhones:!px-3 MediumPhones:!rounded MediumPhones:!text-xs`;
 
   if (loading) {
     return (
