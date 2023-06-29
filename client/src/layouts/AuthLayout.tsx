@@ -8,7 +8,7 @@ const AuthLayout: React.FC<{
 }> = ({ children }) => {
   return (
     <div className="h-screen flex flex-col">
-      <nav className=" flex items-center justify-between p-8 py-6 MediumPhones:p-4">
+      <nav className=" flex items-center justify-between p-8 py-6 MediumPhones:p-4 mb-1">
         <Logo />
         <div className="flex items-center gap-4">
           <Link to="/login">

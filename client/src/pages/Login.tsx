@@ -6,9 +6,9 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { FcGoogle } from "react-icons/fc";
 import Seo from "../utils/Seo";
-import LoginIllustration from "../assets/illustrations/login.png";
 import Input from "../components/Input";
 import Button from "../components/Button";
+import AuthContainer from "../components/AuthContainer";
 
 const Login = () => {
   const [userInput, setUserInput] = useState({
@@ -60,117 +60,117 @@ const Login = () => {
   return (
     <>
       <Seo title="Login" description="Login to your LinkSphere account" />
-      <main className=" max-w-[2560px] mx-auto grid grid-cols-2 TabletAndBelow:grid-cols-1 min-h-[inherit] pb-8 mt-1 w-full">
-        <figure className="w-full p-2 grid place-content-center TabletAndBelow:hidden">
-          <img src={LoginIllustration} alt="login-illustration" />
-        </figure>
-        <section className="max-w-[90%] TabletAndBelow:max-w-none p-4 flex flex-col justify-center items-center w-full TabletAndBelow:p-8 MediumPhones:!p-4 MediumPhones:!pt-8">
-          <form
-            onSubmit={handleSubmit}
-            className="flex flex-col justify-center items-center w-full gap-[0.55rem]"
-          >
-            <h1 className="text-[1.5rem] font-bold mb-2 text-center">
-              Login into your account
-            </h1>
+      <AuthContainer
+        illustrationImg="https://res.cloudinary.com/dkok98flj/image/upload/v1687641212/illustrations/login_kex2y6.png"
+        illustrationImgAlt="login"
+      >
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col justify-center items-center w-full gap-[0.55rem]"
+        >
+          <h1 className="text-[1.5rem] font-bold mb-2 text-center">
+            Login into your account
+          </h1>
 
-            <Input
-              type="email"
-              onChange={(e) =>
-                setUserInput((prev) => ({
-                  ...prev,
-                  email: {
-                    ...prev.email,
-                    value: e.target.value,
-                  },
-                }))
+          <Input
+            type="email"
+            onChange={(e) =>
+              setUserInput((prev) => ({
+                ...prev,
+                email: {
+                  ...prev.email,
+                  value: e.target.value,
+                },
+              }))
+            }
+            value={userInput.email.value}
+            id="login-email-input"
+            label={"Email"}
+            name="email"
+            error={userInput.email.error}
+            helperText={"Email is required"}
+          />
+          <Input
+            type={showPassword ? "text" : "password"}
+            value={userInput.password.value}
+            error={userInput.password.error}
+            onChange={(e) =>
+              setUserInput((prev) => ({
+                ...prev,
+                password: {
+                  ...prev.password,
+                  value: e.target.value.trim(),
+                },
+              }))
+            }
+            id="login-password-input"
+            label={"Password"}
+            name="password"
+            helperText={
+              "Password is required and must be at least 8 characters"
+            }
+            endAdornment={
+              <IconButton
+                aria-label="toggle password visibility"
+                onClick={() => setShowPassword((prev) => !prev)}
+                edge="end"
+              >
+                {showPassword ? <Visibility /> : <VisibilityOff />}
+              </IconButton>
+            }
+          />
+
+          <div className="flex items-center justify-between w-full">
+            <FormControlLabel
+              control={
+                <Checkbox
+                  onChange={(e) =>
+                    setUserInput((prev) => ({
+                      ...prev,
+                      rememberMe: e.target.checked,
+                    }))
+                  }
+                  checked={userInput.rememberMe}
+                  color="secondary"
+                />
               }
-              value={userInput.email.value}
-              id="login-email-input"
-              label={"Email"}
-              error={userInput.email.error}
-              helperText={"Email is required"}
+              className="text-sm"
+              label="Remember me"
             />
-            <Input
-              type={showPassword ? "text" : "password"}
-              value={userInput.password.value}
-              error={userInput.password.error}
-              onChange={(e) =>
-                setUserInput((prev) => ({
-                  ...prev,
-                  password: {
-                    ...prev.password,
-                    value: e.target.value.trim(),
-                  },
-                }))
-              }
-              id="login-password-input"
-              label={"Password"}
-              helperText={
-                "Password is required and must be at least 8 characters"
-              }
-              endAdornment={
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={() => setShowPassword((prev) => !prev)}
-                  edge="end"
-                >
-                  {showPassword ? <Visibility /> : <VisibilityOff />}
-                </IconButton>
-              }
-            />
-
-            <div className="flex items-center justify-between w-full">
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    onChange={(e) =>
-                      setUserInput((prev) => ({
-                        ...prev,
-                        rememberMe: e.target.checked,
-                      }))
-                    }
-                    checked={userInput.rememberMe}
-                    color="secondary"
-                  />
-                }
-                className="text-sm"
-                label="Remember me"
-              />
-              <Link to="/forgot-password">
-                <p className=" text-sm">Forgot your password?</p>
-              </Link>
-            </div>
-
-            <Button
-              variant="contained"
-              color="info"
-              type="submit"
-              className="w-full !p-4"
-            >
-              Login
-            </Button>
-          </form>
-          <p className="text-sm mt-4 self-start">
-            Don't have an account?{" "}
-            <Link to="/signup" className=" !text-Primary !font-bold">
-              Signup
+            <Link to="/forgot-password">
+              <p className=" text-sm">Forgot your password?</p>
             </Link>
-          </p>
-          <p className="text-sm mt-4 mb-6">
-            Or, Login in with your social account
-          </p>
+          </div>
+
           <Button
             variant="contained"
-            color="primary"
-            className="flex item-center gap-[1.3rem] !p-3 !px-[0.8rem]"
+            color="info"
+            type="submit"
+            className="w-full !p-4"
           >
-            <div className="bg-white p-[0.5rem] rounded">
-              <FcGoogle className=" text-xl" />
-            </div>
-            <p className=" !text-white">Login in with Google</p>
+            Login
           </Button>
-        </section>
-      </main>
+        </form>
+        <p className="text-sm mt-4 self-start">
+          Don't have an account?{" "}
+          <Link to="/signup" className=" !text-Primary !font-bold">
+            Signup
+          </Link>
+        </p>
+        <p className="text-sm mt-4 mb-6">
+          Or, Login in with your social account
+        </p>
+        <Button
+          variant="contained"
+          color="primary"
+          className="flex item-center gap-[1.3rem] !p-3 !px-[0.8rem]"
+        >
+          <div className="bg-white p-[0.5rem] rounded">
+            <FcGoogle className=" text-xl" />
+          </div>
+          <p className=" !text-white">Login in with Google</p>
+        </Button>
+      </AuthContainer>
     </>
   );
 };

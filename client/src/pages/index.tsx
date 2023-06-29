@@ -7,3 +7,6 @@ export const Login: LazyExoticComponent<React.FC> = lazy(
 export const Signup: LazyExoticComponent<React.FC> = lazy(
   () => import("./Signup")
 );
+export const ForgotPassword: LazyExoticComponent<React.FC> = lazy(
+  () => import("./ForgotPassword")
+);

@@ -1,5 +1,4 @@
 import Seo from "../utils/Seo";
-import NotFoundIllustration from "../assets/illustrations/404.png";
 import Button from "../components/Button";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import { useNavigate } from "react-router-dom";
@@ -14,7 +13,12 @@ const NotFound = () => {
           Page not found
         </h1>
         <figure className="w-[35%] LargePhones:w-[55%] MediumPhones:!w-[70%]">
-          <img src={NotFoundIllustration} alt="Not found Illustration" />
+          <img
+            src={
+              "https://res.cloudinary.com/dkok98flj/image/upload/v1687641205/illustrations/404_nyhtpg.png"
+            }
+            alt="Not found Illustration"
+          />
         </figure>
         <p className="mt-6 mb-2 text-center MediumPhones:text-sm">
           We couldn't find what you are looking for. Let's find a better place
