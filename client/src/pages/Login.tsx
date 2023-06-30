@@ -9,6 +9,7 @@ import Seo from "../utils/Seo";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import AuthContainer from "../components/AuthContainer";
+import { notifyError, notifySuccess } from "../utils/Toast";
 
 const Login = () => {
   const [userInput, setUserInput] = useState({
@@ -41,6 +42,7 @@ const Login = () => {
           error: prev.password.value.length < 8 ? true : false,
         },
       }));
+      notifyError("Please fill all the fields correctly");
       return;
     } else {
       setUserInput((prev) => ({
@@ -55,6 +57,8 @@ const Login = () => {
         },
       }));
     }
+
+    notifySuccess("Login successful");
   }
 
   return (

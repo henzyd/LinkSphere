@@ -5,10 +5,12 @@ import { Suspense } from "react";
 import LazyLoader from "./components/LazyLoader";
 import NotFound from "./pages/NotFound";
 import AuthLayout from "./layouts/AuthLayout";
+import Toaster from "./utils/Toast";
 
 function App() {
   return (
     <div className="App">
+      <Toaster />
       <Routes>
         <Route
           path="/"
