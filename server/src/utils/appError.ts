@@ -45,8 +45,9 @@ class AppError extends Error {
     statusCode: number,
     validationErrors?: CustomError[]
   ) {
-    super(message);
-
+    super();
+    // super(message); //! come back to this
+    this.message = message;
     this.statusCode = statusCode;
     this.status = `${statusCode}`.startsWith("4") ? "fail" : "error";
     this.isOperational = true;
