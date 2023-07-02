@@ -7,7 +7,7 @@ import Logo from "./Logo";
 const NavBar = () => {
   return (
     <nav className="flex items-center justify-between p-4">
-      <Logo className="w-[8rem]" />
+      <Logo className="w-[8rem] TabletAndBelow:w-[7rem]" />
 
       <div
         className={`flex items-center gap-4 focus:border rounded-md bg-[#EEEEEE] w-[30%] border border-transparent cursor-text`}
