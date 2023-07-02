@@ -6,20 +6,23 @@ import LazyLoader from "./components/LazyLoader";
 import NotFound from "./pages/NotFound";
 import AuthLayout from "./layouts/AuthLayout";
 import Toaster from "./utils/Toast";
+import AppLayout from "./layouts/AppLayout";
 
 function App() {
   return (
     <div className="App">
       <Toaster />
       <Routes>
-        <Route
-          path="/"
-          element={
-            <Suspense fallback={<LazyLoader />}>
-              <Home />
-            </Suspense>
-          }
-        />
+        <Route path="/" element={<AppLayout />}>
+          <Route
+            index
+            element={
+              <Suspense fallback={<LazyLoader />}>
+                <Home />
+              </Suspense>
+            }
+          />
+        </Route>
         <Route
           path="/login"
           element={

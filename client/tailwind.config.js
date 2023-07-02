@@ -8,6 +8,7 @@ export default {
         Secondary: "#10D876",
         Tertiary: "#343a40",
         TextBlack: "#111",
+        AppBG: "#f6f6f6",
       },
       screens: {
         SmallPhones: { max: "380px" },
