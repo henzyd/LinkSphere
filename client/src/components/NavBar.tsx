@@ -26,14 +26,11 @@ const NavBar = () => {
             <IoMdNotificationsOutline className="text-2xl text-TextBlack" />
           </Tooltip>
         </IconButton>
-        <div className="flex items-center gap-2">
-          {/* <IconButton> */}
-          {/* <Tooltip title="notification"> */}
-          <CgProfile className="text-2xl text-TextBlack" />
-          {/* </Tooltip> */}
-          {/* </IconButton> */}
-          <p>Uche</p>
-        </div>
+        <IconButton>
+          <Tooltip title="notification">
+            <CgProfile className="text-2xl text-TextBlack" />
+          </Tooltip>
+        </IconButton>
       </div>
     </nav>
   );
