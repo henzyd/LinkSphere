@@ -8,7 +8,7 @@ import { customErrorFormatter, hashPasswordHandler } from "../utils/helper";
 import prisma from "../db";
 import AppError from "../utils/appError";
 import { signAccessToken, signRefreshToken } from "../utils/jwt";
-import { sendWelcomeMail } from "../utils/email";
+import { sendPasswordResetMail, sendWelcomeMail } from "../utils/email";
 
 const signup = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -228,12 +228,16 @@ const resetPassword = catchAsync(
 
     const resetPasswordUrl = `${req.protocol}://${req.get(
       "host"
-    )}/auth/reset-password-confirm?token=${resetPasswordToken.token}&id=${
-      user.id
-    }`;
+    )}/reset-password-confirm?token=${resetPasswordToken.token}&id=${user.id}`;
     console.log(resetPasswordUrl, "resetPasswordUrl");
 
     //? Send the reset token to the user's email
+    try {
+      await sendPasswordResetMail(email, resetPasswordUrl);
+    } catch (error) {
+      console.log(error);
+      return next(new AppError("Failed to send email", 500));
+    }
 
     res.status(200).json({
       status: "success",
