@@ -69,4 +69,23 @@ async function sendWelcomeMail(
   console.log("Email sent:", info.messageId);
 }
 
-export { sendWelcomeMail };
+async function sendPasswordResetMail(email: string, url: string) {
+  const mailOptions = {
+    from: `${
+      process.env.NODE_ENV === "production"
+        ? process.env.GMAIL_EMAIL
+        : process.env.EMAIL_USERNAME
+    }`,
+    to: email,
+    subject: "LinkSphere - Password Reset",
+    template: "resetPassword",
+    context: {
+      url,
+    },
+  };
+
+  const info = await transporter.sendMail(mailOptions);
+  console.log("Email sent:", info.messageId);
+}
+
+export { sendWelcomeMail, sendPasswordResetMail };
