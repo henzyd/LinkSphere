@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction } from "express";
 import { verify as JwtVerify, JwtPayload } from "jsonwebtoken";
+import { User } from "@prisma/client";
 import catchAsync from "../utils/catchAsync";
 import AppError from "../utils/appError";
 import prisma from "../db";
-import { User } from "@prisma/client";
 
 /**
  * Custom interface to include the _currentUser property in the Request object.
@@ -26,12 +26,14 @@ interface AuthenticatedRequest extends Request {
  */
 const authorization = catchAsync(
   async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-    const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return next(new AppError("Not authorized", 401));
-    }
+    // const authHeader = req.headers.authorization;
+    // if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    //   return next(new AppError("Not authorized", 401));
+    // }
 
-    const token = authHeader.split(" ")[1];
+    // const token = authHeader.split(" ")[1];
+
+    const { accessToken: token } = req.cookies;
 
     if (!token) {
       return next(new AppError("Not authorized", 401));
@@ -40,9 +42,8 @@ const authorization = catchAsync(
     let decoded: JwtPayload | string;
     try {
       decoded = JwtVerify(token, process.env.JWT_SECRET);
-      console.log(decoded, "decoded");
     } catch (error) {
-      return next(new AppError("Invalid token", 400));
+      return next(error);
     }
 
     const { userId } = decoded as { userId: string; iat: number; exp: number };
@@ -53,7 +54,6 @@ const authorization = catchAsync(
         id: userId,
       },
     });
-    console.log(user, "user");
 
     if (!user) {
       return next(new AppError("Invalid token", 401));

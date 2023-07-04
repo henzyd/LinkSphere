@@ -6,7 +6,7 @@ import jwt from "jsonwebtoken";
  */
 function signAccessToken(id: string) {
   return jwt.sign({ userId: id }, process.env.JWT_SECRET, {
-    expiresIn: "3m", // 1 day changed to 3 minute for production
+    expiresIn: process.env.NODE_ENV === "production" ? "3m" : "1d", // 1 day changed to 3 minute for production
   });
 }
 

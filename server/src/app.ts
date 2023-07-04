@@ -1,9 +1,10 @@
 import express from "express";
 import morgan from "morgan";
+import cors from "cors";
+import cookieParser from "cookie-parser";
 import AppError from "./utils/appError";
 import globalErrorHandler from "./controllers/errorHandler";
 import authRoute from "./routes/authentication";
-import cors from "cors";
 import prisma from "./db";
 // import { authorization } from "./middleware/authentication";
 // import fs from "fs";
@@ -20,12 +21,16 @@ app.use(
   })
 ); //? Use the cors middleware
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+
 app.get("/", (req, res) => {
   res.status(200).json({
     status: "success",
     message: `Welcome to the LinkSphere server <${process.env.NODE_ENV}>`,
   });
 });
+
 //? Delete all users
 app.delete("/users", (req, res) => {
   prisma.user.deleteMany().then(() => {
@@ -36,6 +41,7 @@ app.delete("/users", (req, res) => {
   });
 });
 //?
+
 app.use("/auth", authRoute);
 // app.post("/cert", (req, res) => {
 //   console.log(req.body.tempData);
@@ -55,6 +61,7 @@ app.use("/auth", authRoute);
 //     });
 //   });
 // });
+
 app.all("*", (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });

@@ -1,6 +1,16 @@
 import bcrypt from "bcryptjs";
 import { CustomError } from "../global";
 
+/**
+ * Formats the express-validator error message
+ * @param {object} error - The error object
+ * @returns {CustomError} - The formatted error object
+ * @example
+ * const errors = validationResult(req).formatWith(customErrorFormatter);
+ * if (!errors.isEmpty()) {
+ *   return next(new AppError("Invalid request data", 400, errors.array()));
+ * }
+ */
 const customErrorFormatter = ({ path, msg }: any): CustomError => {
   return {
     field: path,
