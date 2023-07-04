@@ -95,13 +95,25 @@ const login = catchAsync(
     const accessToken = signAccessToken(user.id);
     const refreshToken = signRefreshToken(user.id);
 
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      // sameSite: "none",
+    });
+
+    res.cookie("accessToken", accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      // sameSite: "none",
+    });
+
     res.status(200).json({
       status: "success",
       message: "User logged in successfully",
       data: {
         ...updatedUser,
-        accessToken,
-        refreshToken,
+        // accessToken,
+        // refreshToken,
       },
     });
   }
@@ -122,11 +134,16 @@ const logout = catchAsync(
       return next(new AppError("Invalid token", 400));
     }
 
-    await prisma.blacklistedToken.create({
-      data: {
-        token: refreshToken,
-      },
-    });
+    try {
+      await prisma.blacklistedToken.create({
+        data: {
+          token: refreshToken,
+        },
+      });
+    } catch (error) {
+      return next(new AppError("User is already logged out", 400));
+    }
+
     res.status(200).json({
       status: "success",
       message: "User logged out successfully",
