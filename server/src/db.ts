@@ -14,6 +14,15 @@ const prisma = new PrismaClient({
   },
 });
 
+(async () => {
+  try {
+    await prisma.$connect();
+    console.log("Connected to db");
+  } catch (error) {
+    console.error("Error occured on db connection");
+  }
+})();
+
 prisma.$on("query", (e) => {
   if (process.env.NODE_ENV === "production") {
     console.log("--------------------------------------------------");
