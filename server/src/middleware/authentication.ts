@@ -41,7 +41,7 @@ const authorization = catchAsync(
 
     let decoded: JwtPayload | string;
     try {
-      decoded = JwtVerify(token, process.env.JWT_SECRET);
+      decoded = JwtVerify(token, process.env.JWT_SECRET as string);
     } catch (error) {
       return next(error);
     }

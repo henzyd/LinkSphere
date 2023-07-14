@@ -10,7 +10,8 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "declaration": true,
-    "rootDir": "./src"
+    "rootDir": "./src",
+    "skipLibCheck": true, //! Remove this line if you want to check for library errors
   },
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules", "**/*.spec.ts"]
