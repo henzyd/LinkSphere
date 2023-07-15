@@ -3,7 +3,7 @@ import { validationResult } from "express-validator";
 import bcrypt from "bcryptjs";
 import { JwtPayload, verify as JwtVerify } from "jsonwebtoken";
 import crypto from "crypto";
-// import { google } from "googleapis";
+import { google } from "googleapis";
 import { OAuth2Client } from "google-auth-library";
 import catchAsync from "../utils/catchAsync";
 import { customErrorFormatter, hashPasswordHandler } from "../utils/helper";
@@ -11,6 +11,16 @@ import prisma from "../db";
 import AppError from "../utils/appError";
 import { signAccessToken, signRefreshToken } from "../utils/jwt";
 import { sendPasswordResetMail, sendWelcomeMail } from "../utils/email";
+
+const SCOPES = [
+  "email",
+  "profile",
+  "https://www.googleapis.com/auth/userinfo.profile",
+  "https://www.googleapis.com/auth/userinfo.email",
+  "openid",
+];
+
+let oAuth2Client: OAuth2Client;
 
 const signup = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -121,14 +131,6 @@ const login = catchAsync(
   }
 );
 
-const SCOPES = [
-  "email",
-  "profile",
-  "https://www.googleapis.com/auth/userinfo.profile",
-  "https://www.googleapis.com/auth/userinfo.email",
-  "openid",
-];
-
 const getGoogleAuthUrl = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req).formatWith(customErrorFormatter);
@@ -136,20 +138,22 @@ const getGoogleAuthUrl = catchAsync(
       return next(new AppError("Invalid request data", 400, errors.array()));
     }
 
-    res.header("Referrer-Policy", "no-referrer-when-downgrade"); //? Remove this in production
+    // res.header("Referrer-Policy", "no-referrer-when-downgrade"); //? Remove this in production
 
-    const oAuth2Client = new OAuth2Client(
+    oAuth2Client = new google.auth.OAuth2(
       process.env.GOOGLE_CLIENT_ID,
       process.env.GOOGLE_CLIENT_SECRET,
-      `${process.env.CLIENT_BASE_URL}/${req.body.authType}`
+      `http://localhost:5000/oauth`
     );
 
-    console.log(oAuth2Client.credentials, "oAuth2Client");
+    // console.log(oAuth2Client.credentials, "oAuth2Client");
 
     const authorizeUrl = oAuth2Client.generateAuthUrl({
       access_type: "offline",
-      scope: SCOPES,
+      scope: "https://www.googleapis.com/auth/userinfo.profile openid",
+      // scope: SCOPES,
       // prompt: "consent",
+      approval_prompt: "force",
     });
 
     res.status(200).json({
@@ -170,18 +174,24 @@ const googleSignup = catchAsync(
     }
 
     const { code } = req.body;
-    console.log(code, "code");
 
     const oAuth2Client = new OAuth2Client(
       process.env.GOOGLE_CLIENT_ID,
       process.env.GOOGLE_CLIENT_SECRET,
-      `${process.env.CLIENT_BASE_URL}/signup`
+      `${process.env.CLIENT_BASE_URL}/oauth`
     );
 
-    console.log(oAuth2Client, "oAuth2Client");
+    // console.log(oAuth2Client, "oAuth2Client");
+    // console.log(
+    //   await oAuth2Client.generateCodeVerifierAsync(),
+    //   "oAuth2Client.generateCodeVerifierAsync()"
+    // );
 
     let response;
     try {
+      console.log(code, "code");
+      console.log(oAuth2Client.getAccessToken(), "oAuth2Client.credentials");
+
       response = await oAuth2Client.getToken(code);
       console.log(response, "response");
     } catch (error: any) {
@@ -194,17 +204,17 @@ const googleSignup = catchAsync(
     // const { data ://} = await oAuth2Client.request({
     //   url: "httpswww.googleapis.com/oauth2/v2/userinfo",
     // });
-    const user = await oAuth2Client.verifyIdToken({
-      idToken: response?.tokens?.id_token || "",
-      audience: process.env.GOOGLE_CLIENT_ID,
-    });
-    console.log(user, "user");
+    // const user = await oAuth2Client.verifyIdToken({
+    //   idToken: response?.tokens?.id_token || "",
+    //   audience: process.env.GOOGLE_CLIENT_ID,
+    // });
+    // console.log(user, "user");
 
-    const { email, name } = user.getPayload() as {
-      email: string;
-      name: string;
-    };
-    console.log(user.getPayload(), "user.getPayload()");
+    // const { email, name } = user.getPayload() as {
+    //   email: string;
+    //   name: string;
+    // };
+    // console.log(user.getPayload(), "user.getPayload()");
   }
 );
 
