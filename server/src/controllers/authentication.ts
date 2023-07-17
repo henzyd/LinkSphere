@@ -181,17 +181,8 @@ const googleSignup = catchAsync(
       `${process.env.CLIENT_BASE_URL}/oauth`
     );
 
-    // console.log(oAuth2Client, "oAuth2Client");
-    // console.log(
-    //   await oAuth2Client.generateCodeVerifierAsync(),
-    //   "oAuth2Client.generateCodeVerifierAsync()"
-    // );
-
     let response;
     try {
-      console.log(code, "code");
-      console.log(oAuth2Client.getAccessToken(), "oAuth2Client.credentials");
-
       response = await oAuth2Client.getToken(code);
       console.log(response, "response");
     } catch (error: any) {
