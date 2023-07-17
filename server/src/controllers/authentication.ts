@@ -3,12 +3,24 @@ import { validationResult } from "express-validator";
 import bcrypt from "bcryptjs";
 import { JwtPayload, verify as JwtVerify } from "jsonwebtoken";
 import crypto from "crypto";
+import { google } from "googleapis";
+import { OAuth2Client } from "google-auth-library";
 import catchAsync from "../utils/catchAsync";
 import { customErrorFormatter, hashPasswordHandler } from "../utils/helper";
 import prisma from "../db";
 import AppError from "../utils/appError";
 import { signAccessToken, signRefreshToken } from "../utils/jwt";
 import { sendPasswordResetMail, sendWelcomeMail } from "../utils/email";
+
+const SCOPES = [
+  "email",
+  "profile",
+  "https://www.googleapis.com/auth/userinfo.profile",
+  "https://www.googleapis.com/auth/userinfo.email",
+  "openid",
+];
+
+let oAuth2Client: OAuth2Client;
 
 const signup = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -119,6 +131,84 @@ const login = catchAsync(
   }
 );
 
+const getGoogleAuthUrl = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const errors = validationResult(req).formatWith(customErrorFormatter);
+    if (!errors.isEmpty()) {
+      return next(new AppError("Invalid request data", 400, errors.array()));
+    }
+
+    // res.header("Referrer-Policy", "no-referrer-when-downgrade"); //? Remove this in production
+
+    oAuth2Client = new google.auth.OAuth2(
+      process.env.GOOGLE_CLIENT_ID,
+      process.env.GOOGLE_CLIENT_SECRET,
+      `http://localhost:5000/oauth`
+    );
+
+    // console.log(oAuth2Client.credentials, "oAuth2Client");
+
+    const authorizeUrl = oAuth2Client.generateAuthUrl({
+      access_type: "offline",
+      scope: "https://www.googleapis.com/auth/userinfo.profile openid",
+      // scope: SCOPES,
+      // prompt: "consent",
+      approval_prompt: "force",
+    });
+
+    res.status(200).json({
+      status: "success",
+      message: "Google OAuth url generated successfully",
+      data: {
+        url: authorizeUrl,
+      },
+    });
+  }
+);
+
+const googleSignup = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const errors = validationResult(req).formatWith(customErrorFormatter);
+    if (!errors.isEmpty()) {
+      return next(new AppError("Invalid request data", 400, errors.array()));
+    }
+
+    const { code } = req.body;
+
+    const oAuth2Client = new OAuth2Client(
+      process.env.GOOGLE_CLIENT_ID,
+      process.env.GOOGLE_CLIENT_SECRET,
+      `${process.env.CLIENT_BASE_URL}/oauth`
+    );
+
+    let response;
+    try {
+      response = await oAuth2Client.getToken(code);
+      console.log(response, "response");
+    } catch (error: any) {
+      console.log(error.message, "error.message");
+      return next(new AppError("Invalid code", 400));
+    }
+    // oAuth2Client.setCredentials(response.tokens);
+    // console.log(oAuth2Client, "oAuth2Client");
+
+    // const { data ://} = await oAuth2Client.request({
+    //   url: "httpswww.googleapis.com/oauth2/v2/userinfo",
+    // });
+    // const user = await oAuth2Client.verifyIdToken({
+    //   idToken: response?.tokens?.id_token || "",
+    //   audience: process.env.GOOGLE_CLIENT_ID,
+    // });
+    // console.log(user, "user");
+
+    // const { email, name } = user.getPayload() as {
+    //   email: string;
+    //   name: string;
+    // };
+    // console.log(user.getPayload(), "user.getPayload()");
+  }
+);
+
 const logout = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req).formatWith(customErrorFormatter);
@@ -129,7 +219,7 @@ const logout = catchAsync(
     const { refreshToken } = req.body;
 
     try {
-      JwtVerify(refreshToken, process.env.JWT_SECRET);
+      JwtVerify(refreshToken, process.env.JWT_SECRET as string);
     } catch (error) {
       return next(new AppError("Invalid token", 400));
     }
@@ -162,7 +252,7 @@ const refreshAccessToken = catchAsync(
 
     let decoded: JwtPayload | string;
     try {
-      decoded = JwtVerify(refreshToken, process.env.JWT_SECRET);
+      decoded = JwtVerify(refreshToken, process.env.JWT_SECRET as string);
     } catch (error) {
       return next(new AppError("Invalid token", 400));
     }
@@ -321,6 +411,8 @@ const resetPasswordConfirm = catchAsync(
 export {
   signup,
   login,
+  getGoogleAuthUrl,
+  googleSignup,
   logout,
   refreshAccessToken,
   resetPassword,

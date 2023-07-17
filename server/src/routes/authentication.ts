@@ -7,6 +7,8 @@ import {
   refreshAccessToken,
   resetPassword,
   resetPasswordConfirm,
+  getGoogleAuthUrl,
+  googleSignup,
 } from "../controllers/authentication";
 import { authorization } from "../middleware/authentication";
 
@@ -37,6 +39,29 @@ router.post(
   signup
 );
 router.post("/login", [emailVaidator(), passwordValidator()], login);
+router.post(
+  "/getGoogleAuthUrl",
+  [
+    body("authType")
+      .trim()
+      .notEmpty()
+      .isIn(["signup", "login"])
+      .withMessage("Invalid authType. Only signup and login are allowed"),
+  ],
+  getGoogleAuthUrl
+);
+router.post(
+  "/googleSignup",
+  [
+    body("code")
+      .isString()
+      .withMessage("Code must be a string")
+      .trim()
+      .notEmpty()
+      .withMessage("Code is required"),
+  ],
+  googleSignup
+);
 router.post("/logout", authorization, [refreshTokenValidator()], logout);
 router.post("/refresh-token", [refreshTokenValidator()], refreshAccessToken);
 router.post("/reset-password", [emailVaidator()], resetPassword);

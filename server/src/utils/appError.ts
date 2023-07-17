@@ -1,6 +1,6 @@
 // import { PrismaClient } from "@prisma/client";
 
-import { CustomError } from "../global";
+import { CustomError } from "../types";
 
 // import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
 

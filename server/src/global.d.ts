@@ -2,10 +2,16 @@ declare global {
   namespace NodeJS {
     interface ProcessEnv {
       NODE_ENV: "development" | "production";
-      DATABASE_URL: string;
       PORT: string;
+      CLIENT_BASE_URL: string;
+
+      DATABASE_URL: string;
       JWT_SECRET: string;
       PASSWORD_SALT: string;
+
+      GOOGLE_CLIENT_ID: string;
+      GOOGLE_CLIENT_SECRET: string;
+
       AUTH_EMAIL: string;
       EMAIL_HOST: string;
       EMAIL_PORT: string;
@@ -16,9 +22,3 @@ declare global {
     }
   }
 }
-
-export interface CustomError {
-  field: string;
-  message: string;
-}
-export {};
