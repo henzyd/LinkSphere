@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { IconButton, Tooltip } from "@mui/material";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import { FiSearch } from "react-icons/fi";
