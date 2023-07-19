@@ -10,7 +10,7 @@ const NavBar = () => {
   const [isSearchFocused, setIsSearchFocused] = useState(false);
 
   return (
-    <nav className="grid items-center justify-between p-4 gap-4 grid-cols-[min-content,1fr,min-content]">
+    <nav className="grid items-center justify-between p-4 gap-4 grid-cols-[min-content,1fr,min-content] bg-white sticky top-0 z-50 shadow">
       <div className="w-[8rem]">
         <Logo className=" TabletAndBelow:w-[7rem]" />
       </div>
