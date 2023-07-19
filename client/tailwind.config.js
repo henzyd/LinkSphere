@@ -9,6 +9,7 @@ export default {
         Tertiary: "#343a40",
         TextBlack: "#111",
         AppBG: "#f6f6f6",
+        IconColor: "#303030",
       },
       screens: {
         SmallPhones: { max: "380px" },

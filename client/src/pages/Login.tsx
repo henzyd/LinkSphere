@@ -135,7 +135,7 @@ const Login = () => {
                     }))
                   }
                   checked={userInput.rememberMe}
-                  color="secondary"
+                  color="primary"
                 />
               }
               className="text-sm"

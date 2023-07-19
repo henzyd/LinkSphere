@@ -2,10 +2,12 @@ import Seo from "../utils/Seo";
 
 const Home = () => {
   return (
-    <div>
+    <>
       <Seo title="Home" description="Home page" />
-      <div>Home</div>
-    </div>
+      <section id="CreatePost">
+        <div></div>
+      </section>
+    </>
   );
 };
 
