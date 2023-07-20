@@ -10,7 +10,7 @@ const AppLayout: React.FC<AppLayoutProps> = () => {
   return (
     <div>
       <NavBar />
-      <main className="bg-AppBG h-[400vh]">
+      <main className="bg-AppBG ">
         <AppContainer>
           <Outlet />
         </AppContainer>
