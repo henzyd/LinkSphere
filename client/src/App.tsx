@@ -23,7 +23,9 @@ function App() {
             }
           />
         </Route>
-        <AuthRoute />
+        <Route path="/login" element={<AuthRoute.Login />} />
+        <Route path="/signup" element={<AuthRoute.Signup />} />
+        <Route path="/forgot-password" element={<AuthRoute.ForgotPassword />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </div>
