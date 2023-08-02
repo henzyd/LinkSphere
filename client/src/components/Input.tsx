@@ -7,17 +7,8 @@ import {
   OutlinedInputProps,
 } from "@mui/material";
 
-interface InputProps {
-  id: OutlinedInputProps["id"];
-  label: OutlinedInputProps["label"];
-  name: OutlinedInputProps["name"];
-  type: OutlinedInputProps["type"];
-  error?: OutlinedInputProps["error"];
+interface InputProps extends OutlinedInputProps {
   helperText?: string;
-  className?: OutlinedInputProps["className"];
-  value: OutlinedInputProps["value"];
-  onChange: OutlinedInputProps["onChange"];
-  endAdornment?: OutlinedInputProps["endAdornment"];
 }
 
 const Input: React.FC<InputProps> = ({
@@ -31,6 +22,7 @@ const Input: React.FC<InputProps> = ({
   value,
   onChange,
   endAdornment,
+  required,
 }) => {
   return (
     <FormControl className="w-full" variant="outlined">
@@ -44,11 +36,12 @@ const Input: React.FC<InputProps> = ({
         error={error || false}
         id={id}
         label={label}
+        required={required || false}
         endAdornment={endAdornment || null}
       />
       <FormHelperText
         className={`!text-red-500 !font-medium !text-xs ${
-          error ? "visible" : "invisible"
+          error ? "block" : "hidden"
         }`}
         error={error || false}
       >

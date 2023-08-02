@@ -1,12 +1,12 @@
+import { Suspense } from "react";
 import { Routes, Route } from "react-router-dom";
 import "./App.css";
-import { ForgotPassword, Home, Login, Signup } from "./pages";
-import { Suspense } from "react";
+import { Home } from "./pages";
 import LazyLoader from "./components/LazyLoader";
 import NotFound from "./pages/NotFound";
-import AuthLayout from "./layouts/AuthLayout";
 import Toaster from "./utils/Toast";
 import AppLayout from "./layouts/AppLayout";
+import AuthRoute from "./routes/AuthRoute";
 
 function App() {
   return (
@@ -23,34 +23,9 @@ function App() {
             }
           />
         </Route>
-        <Route
-          path="/login"
-          element={
-            <Suspense fallback={<LazyLoader />}>
-              <AuthLayout>
-                <Login />
-              </AuthLayout>
-            </Suspense>
-          }
-        />
-        <Route
-          path="/signup"
-          element={
-            <Suspense fallback={<LazyLoader />}>
-              <AuthLayout>
-                <Signup />
-              </AuthLayout>
-            </Suspense>
-          }
-        />
-        <Route
-          path="/forgot-password"
-          element={
-            <Suspense fallback={<LazyLoader />}>
-              <ForgotPassword />
-            </Suspense>
-          }
-        />
+        <Route path="/login" element={<AuthRoute.Login />} />
+        <Route path="/signup" element={<AuthRoute.Signup />} />
+        <Route path="/forgot-password" element={<AuthRoute.ForgotPassword />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </div>

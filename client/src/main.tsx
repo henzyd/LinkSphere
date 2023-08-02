@@ -5,13 +5,17 @@ import "./index.css";
 import { BrowserRouter } from "react-router-dom";
 import theme from "./utils/Theme.ts";
 import { ThemeProvider } from "@mui/material/styles";
+import { Provider } from "react-redux";
+import store from "./redux/store.ts";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-  <BrowserRouter>
-    <React.StrictMode>
+  <React.StrictMode>
+    <BrowserRouter>
       <ThemeProvider theme={theme}>
-        <App />
+        <Provider store={store}>
+          <App />
+        </Provider>
       </ThemeProvider>
-    </React.StrictMode>
-  </BrowserRouter>
+    </BrowserRouter>
+  </React.StrictMode>
 );
