@@ -1,17 +1,20 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import IconButton from "@mui/material/IconButton";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { Link, useNavigate } from "react-router-dom";
+import { FcGoogle } from "react-icons/fc";
 import Seo from "../utils/Seo";
 import Input from "../components/Input";
 import Button from "../components/Button";
-import { Link } from "react-router-dom";
-import { FcGoogle } from "react-icons/fc";
 import AuthContainer from "../components/AuthContainer";
+import { useSignupMutation } from "../api/queries/authQuery";
+import { notifyError, notifySuccess } from "../utils/Toast";
 
 const Signup = () => {
+  const navigate = useNavigate();
   const [userInput, setUserInput] = useState({
-    name: {
+    username: {
       value: "",
       error: false,
     },
@@ -28,28 +31,30 @@ const Signup = () => {
       error: false,
     },
   });
-
   const [showPassword, setShowPassword] = useState({
     password: false,
     confirmPassword: false,
   });
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  const [signup, { isLoading, isSuccess, isError, error }] =
+    useSignupMutation();
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     console.log(userInput);
 
     //? Validation
     if (
-      !userInput.name.value ||
+      !userInput.username.value ||
       !userInput.email.value ||
       userInput.password.value.length < 8 ||
       userInput.confirmPassword.value.length < 8
     ) {
       setUserInput((prev) => ({
         ...prev,
-        name: {
-          ...prev.name,
-          error: !prev.name.value ? true : false,
+        username: {
+          ...prev.username,
+          error: !prev.username.value ? true : false,
         },
         email: {
           ...prev.email,
@@ -68,8 +73,8 @@ const Signup = () => {
     } else {
       setUserInput((prev) => ({
         ...prev,
-        name: {
-          ...prev.name,
+        username: {
+          ...prev.username,
           error: false,
         },
         email: {
@@ -86,7 +91,28 @@ const Signup = () => {
         },
       }));
     }
+
+    await signup({
+      email: userInput.email.value,
+      password: userInput.password.value,
+      username: userInput.username.value,
+    });
   }
+
+  useEffect(() => {
+    if (isSuccess) {
+      navigate("/login");
+      notifySuccess("Signup successful, please login");
+    }
+
+    if (error) {
+      if ("status" in error) {
+        if (error.status === 400) {
+          notifyError("Signup failed, email or username already exists");
+        }
+      }
+    }
+  }, [isSuccess, isError]);
 
   return (
     <>
@@ -97,7 +123,7 @@ const Signup = () => {
       >
         <form
           onSubmit={handleSubmit}
-          className="flex flex-col justify-center items-center w-full gap-[0.55rem]"
+          className="flex flex-col justify-center items-center w-full gap-[1rem]"
         >
           <h1 className="text-[1.5rem] font-bold mb-2 text-center">
             Create an account
@@ -107,18 +133,18 @@ const Signup = () => {
             onChange={(e) =>
               setUserInput((prev) => ({
                 ...prev,
-                name: {
-                  ...prev.name,
+                username: {
+                  ...prev.username,
                   value: e.target.value,
                 },
               }))
             }
-            value={userInput.name.value}
+            value={userInput.username.value}
             id="login-name-input"
-            label={"Name"}
+            label={"Username"}
             name="name"
-            error={userInput.name.error}
-            helperText={"Name is required"}
+            error={userInput.username.error}
+            helperText={"Username is required"}
           />
           <Input
             type="email"
@@ -216,6 +242,7 @@ const Signup = () => {
             color="info"
             type="submit"
             className="w-full !mt-3 !p-4"
+            loading={isLoading}
           >
             Signup
           </Button>

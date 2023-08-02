@@ -1,19 +1,11 @@
 import { Button as MuiButton, ButtonProps } from "@mui/material";
-import LoadingButton from "@mui/lab/LoadingButton";
-import SaveIcon from "@mui/icons-material/Save";
 
-const Button: React.FC<{
+interface ButtonPropsType extends ButtonProps {
   children: React.ReactNode;
-  color?: ButtonProps["color"];
-  variant?: ButtonProps["variant"];
-  startIcon?: ButtonProps["startIcon"];
-  endIcon?: ButtonProps["endIcon"];
-  disabled?: ButtonProps["disabled"];
   loading?: boolean;
-  type?: ButtonProps["type"];
-  className?: ButtonProps["className"];
-  onClick?: ButtonProps["onClick"];
-}> = ({
+}
+
+const Button: React.FC<ButtonPropsType> = ({
   children,
   color,
   variant,
@@ -25,31 +17,48 @@ const Button: React.FC<{
   className,
   onClick,
 }) => {
-  const classNameStyles: ButtonProps["className"] = `!text-xs LaptopAndAbove:!text-sm !p-3 !rounded-md !px-5 !text-white MediumPhones:!p-2 MediumPhones:!py-[0.85rem] MediumPhones:!px-3 MediumPhones:!rounded MediumPhones:!text-xs`;
+  const classNameStyles: ButtonProps["className"] = `flex justify-center items-center !text-xs LaptopAndAbove:!text-sm !p-3 !rounded-md !px-5 !text-white MediumPhones:!p-2 MediumPhones:!py-[0.85rem] MediumPhones:!px-3 MediumPhones:!rounded MediumPhones:!text-xs`;
 
   if (loading) {
     return (
-      <LoadingButton
-        loading
-        startIcon={<SaveIcon />}
-        className={`${classNameStyles} cursor-not-allowed`}
+      <MuiButton
+        variant={variant || "contained"}
+        color={color || "primary"}
+        className={`${classNameStyles} ${className} !py-[0.35rem] opacity-40 !cursor-not-allowed`}
+        startIcon={
+          <figure className="w-10 text">
+            <img
+              src="https://res.cloudinary.com/dkok98flj/image/upload/v1690825662/other-assets/wired-outline-332-loader-3_yrfrqx.gif"
+              alt="loading"
+              className="w-full h-full object-contain "
+            />
+          </figure>
+        }
+        type={"button"}
+        sx={{
+          "& .MuiTouchRipple-root": {
+            display: "none",
+          },
+          boxShadow: "none !important",
+          // textTransform: "none !important",
+        }}
       >
-        <span>Loading...</span>
-      </LoadingButton>
+        Loading...
+      </MuiButton>
     );
   } else {
     return (
       <MuiButton
         variant={variant || "contained"}
         color={color || "primary"}
-        className={`${classNameStyles} ${className}`}
+        className={`${classNameStyles} ${className} `}
         startIcon={startIcon || null}
         endIcon={endIcon || null}
         disabled={disabled || false}
         type={type || "button"}
         onClick={onClick}
       >
-        {children}
+        <>{children}</>
       </MuiButton>
     );
   }
