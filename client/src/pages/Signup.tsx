@@ -83,7 +83,7 @@ const Signup = () => {
           className="flex flex-col justify-center items-center w-full gap-[1rem]"
         >
           <h1 className="text-[1.5rem] font-bold mb-2 text-center">
-            Create an Account
+            Create an account
           </h1>
           <Input
             type="text"
