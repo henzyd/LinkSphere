@@ -26,7 +26,9 @@ const Input: React.FC<InputProps> = ({
 }) => {
   return (
     <FormControl className="w-full" variant="outlined">
-      <InputLabel htmlFor={id}>{label}</InputLabel>
+      <InputLabel htmlFor={id} className={`${error && "!text-red-500"}`}>
+        {label}
+      </InputLabel>
       <OutlinedInput
         type={type || "text"}
         value={value}
