@@ -1,30 +1,21 @@
-import React, { Suspense } from "react";
+import React from "react";
 import { ForgotPassword, Login, Signup } from "../pages";
-import LazyLoader from "../components/LazyLoader";
 import AuthLayout from "../layouts/AuthLayout";
 
 class AuthRoute {
   static Login: React.FC = () => (
-    <Suspense fallback={<LazyLoader />}>
-      <AuthLayout>
-        <Login />
-      </AuthLayout>
-    </Suspense>
+    <AuthLayout>
+      <Login />
+    </AuthLayout>
   );
 
   static Signup: React.FC = () => (
-    <Suspense fallback={<LazyLoader />}>
-      <AuthLayout>
-        <Signup />
-      </AuthLayout>
-    </Suspense>
+    <AuthLayout>
+      <Signup />
+    </AuthLayout>
   );
 
-  static ForgotPassword: React.FC = () => (
-    <Suspense fallback={<LazyLoader />}>
-      <ForgotPassword />
-    </Suspense>
-  );
+  static ForgotPassword: React.FC = () => <ForgotPassword />;
 }
 
 export default AuthRoute;
