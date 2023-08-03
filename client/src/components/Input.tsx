@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 
 interface InputProps extends OutlinedInputProps {
-  helperText?: string;
+  helperText?: string | null;
 }
 
 const Input: React.FC<InputProps> = ({
