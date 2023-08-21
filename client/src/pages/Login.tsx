@@ -7,12 +7,12 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { FcGoogle } from "react-icons/fc";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import Seo from "../utils/Seo";
-import Input from "../components/Input";
-import Button from "../components/Button";
-import AuthContainer from "../components/AuthContainer";
-import { notifyError, notifySuccess } from "../utils/Toast";
-import { useLoginMutation } from "../api/queries/authQuery";
+import Seo from "~/components/Seo";
+import Input from "~/components/Input";
+import Button from "~/components/Button";
+import AuthContainer from "~/components/AuthContainer";
+import { notifyError, notifySuccess } from "~/utils/Toast";
+import { useLoginMutation } from "~/api/queries/authQuery";
 
 const loginValidationSchema = Yup.object().shape({
   email: Yup.string().email("Email is not valid").required("Email is required"),

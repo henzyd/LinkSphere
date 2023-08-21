@@ -1,4 +1,4 @@
-import Seo from "../utils/Seo";
+import Seo from "../components/Seo";
 import Button from "../components/Button";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import { useNavigate } from "react-router-dom";

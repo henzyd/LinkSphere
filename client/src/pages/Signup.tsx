@@ -6,12 +6,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import Seo from "../utils/Seo";
+import Seo from "../components/Seo";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import AuthContainer from "../components/AuthContainer";
 import { useSignupMutation } from "../api/queries/authQuery";
-import { notifyError, notifySuccess } from "../utils/Toast";
+import { notifyError, notifySuccess } from "../components/Toast";
 
 const signupValidationSchema = Yup.object().shape({
   username: Yup.string().required("Username is required"),

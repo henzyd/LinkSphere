@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { IoArrowBack } from "react-icons/io5";
-import Seo from "../utils/Seo";
+import Seo from "../components/Seo";
 import AuthContainer from "../components/AuthContainer";
 import Input from "../components/Input";
 import Button from "../components/Button";
