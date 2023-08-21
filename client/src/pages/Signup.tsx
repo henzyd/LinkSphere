@@ -13,7 +13,7 @@ import AuthContainer from "../components/AuthContainer";
 import { useSignupMutation } from "../api/queries/authQuery";
 import { notifyError, notifySuccess } from "../utils/Toast";
 
-const signupSchema = Yup.object().shape({
+const signupValidationSchema = Yup.object().shape({
   username: Yup.string().required("Username is required"),
   email: Yup.string().email("Email is not valid").required("Email is required"),
   password: Yup.string()
@@ -40,7 +40,7 @@ const Signup = () => {
       password: "",
       confirmPassword: "",
     },
-    validationSchema: signupSchema,
+    validationSchema: signupValidationSchema,
     onSubmit: async (values) => {
       try {
         await signup({

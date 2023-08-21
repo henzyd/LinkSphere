@@ -9,11 +9,7 @@ const authApi = createApi({
   tagTypes: ["Auth"],
   endpoints: (builder) => ({
     signup: builder.mutation({
-      query: (credentials: {
-        username: string;
-        email: string;
-        password: string;
-      }) => ({
+      query: (credentials) => ({
         url: "/signup",
         method: "POST",
         body: credentials,

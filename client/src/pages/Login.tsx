@@ -1,65 +1,66 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Checkbox, FormControlLabel } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { FcGoogle } from "react-icons/fc";
+import * as Yup from "yup";
+import { useFormik } from "formik";
 import Seo from "../utils/Seo";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import AuthContainer from "../components/AuthContainer";
 import { notifyError, notifySuccess } from "../utils/Toast";
+import { useLoginMutation } from "../api/queries/authQuery";
+
+const loginValidationSchema = Yup.object().shape({
+  email: Yup.string().email("Email is not valid").required("Email is required"),
+  password: Yup.string()
+    .min(8, "Password must be at least 8 characters")
+    .required("Password is required and must be at least 8 characters"),
+  rememberMe: Yup.boolean(),
+});
 
 const Login = () => {
-  const [userInput, setUserInput] = useState({
-    email: {
-      value: "",
-      error: false,
-    },
-    password: {
-      value: "",
-      error: false,
-    },
-    rememberMe: false,
-  });
-
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
+  const [login, { isLoading }] = useLoginMutation();
 
-    //? Validation
-    if (!userInput.email.value || userInput.password.value.length < 8) {
-      setUserInput((prev) => ({
-        ...prev,
-        email: {
-          ...prev.email,
-          error: !prev.email.value ? true : false,
-        },
-        password: {
-          ...prev.password,
-          error: prev.password.value.length < 8 ? true : false,
-        },
-      }));
-      notifyError("Please fill all the fields correctly");
-      return;
-    } else {
-      setUserInput((prev) => ({
-        ...prev,
-        email: {
-          ...prev.email,
-          error: false,
-        },
-        password: {
-          ...prev.password,
-          error: false,
-        },
-      }));
-    }
-
-    notifySuccess("Login successful");
-  }
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+      rememberMe: false,
+    },
+    validationSchema: loginValidationSchema,
+    onSubmit: async (values) => {
+      try {
+        await login({
+          email: values.email,
+          password: values.password,
+        }).unwrap();
+        navigate("/login");
+        notifySuccess("Login successful");
+      } catch (error: any) {
+        if ("status" in error) {
+          if (error.status === 400) {
+            if (error.data.validationErrors) {
+              notifyError(error.data.validationErrors[0].message);
+            } else if (error.data.message) {
+              const message: string = error.data.message.toLowerCase();
+              if (message.includes("duplicate")) {
+                if (message.includes("email")) {
+                  notifyError("Login failed, Email already exists");
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+  });
 
   return (
     <>
@@ -69,7 +70,7 @@ const Login = () => {
         illustrationImgAlt="login"
       >
         <form
-          onSubmit={handleSubmit}
+          onSubmit={formik.handleSubmit}
           className="flex flex-col justify-center items-center w-full gap-[0.55rem]"
         >
           <h1 className="text-[1.5rem] font-bold mb-2 text-center">
@@ -78,40 +79,30 @@ const Login = () => {
 
           <Input
             type="email"
-            onChange={(e) =>
-              setUserInput((prev) => ({
-                ...prev,
-                email: {
-                  ...prev.email,
-                  value: e.target.value,
-                },
-              }))
-            }
-            value={userInput.email.value}
+            onChange={formik.handleChange}
+            value={formik.values.email}
             id="login-email-input"
             label={"Email"}
             name="email"
-            error={userInput.email.error}
-            helperText={"Email is required"}
+            error={formik.touched.email && Boolean(formik.errors.email)}
+            helperText={
+              formik.touched.email && formik.errors.email
+                ? formik.errors.email
+                : null
+            }
           />
           <Input
             type={showPassword ? "text" : "password"}
-            value={userInput.password.value}
-            error={userInput.password.error}
-            onChange={(e) =>
-              setUserInput((prev) => ({
-                ...prev,
-                password: {
-                  ...prev.password,
-                  value: e.target.value.trim(),
-                },
-              }))
-            }
+            value={formik.values.password}
+            error={formik.touched.password && Boolean(formik.errors.password)}
+            onChange={formik.handleChange}
             id="login-password-input"
             label={"Password"}
             name="password"
             helperText={
-              "Password is required and must be at least 8 characters"
+              formik.touched.password && formik.errors.password
+                ? formik.errors.password
+                : null
             }
             endAdornment={
               <IconButton
@@ -128,14 +119,10 @@ const Login = () => {
             <FormControlLabel
               control={
                 <Checkbox
-                  onChange={(e) =>
-                    setUserInput((prev) => ({
-                      ...prev,
-                      rememberMe: e.target.checked,
-                    }))
-                  }
-                  checked={userInput.rememberMe}
+                  onChange={formik.handleChange}
+                  checked={formik.values.rememberMe}
                   color="primary"
+                  name="rememberMe"
                 />
               }
               className="text-sm"
@@ -145,12 +132,12 @@ const Login = () => {
               <p className=" text-sm">Forgot your password?</p>
             </Link>
           </div>
-
           <Button
             variant="contained"
             color="info"
             type="submit"
             className="w-full !p-4"
+            loading={isLoading}
           >
             Login
           </Button>
