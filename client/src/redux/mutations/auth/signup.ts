@@ -1,5 +1,5 @@
 import { isApiErrorResponse } from "~/utils/helpers";
-import { notifyError, notifySuccess } from "~/utils/toast";
+import { notifyError, notifySuccess } from "~/utils/toast.ts";
 import authApi from ".";
 
 const _signupEndpoint = authApi.injectEndpoints({
