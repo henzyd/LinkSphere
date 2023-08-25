@@ -1,6 +1,6 @@
 import authApi from ".";
 import { isApiErrorResponse } from "~/utils/helpers";
-import { notifyError, notifySuccess } from "~/utils/toast.ts";
+import { notifyError, notifySuccess } from "~/utils/toast";
 
 const _loginEndpoint = authApi.injectEndpoints({
   endpoints: (builder) => ({
