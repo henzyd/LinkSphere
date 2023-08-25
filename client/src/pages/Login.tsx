@@ -11,7 +11,7 @@ import Seo from "~/components/Seo";
 import Input from "~/components/Input";
 import Button from "~/components/Button";
 import AuthContainer from "~/components/AuthContainer";
-import useloginMutation from "~/redux/mutations/auth/login";
+import useLoginMutation from "~/redux/mutations/auth/login";
 
 const loginValidationSchema = Yup.object().shape({
   email: Yup.string().email("Email is not valid").required("Email is required"),
@@ -25,7 +25,7 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
-  const { login, result } = useloginMutation();
+  const { login, result } = useLoginMutation();
   const { isLoading } = result;
 
   const formik = useFormik({

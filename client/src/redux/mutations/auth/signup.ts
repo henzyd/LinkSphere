@@ -1,12 +1,12 @@
-import authApi from ".";
 import { isApiErrorResponse } from "~/utils/helpers";
 import { notifyError, notifySuccess } from "~/utils/toast";
+import authApi from ".";
 
-const _loginEndpoint = authApi.injectEndpoints({
+const _signupEndpoint = authApi.injectEndpoints({
   endpoints: (builder) => ({
-    login: builder.mutation({
+    signup: builder.mutation({
       query: (credentials) => ({
-        url: "/login",
+        url: "/signup",
         method: "POST",
         body: credentials,
       }),
@@ -14,13 +14,15 @@ const _loginEndpoint = authApi.injectEndpoints({
   }),
 });
 
-function useLoginMutation() {
-  const [trigger, result] = _loginEndpoint.useLoginMutation();
+function useSignupMutation() {
+  const [trigger, result] = _signupEndpoint.useSignupMutation();
 
-  const login = async (values: Record<"email" | "password", string>) => {
+  const signup = async (
+    values: Record<"email" | "password" | "username", string>
+  ) => {
     try {
       await trigger(values).unwrap();
-      notifySuccess("Login Successful");
+      notifySuccess("Signup successfully");
     } catch (error) {
       if (isApiErrorResponse(error)) {
         if (error.status === 400) {
@@ -30,7 +32,9 @@ function useLoginMutation() {
             const message: string = error.data.message.toLowerCase();
             if (message.includes("duplicate")) {
               if (message.includes("email")) {
-                notifyError("Login failed, Email already exists");
+                notifyError("Signup failed, Email already exists");
+              } else if (message.includes("username")) {
+                notifyError("Signup failed, Username already exists");
               }
             }
           }
@@ -39,7 +43,7 @@ function useLoginMutation() {
     }
   };
 
-  return { login, result };
+  return { signup, result };
 }
 
-export default useLoginMutation;
+export default useSignupMutation;

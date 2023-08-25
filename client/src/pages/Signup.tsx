@@ -1,17 +1,15 @@
 import { useState } from "react";
-import IconButton from "@mui/material/IconButton";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { IconButton } from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { Link, useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import Seo from "../components/Seo";
-import Input from "../components/Input";
-import Button from "../components/Button";
-import AuthContainer from "../components/AuthContainer";
-import { useSignupMutation } from "../redux/queries/auth";
-import { notifyError, notifySuccess } from "../components/Toast";
+import useSignupMutation from "~/redux/mutations/auth/signup";
+import Seo from "~/components/Seo";
+import Input from "~/components/Input";
+import Button from "~/components/Button";
+import AuthContainer from "~/components/AuthContainer";
 
 const signupValidationSchema = Yup.object().shape({
   username: Yup.string().required("Username is required"),
@@ -31,7 +29,8 @@ const Signup = () => {
     confirmPassword: false,
   });
 
-  const [signup, { isLoading }] = useSignupMutation();
+  const { signup, result } = useSignupMutation();
+  const { isLoading } = result;
 
   const formik = useFormik({
     initialValues: {
@@ -42,32 +41,12 @@ const Signup = () => {
     },
     validationSchema: signupValidationSchema,
     onSubmit: async (values) => {
-      try {
-        await signup({
-          email: values.email,
-          password: values.password,
-          username: values.username,
-        }).unwrap();
-        navigate("/login");
-        notifySuccess("Signedup successfully, please login");
-      } catch (error: any) {
-        if ("status" in error) {
-          if (error.status === 400) {
-            if (error.data.validationErrors) {
-              notifyError(error.data.validationErrors[0].message);
-            } else if (error.data.message) {
-              const message: string = error.data.message.toLowerCase();
-              if (message.includes("duplicate")) {
-                if (message.includes("email")) {
-                  notifyError("Signup failed, Email already exists");
-                } else if (message.includes("username")) {
-                  notifyError("Signup failed, Username already exists");
-                }
-              }
-            }
-          }
-        }
-      }
+      await signup({
+        username: values.username,
+        email: values.email,
+        password: values.password,
+      });
+      navigate("/");
     },
   });
 
