@@ -10,7 +10,7 @@ import Seo from "../components/Seo";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import AuthContainer from "../components/AuthContainer";
-import { useSignupMutation } from "../api/queries/authQuery";
+import { useSignupMutation } from "../redux/queries/auth";
 import { notifyError, notifySuccess } from "../components/Toast";
 
 const signupValidationSchema = Yup.object().shape({

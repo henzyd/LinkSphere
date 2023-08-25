@@ -4,8 +4,8 @@ import { ThemeProvider } from "@mui/material/styles";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App.tsx";
 import "./index.css";
-import theme from "./utils/Theme.ts";
 import { Provider } from "react-redux";
+import theme from "./utils/theme.ts";
 import store from "./redux/store.ts";
 import LazyLoader from "./components/LazyLoader.tsx";
 

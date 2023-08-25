@@ -11,8 +11,7 @@ import Seo from "~/components/Seo";
 import Input from "~/components/Input";
 import Button from "~/components/Button";
 import AuthContainer from "~/components/AuthContainer";
-import { notifyError, notifySuccess } from "~/utils/Toast";
-import { useLoginMutation } from "~/api/queries/authQuery";
+import useloginMutation from "~/redux/mutations/auth/login";
 
 const loginValidationSchema = Yup.object().shape({
   email: Yup.string().email("Email is not valid").required("Email is required"),
@@ -26,7 +25,8 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
-  const [login, { isLoading }] = useLoginMutation();
+  const { login, result } = useloginMutation();
+  const { isLoading } = result;
 
   const formik = useFormik({
     initialValues: {
@@ -36,29 +36,11 @@ const Login = () => {
     },
     validationSchema: loginValidationSchema,
     onSubmit: async (values) => {
-      try {
-        await login({
-          email: values.email,
-          password: values.password,
-        }).unwrap();
-        navigate("/login");
-        notifySuccess("Login successful");
-      } catch (error: any) {
-        if ("status" in error) {
-          if (error.status === 400) {
-            if (error.data.validationErrors) {
-              notifyError(error.data.validationErrors[0].message);
-            } else if (error.data.message) {
-              const message: string = error.data.message.toLowerCase();
-              if (message.includes("duplicate")) {
-                if (message.includes("email")) {
-                  notifyError("Login failed, Email already exists");
-                }
-              }
-            }
-          }
-        }
-      }
+      await login({
+        email: values.email,
+        password: values.password,
+      });
+      navigate("/");
     },
   });
 

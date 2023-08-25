@@ -6,14 +6,14 @@ export default ({ mode }) => {
   process.env = { ...process.env, ...loadEnv(mode, process.cwd()) };
 
   return defineConfig({
-    plugins: [react()],
+    server: {
+      port: parseInt(process.env.VITE_PORT) || 5173,
+    },
     resolve: {
       alias: {
         "~": path.resolve(__dirname, "src"),
       },
     },
-    server: {
-      port: parseInt(process.env.VITE_PORT) || 5173,
-    },
+    plugins: [react()],
   });
 };
