@@ -1,4 +1,4 @@
-import Seo from "../utils/Seo";
+import Seo from "../components/Seo";
 import CreatePost from "../components/CreatePost";
 import EmptyPost from "../components/EmptyPost";
 

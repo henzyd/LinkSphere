@@ -2,7 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import "./App.css";
 import { Home } from "./pages";
 import NotFound from "./pages/NotFound";
-import Toaster from "./utils/Toast";
+import Toaster from "./components/Toast";
 import AppLayout from "./layouts/AppLayout";
 import AuthRoute from "./routes/AuthRoute";
 
