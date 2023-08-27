@@ -4,7 +4,7 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { Link, useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 import * as Yup from "yup";
-import { useFormik } from "formik";
+import { Formik } from "formik";
 import useSignupMutation from "~/redux/mutations/auth/signup";
 import Seo from "~/components/Seo";
 import Input from "~/components/Input";
@@ -29,26 +29,7 @@ const Signup = () => {
     confirmPassword: false,
   });
 
-  const { signup, result } = useSignupMutation();
-  const { isLoading } = result;
-
-  const formik = useFormik({
-    initialValues: {
-      username: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-    },
-    validationSchema: signupValidationSchema,
-    onSubmit: async (values) => {
-      await signup({
-        username: values.username,
-        email: values.email,
-        password: values.password,
-      });
-      navigate("/");
-    },
-  });
+  const { signup } = useSignupMutation();
 
   return (
     <>
@@ -57,114 +38,112 @@ const Signup = () => {
         illustrationImg="https://res.cloudinary.com/dkok98flj/image/upload/v1687641216/illustrations/sign_up_ys1xei.png"
         illustrationImgAlt="signup"
       >
-        <form
-          onSubmit={formik.handleSubmit}
-          className="flex flex-col justify-center items-center w-full gap-[1rem]"
+        <Formik
+          initialValues={{
+            username: "",
+            email: "",
+            password: "",
+            confirmPassword: "",
+          }}
+          validationSchema={signupValidationSchema}
+          onSubmit={async (values) => {
+            await signup({
+              username: values.username,
+              email: values.email,
+              password: values.password,
+            });
+            navigate("/");
+          }}
+          validateOnBlur={false}
         >
-          <h1 className="text-[1.5rem] font-bold mb-2 text-center">
-            Create an account
-          </h1>
-          <Input
-            type="text"
-            onChange={formik.handleChange}
-            value={formik.values.username}
-            id="login-name-input"
-            label={"Username"}
-            name="username"
-            error={formik.touched.username && Boolean(formik.errors.username)}
-            helperText={
-              formik.touched.username && formik.errors.username
-                ? formik.errors.username
-                : null
-            }
-          />
-          <Input
-            type="email"
-            onChange={formik.handleChange}
-            value={formik.values.email}
-            id="login-email-input"
-            label={"Email"}
-            name="email"
-            error={formik.touched.email && Boolean(formik.errors.email)}
-            helperText={
-              formik.touched.email && formik.errors.email
-                ? formik.errors.email
-                : null
-            }
-          />
-          <Input
-            type={showPassword.password ? "text" : "password"}
-            onChange={formik.handleChange}
-            value={formik.values.password}
-            id="login-password-input"
-            label={"Password"}
-            name="password"
-            error={formik.touched.password && Boolean(formik.errors.password)}
-            helperText={
-              formik.touched.password && formik.errors.password
-                ? formik.errors.password
-                : null
-            }
-            endAdornment={
-              <IconButton
-                aria-label="toggle password visibility"
-                onClick={() =>
-                  setShowPassword((prev) => ({
-                    ...prev,
-                    password: !prev.password,
-                  }))
+          {({ handleSubmit, isSubmitting }) => (
+            <form
+              onSubmit={handleSubmit}
+              className="flex flex-col justify-center items-center w-full gap-[1rem]"
+            >
+              <h1 className="text-[1.5rem] font-bold mb-2 text-center">
+                Create an account
+              </h1>
+              <Input
+                id="signup-username-input"
+                data-testid="signup-username-input"
+                label="Username"
+                name="username"
+                placeholder="someone"
+              />
+              <Input
+                type="email"
+                required
+                id="signup-email-input"
+                label="Email Address"
+                name="email"
+                placeholder="someone@gmail.com"
+                data-testid="signup-email-input"
+              />
+              <Input
+                id="signup-password-input"
+                label="Password"
+                type={showPassword ? "text" : "password"}
+                required
+                placeholder="****************"
+                name="password"
+                className="placeholder:leading-3"
+                data-testid="signup-password-input"
+                endAdornment={
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={() =>
+                      setShowPassword((prev) => ({
+                        ...prev,
+                        password: !prev.password,
+                      }))
+                    }
+                    edge="end"
+                  >
+                    {showPassword.password ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
                 }
-                edge="end"
-              >
-                {showPassword.password ? <Visibility /> : <VisibilityOff />}
-              </IconButton>
-            }
-          />
-          <Input
-            type={showPassword.confirmPassword ? "text" : "password"}
-            onChange={formik.handleChange}
-            value={formik.values.confirmPassword}
-            id="login-confirm-password-input"
-            label={"Confirm Password"}
-            name="confirmPassword"
-            error={
-              formik.touched.confirmPassword &&
-              Boolean(formik.errors.confirmPassword)
-            }
-            helperText={
-              formik.touched.confirmPassword && formik.errors.confirmPassword
-                ? formik.errors.confirmPassword
-                : null
-            }
-            endAdornment={
-              <IconButton
-                aria-label="toggle password visibility"
-                onClick={() =>
-                  setShowPassword((prev) => ({
-                    ...prev,
-                    confirmPassword: !prev.confirmPassword,
-                  }))
+              />
+              <Input
+                id="signup-confirm-password-input"
+                label="Confirm Password"
+                type={showPassword ? "text" : "password"}
+                required
+                placeholder="****************"
+                name="password"
+                className="placeholder:leading-3"
+                data-testid="signup-confirm-password-input"
+                endAdornment={
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={() =>
+                      setShowPassword((prev) => ({
+                        ...prev,
+                        confirmPassword: !prev.confirmPassword,
+                      }))
+                    }
+                    edge="end"
+                  >
+                    {showPassword.confirmPassword ? (
+                      <VisibilityOff />
+                    ) : (
+                      <Visibility />
+                    )}
+                  </IconButton>
                 }
-                edge="end"
+              />
+              <Button
+                variant="contained"
+                color="info"
+                type="submit"
+                className="w-full !mt-3 !p-4"
+                loading={isSubmitting}
               >
-                {showPassword.confirmPassword ? (
-                  <Visibility />
-                ) : (
-                  <VisibilityOff />
-                )}
-              </IconButton>
-            }
-          />
-          <Button
-            variant="contained"
-            color="info"
-            type="submit"
-            className="w-full !mt-3 !p-4"
-            loading={isLoading}
-          >
-            Signup
-          </Button>
-        </form>
+                Signup
+              </Button>
+            </form>
+          )}
+        </Formik>
         <p className="text-sm mt-4 self-start">
           Already have an account?{" "}
           <Link to="/login" className=" !text-Primary !font-bold">

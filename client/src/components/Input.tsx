@@ -1,55 +1,39 @@
 import React from "react";
-import {
-  OutlinedInput,
-  FormControl,
-  InputLabel,
-  FormHelperText,
-  OutlinedInputProps,
-} from "@mui/material";
+import { OutlinedInput, InputLabel, OutlinedInputProps } from "@mui/material";
+import { ErrorMessage, Field, FieldConfig, FieldProps } from "formik";
+import { twMerge } from "tailwind-merge";
 
-interface InputProps extends OutlinedInputProps {
-  helperText?: string | null;
+interface InputProps extends FieldConfig, OutlinedInputProps {
+  "data-testid": string;
+  name: string;
+  value?: string;
 }
 
-const Input: React.FC<InputProps> = ({
-  id,
-  label,
-  name,
-  type,
-  error,
-  helperText,
-  className,
-  value,
-  onChange,
-  endAdornment,
-  required,
-}) => {
+const Input: React.FC<InputProps> = ({ label, className, ...props }) => {
   return (
-    <FormControl className="w-full" variant="outlined">
-      <InputLabel htmlFor={id} className={`${error && "!text-red-500"}`}>
-        {label}
-      </InputLabel>
-      <OutlinedInput
-        type={type || "text"}
-        value={value}
-        name={name}
-        onChange={onChange}
-        className={` w-full !placeholder:text-base ${className}`}
-        error={error || false}
-        id={id}
-        label={label}
-        required={required || false}
-        endAdornment={endAdornment || null}
-      />
-      <FormHelperText
-        className={`!text-red-500 !font-medium !text-xs ${
-          error ? "block" : "hidden"
-        }`}
-        error={error || false}
-      >
-        {helperText || "Incorrect entry."}
-      </FormHelperText>
-    </FormControl>
+    <Field {...props}>
+      {({ field, meta }: FieldProps) => (
+        <div className="w-full">
+          <InputLabel
+            htmlFor={props.name}
+            className={`${meta.error ? "!text-red-500" : ""}`}
+          >
+            {label}
+          </InputLabel>
+          <OutlinedInput
+            {...props}
+            {...field}
+            className={twMerge(`w-full !placeholder:text-base`, className)}
+          />
+          <ErrorMessage
+            name={props.name}
+            className={`!text-texts-error !font-medium !text-xs pl-1`}
+            component={"p"}
+            data-testid={`${props["data-testid"]}-error`}
+          />
+        </div>
+      )}
+    </Field>
   );
 };
 

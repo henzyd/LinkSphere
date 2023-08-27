@@ -1,12 +1,10 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Checkbox, FormControlLabel } from "@mui/material";
-import IconButton from "@mui/material/IconButton";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { IconButton, Checkbox, FormControlLabel } from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { FcGoogle } from "react-icons/fc";
 import * as Yup from "yup";
-import { useFormik } from "formik";
+import { Formik } from "formik";
 import Seo from "~/components/Seo";
 import Input from "~/components/Input";
 import Button from "~/components/Button";
@@ -25,24 +23,7 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
-  const { login, result } = useLoginMutation();
-  const { isLoading } = result;
-
-  const formik = useFormik({
-    initialValues: {
-      email: "",
-      password: "",
-      rememberMe: false,
-    },
-    validationSchema: loginValidationSchema,
-    onSubmit: async (values) => {
-      await login({
-        email: values.email,
-        password: values.password,
-      });
-      navigate("/");
-    },
-  });
+  const { login } = useLoginMutation();
 
   return (
     <>
@@ -51,79 +32,91 @@ const Login = () => {
         illustrationImg="https://res.cloudinary.com/dkok98flj/image/upload/v1687641212/illustrations/login_kex2y6.png"
         illustrationImgAlt="login"
       >
-        <form
-          onSubmit={formik.handleSubmit}
-          className="flex flex-col justify-center items-center w-full gap-[0.55rem]"
+        <Formik
+          initialValues={{
+            email: "",
+            password: "",
+            rememberMe: false,
+          }}
+          validationSchema={loginValidationSchema}
+          onSubmit={async (values) => {
+            await login({
+              email: values.email,
+              password: values.password,
+            });
+            navigate("/");
+          }}
+          validateOnBlur={false}
         >
-          <h1 className="text-[1.5rem] font-bold mb-2 text-center">
-            Login into your account
-          </h1>
+          {({ handleSubmit, isSubmitting, values, setFieldValue }) => (
+            <form
+              method="POST"
+              onSubmit={handleSubmit}
+              className="flex flex-col justify-center items-center w-full gap-[0.55rem]"
+            >
+              <h1 className="text-[1.5rem] font-bold mb-2 text-center">
+                Login into your account
+              </h1>
 
-          <Input
-            type="email"
-            onChange={formik.handleChange}
-            value={formik.values.email}
-            id="login-email-input"
-            label={"Email"}
-            name="email"
-            error={formik.touched.email && Boolean(formik.errors.email)}
-            helperText={
-              formik.touched.email && formik.errors.email
-                ? formik.errors.email
-                : null
-            }
-          />
-          <Input
-            type={showPassword ? "text" : "password"}
-            value={formik.values.password}
-            error={formik.touched.password && Boolean(formik.errors.password)}
-            onChange={formik.handleChange}
-            id="login-password-input"
-            label={"Password"}
-            name="password"
-            helperText={
-              formik.touched.password && formik.errors.password
-                ? formik.errors.password
-                : null
-            }
-            endAdornment={
-              <IconButton
-                aria-label="toggle password visibility"
-                onClick={() => setShowPassword((prev) => !prev)}
-                edge="end"
-              >
-                {showPassword ? <Visibility /> : <VisibilityOff />}
-              </IconButton>
-            }
-          />
-
-          <div className="flex items-center justify-between w-full">
-            <FormControlLabel
-              control={
-                <Checkbox
-                  onChange={formik.handleChange}
-                  checked={formik.values.rememberMe}
-                  color="primary"
-                  name="rememberMe"
+              <Input
+                id="login-email-input"
+                label="Email Address"
+                required
+                placeholder="someone@gmail.com"
+                name="email"
+                type="email"
+                data-testid="login-email-input"
+              />
+              <Input
+                id="login-password-input"
+                label="Password"
+                type={showPassword ? "text" : "password"}
+                required
+                placeholder="****************"
+                name="password"
+                className="placeholder:leading-3"
+                data-testid="login-password-input"
+                endAdornment={
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={() => setShowPassword((prev) => !prev)}
+                    edge="end"
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                }
+              />
+              <div className="flex items-center justify-between w-full">
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      onChange={() => {
+                        setFieldValue("rememberMe", !values.rememberMe);
+                      }}
+                      checked={values.rememberMe}
+                      color="primary"
+                      name="rememberMe"
+                    />
+                  }
+                  className="text-sm"
+                  label="Remember me"
                 />
-              }
-              className="text-sm"
-              label="Remember me"
-            />
-            <Link to="/forgot-password">
-              <p className=" text-sm">Forgot your password?</p>
-            </Link>
-          </div>
-          <Button
-            variant="contained"
-            color="info"
-            type="submit"
-            className="w-full !p-4"
-            loading={isLoading}
-          >
-            Login
-          </Button>
-        </form>
+                <Link to="/forgot-password">
+                  <p className=" text-sm">Forgot your password?</p>
+                </Link>
+              </div>
+              <Button
+                variant="contained"
+                color="info"
+                type="submit"
+                className="w-full !p-4"
+                loading={isSubmitting}
+              >
+                Login
+              </Button>
+            </form>
+          )}
+        </Formik>
         <p className="text-sm mt-4 self-start">
           Don't have an account?{" "}
           <Link to="/signup" className=" !text-Primary !font-bold">
