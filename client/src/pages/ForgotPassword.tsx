@@ -1,33 +1,23 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { IoArrowBack } from "react-icons/io5";
-import Seo from "../components/Seo";
-import AuthContainer from "../components/AuthContainer";
-import Input from "../components/Input";
-import Button from "../components/Button";
+import { Formik } from "formik";
+import * as Yup from "yup";
+import Seo from "~/components/Seo";
+import AuthContainer from "~/components/AuthContainer";
+import Input from "~/components/Input";
+import Button from "~/components/Button";
+
+const ValidationSchema = Yup.object().shape({
+  email: Yup.string().email("Email is not valid").required("Email is required"),
+});
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
-  const [email, setEmail] = useState({
-    value: "",
-    error: false,
+  const [instructionsSent, setInstructionsSent] = useState({
+    value: false,
+    email: "",
   });
-  const [instructionsSent, setInstructionsSent] = useState(false);
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    //? Validation
-    if (!email.value) {
-      setEmail((prev) => ({
-        ...prev,
-        error: true,
-      }));
-      return;
-    }
-
-    setInstructionsSent(true);
-  };
 
   return (
     <>
@@ -39,51 +29,61 @@ const ForgotPassword = () => {
         illustrationImg="https://res.cloudinary.com/dkok98flj/image/upload/v1688055933/illustrations/undraw_Forgot_password_re_hxwm_qzq5tj.png"
         illustrationImgAlt="forgot-password"
       >
-        {!instructionsSent ? (
-          <form
-            onSubmit={handleSubmit}
-            className="flex flex-col justify-center items-center w-full gap-[0.55rem]"
+        {!instructionsSent.value ? (
+          <Formik
+            initialValues={{
+              email: "",
+            }}
+            validationSchema={ValidationSchema}
+            onSubmit={async (values) => {
+              setInstructionsSent({
+                value: true,
+                email: values.email,
+              });
+            }}
+            validateOnBlur={false}
           >
-            <h1 className="text-[1.5rem] font-bold text-center">
-              Forgot Password?
-            </h1>
-            <p className="text-base mb-4 !text-Tertiary text-center">
-              No worries, we'll send you reset instructions
-            </p>
-            <Input
-              type="text"
-              name="email"
-              onChange={(e) =>
-                setEmail((prev) => ({
-                  ...prev,
-                  value: e.target.value,
-                }))
-              }
-              value={email.value}
-              id="forgot-email-input"
-              label={"Email"}
-              error={email.error}
-              helperText={"Email is required"}
-            />
-            <Button
-              variant="contained"
-              color="info"
-              type="submit"
-              className="w-full !mt-3 !p-4"
-            >
-              Reset Password
-            </Button>
+            {({ handleSubmit, isSubmitting }) => (
+              <form
+                onSubmit={handleSubmit}
+                className="flex flex-col justify-center items-center w-full gap-[0.55rem]"
+              >
+                <h1 className="text-[1.5rem] font-bold text-center">
+                  Forgot Password?
+                </h1>
+                <p className="text-base mb-4 !text-Tertiary text-center">
+                  No worries, we'll send you reset instructions
+                </p>
+                <Input
+                  type="email"
+                  name="email"
+                  id="forgot-password-email-input"
+                  label="Email Address"
+                  required
+                  data-testid="forgot-password-email-input"
+                />
+                <Button
+                  variant="contained"
+                  color="info"
+                  type="submit"
+                  className="w-full !mt-3 !p-4"
+                  loading={isSubmitting}
+                >
+                  Reset Password
+                </Button>
 
-            <div
-              className="flex items-center cursor-pointer gap-2 mt-4"
-              onClick={() => {
-                navigate("/login");
-              }}
-            >
-              <IoArrowBack />
-              <p className="text-base">Back to login</p>
-            </div>
-          </form>
+                <div
+                  className="flex items-center cursor-pointer gap-2 mt-4"
+                  onClick={() => {
+                    navigate("/login");
+                  }}
+                >
+                  <IoArrowBack />
+                  <p className="text-base">Back to login</p>
+                </div>
+              </form>
+            )}
+          </Formik>
         ) : (
           <div className="flex flex-col justify-center items-center w-full gap-[0.55rem]">
             <h1 className="text-[1.5rem] font-bold text-center">
@@ -91,7 +91,7 @@ const ForgotPassword = () => {
             </h1>
             <p className="text-base mb-5 !text-Tertiary flex flex-col items-center">
               We sent a password reset link to <br />{" "}
-              <span className="text-xl">{email.value}</span>
+              <span className="text-xl">{instructionsSent.email}</span>
             </p>
             <Button
               variant="contained"
@@ -106,7 +106,10 @@ const ForgotPassword = () => {
               <span
                 className="!text-Primary cursor-pointer"
                 onClick={() => {
-                  setInstructionsSent(false); //?
+                  setInstructionsSent({
+                    value: false,
+                    email: "",
+                  }); //?
                 }}
               >
                 Click to resend
