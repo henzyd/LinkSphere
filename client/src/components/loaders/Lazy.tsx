@@ -1,4 +1,4 @@
-const LazyLoader = () => {
+const Lazy = () => {
   return (
     <div className=" min-h-screen flex justify-center flex-col items-center">
       <span className="LazyLoader"></span>
@@ -9,4 +9,4 @@ const LazyLoader = () => {
   );
 };
 
-export default LazyLoader;
+export default Lazy;

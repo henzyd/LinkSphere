@@ -1,6 +1,6 @@
 import React from "react";
-import { ForgotPassword, Login, Signup } from "../pages";
-import AuthLayout from "../layouts/AuthLayout";
+import { ForgotPassword, Login, Signup } from "~/pages";
+import AuthLayout from "~/layouts/AuthLayout";
 
 class AuthRoute {
   static Login: React.FC = () => (

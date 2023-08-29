@@ -1,23 +1,5 @@
-import React from "react";
 import { BsChatRightDots } from "react-icons/bs";
 import { IoGitPullRequestOutline, IoSettingsOutline } from "react-icons/io5";
-
-interface AppContainerProps {
-  children: React.ReactNode;
-}
-
-const AppContainer: React.FC<AppContainerProps> = ({ children }) => {
-  return (
-    <section
-      id="AppContainer"
-      className="grid grid-cols-[1fr,3fr,1fr] gap-8 p-7 px-12 h-[inherit] max-w-screen-LargeLaptop mx-auto pb-12"
-    >
-      <LeftSide />
-      <main className="flex flex-col">{children}</main>
-      <RightSide />
-    </section>
-  );
-};
 
 const LeftSide: React.FC = () => {
   const data = [
@@ -55,10 +37,4 @@ const LeftSide: React.FC = () => {
   );
 };
 
-const RightSide: React.FC = () => {
-  return (
-    <aside className="bg-white flex rounded-lg overflow-hidden shadow-md h-fit sticky top-[100px]"></aside>
-  );
-};
-
-export default AppContainer;
+export default LeftSide;

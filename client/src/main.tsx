@@ -7,14 +7,14 @@ import "./index.css";
 import { Provider } from "react-redux";
 import theme from "./utils/theme";
 import store from "./redux/store";
-import LazyLoader from "./components/LazyLoader";
+import Lazy from "./components/loaders/Lazy";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <BrowserRouter>
       <ThemeProvider theme={theme}>
         <Provider store={store}>
-          <Suspense fallback={<LazyLoader />}>
+          <Suspense fallback={<Lazy />}>
             <App />
           </Suspense>
         </Provider>

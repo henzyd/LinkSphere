@@ -4,7 +4,7 @@ import { IoMdNotificationsOutline } from "react-icons/io";
 import { FiSearch } from "react-icons/fi";
 import { BsFillPersonFill } from "react-icons/bs";
 import { HiHome } from "react-icons/hi2";
-import Logo from "./Logo";
+import Logo from "../../components/Logo";
 
 const NavBar = () => {
   const [isSearchFocused, setIsSearchFocused] = useState(false);

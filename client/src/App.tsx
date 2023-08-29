@@ -3,7 +3,7 @@ import "./App.css";
 import { Home } from "./pages";
 import NotFound from "./pages/NotFound";
 import Toaster from "./components/Toast";
-import AppLayout from "./layouts/AppLayout";
+import AppLayout from "./layouts/app";
 import AuthRoute from "./routes/AuthRoute";
 
 function App() {
