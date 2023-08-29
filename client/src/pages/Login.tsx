@@ -57,35 +57,33 @@ const Login = () => {
               <h1 className="text-[1.5rem] font-bold mb-2 text-center">
                 Login into your account
               </h1>
-
-              <Input
-                id="login-email-input"
-                label="Email Address"
-                required
-                placeholder="someone@gmail.com"
-                name="email"
-                type="email"
-                data-testid="login-email-input"
-              />
-              <Input
-                id="login-password-input"
-                label="Password"
-                type={showPassword ? "text" : "password"}
-                required
-                placeholder="****************"
-                name="password"
-                className="placeholder:leading-3"
-                data-testid="login-password-input"
-                endAdornment={
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={() => setShowPassword((prev) => !prev)}
-                    edge="end"
-                  >
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                }
-              />
+              <div className="flex flex-col gap-4 w-full">
+                <Input
+                  id="login-email-input"
+                  label="Email Address"
+                  required
+                  name="email"
+                  type="email"
+                  data-testid="login-email-input"
+                />
+                <Input
+                  id="login-password-input"
+                  label="Password"
+                  type={showPassword ? "text" : "password"}
+                  required
+                  name="password"
+                  data-testid="login-password-input"
+                  endAdornment={
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={() => setShowPassword((prev) => !prev)}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  }
+                />
+              </div>
               <div className="flex items-center justify-between w-full">
                 <FormControlLabel
                   control={
@@ -101,8 +99,8 @@ const Login = () => {
                   className="text-sm"
                   label="Remember me"
                 />
-                <Link to="/forgot-password">
-                  <p className=" text-sm">Forgot your password?</p>
+                <Link to="/forgot-password" className="hover:underline text-sm">
+                  Forgot your password?
                 </Link>
               </div>
               <Button
@@ -119,7 +117,10 @@ const Login = () => {
         </Formik>
         <p className="text-sm mt-4 self-start">
           Don't have an account?{" "}
-          <Link to="/signup" className=" !text-Primary !font-bold">
+          <Link
+            to="/signup"
+            className=" !text-Primary !font-bold hover:underline"
+          >
             Signup
           </Link>
         </p>
