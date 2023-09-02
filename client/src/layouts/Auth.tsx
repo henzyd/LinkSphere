@@ -1,11 +1,8 @@
-import React from "react";
-import Logo from "../components/Logo";
-import Button from "../components/Button";
-import { Link } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
+import Logo from "~/components/Logo";
+import Button from "~/components/Button";
 
-const AuthLayout: React.FC<{
-  children: React.ReactNode;
-}> = ({ children }) => {
+const Auth = () => {
   return (
     <div className="h-screen flex flex-col">
       <nav className=" flex items-center justify-between p-8 py-6 MediumPhones:p-4 mb-1">
@@ -31,9 +28,9 @@ const AuthLayout: React.FC<{
           </Link>
         </div>
       </nav>
-      {children}
+      <Outlet />
     </div>
   );
 };
 
-export default AuthLayout;
+export default Auth;
