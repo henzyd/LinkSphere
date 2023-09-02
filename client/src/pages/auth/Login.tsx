@@ -8,7 +8,7 @@ import { Formik } from "formik";
 import Seo from "~/components/Seo";
 import Input from "~/components/Input";
 import Button from "~/components/Button";
-import AuthContainer from "~/components/AuthContainer";
+import AuthWrapper from "~/components/AuthWrapper";
 import useLoginMutation from "~/redux/mutations/auth/login";
 
 const loginValidationSchema = Yup.object().shape({
@@ -28,7 +28,7 @@ const Login = () => {
   return (
     <>
       <Seo title="Login" description="Login to your LinkSphere account" />
-      <AuthContainer
+      <AuthWrapper
         illustrationImg="https://res.cloudinary.com/dkok98flj/image/upload/v1687641212/illustrations/login_kex2y6.png"
         illustrationImgAlt="login"
       >
@@ -137,7 +137,7 @@ const Login = () => {
           </div>
           <p className=" !text-white">Login in with Google</p>
         </Button>
-      </AuthContainer>
+      </AuthWrapper>
     </>
   );
 };

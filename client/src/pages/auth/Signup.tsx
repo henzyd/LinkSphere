@@ -9,7 +9,7 @@ import useSignupMutation from "~/redux/mutations/auth/signup";
 import Seo from "~/components/Seo";
 import Input from "~/components/Input";
 import Button from "~/components/Button";
-import AuthContainer from "~/components/AuthContainer";
+import AuthWrapper from "~/components/AuthWrapper";
 
 const signupValidationSchema = Yup.object().shape({
   username: Yup.string().required("Username is required"),
@@ -34,7 +34,7 @@ const Signup = () => {
   return (
     <>
       <Seo title="Signup" description="Signup to your LinkSphere account" />
-      <AuthContainer
+      <AuthWrapper
         illustrationImg="https://res.cloudinary.com/dkok98flj/image/upload/v1687641216/illustrations/sign_up_ys1xei.png"
         illustrationImgAlt="signup"
       >
@@ -161,7 +161,7 @@ const Signup = () => {
           </div>
           <p className=" !text-white">Signup with Google</p>
         </Button>
-      </AuthContainer>
+      </AuthWrapper>
     </>
   );
 };

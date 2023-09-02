@@ -4,7 +4,7 @@ import { IoArrowBack } from "react-icons/io5";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import Seo from "~/components/Seo";
-import AuthContainer from "~/components/AuthContainer";
+import AuthWrapper from "~/components/AuthWrapper";
 import Input from "~/components/Input";
 import Button from "~/components/Button";
 
@@ -25,7 +25,7 @@ const ForgotPassword = () => {
         title="Forgot Password"
         description="Can't remember your password? change it"
       />
-      <AuthContainer
+      <AuthWrapper
         illustrationImg="https://res.cloudinary.com/dkok98flj/image/upload/v1688055933/illustrations/undraw_Forgot_password_re_hxwm_qzq5tj.png"
         illustrationImgAlt="forgot-password"
       >
@@ -126,7 +126,7 @@ const ForgotPassword = () => {
             </div>
           </div>
         )}
-      </AuthContainer>
+      </AuthWrapper>
     </>
   );
 };
