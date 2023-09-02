@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import {
   Route,
   RouterProvider,
@@ -11,6 +12,7 @@ import AppLayout from "./layouts/app";
 import ErrorBoundary from "./components/ErrorBoundary";
 import Lazy from "./components/loaders/Lazy";
 import Auth from "./layouts/Auth";
+import HomeLoader from "./components/loaders/Home";
 
 async function loader() {
   try {
@@ -31,7 +33,14 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <Route errorElement={<ErrorBoundary />}>
       <Route loader={loader}>
-        <Route path="/" element={<AppLayout />}>
+        <Route
+          path="/"
+          element={
+            <Suspense fallback={<HomeLoader />}>
+              <AppLayout />
+            </Suspense>
+          }
+        >
           <Route index element={<Home />} />
         </Route>
       </Route>
