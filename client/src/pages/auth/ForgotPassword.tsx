@@ -63,13 +63,12 @@ const ForgotPassword = () => {
                   data-testid="forgot-password-email-input"
                 />
                 <Button
-                  variant="contained"
                   color="info"
                   type="submit"
                   className="w-full !mt-3 !p-4"
                   loading={isSubmitting}
                 >
-                  Reset Password
+                  Send reset link
                 </Button>
 
                 <div
@@ -93,12 +92,7 @@ const ForgotPassword = () => {
               We sent a password reset link to <br />{" "}
               <span className="text-xl">{instructionsSent.email}</span>
             </p>
-            <Button
-              variant="contained"
-              color="info"
-              type="submit"
-              className="w-full !p-4"
-            >
+            <Button color="info" type="submit" className="w-full !p-4">
               Open email app
             </Button>
             <p className="!text-Tertiary mt-5 text-base">
