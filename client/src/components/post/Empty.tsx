@@ -1,7 +1,7 @@
-const EmptyPost = () => {
+const Empty = () => {
   return (
     <section
-      id="EmptyPost"
+      id="Empty"
       className="bg-white flex flex-col rounded-lg shadow h-fit p-6 w-full gap-4 justify-center items-center"
     >
       <figure className="w-[60%]">
@@ -18,4 +18,4 @@ const EmptyPost = () => {
   );
 };
 
-export default EmptyPost;
+export default Empty;

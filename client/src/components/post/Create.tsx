@@ -2,13 +2,13 @@ import { FiEdit } from "react-icons/fi";
 import TextareaAutosize from "@mui/base/TextareaAutosize";
 import { HiPhoto } from "react-icons/hi2";
 import { BsFillPlayBtnFill } from "react-icons/bs";
-import Button from "./Button";
+import Button from "../Button";
 import { IconButton } from "@mui/material";
 
-const CreatePost = () => {
+const Create = () => {
   return (
     <section
-      id="CreatePost"
+      id="Create"
       className="bg-white flex flex-col rounded-lg overflow-hidden shadow h-fit p-6 w-full gap-4"
     >
       <div className="flex items-center gap-4 pl-2">
@@ -42,4 +42,4 @@ const CreatePost = () => {
   );
 };
 
-export default CreatePost;
+export default Create;

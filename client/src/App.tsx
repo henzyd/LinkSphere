@@ -1,24 +1,54 @@
-import { Routes, Route } from "react-router-dom";
+import {
+  Route,
+  RouterProvider,
+  createBrowserRouter,
+  createRoutesFromElements,
+} from "react-router-dom";
 import "./App.css";
-import { Home } from "./pages";
+import { ForgotPassword, Home, Login, Signup } from "./pages";
 import NotFound from "./pages/NotFound";
-import Toaster from "./components/Toast";
-import AppLayout from "./layouts/AppLayout";
-import AuthRoute from "./routes/AuthRoute";
+import AppLayout from "./layouts/app";
+import ErrorBoundary from "./components/ErrorBoundary";
+import Lazy from "./components/loaders/Lazy";
+import Auth from "./layouts/Auth";
+
+async function loader() {
+  try {
+    // await fetchUserIfTokenExists();
+
+    return null;
+  } catch (error) {
+    return new Response("", {
+      status: 302,
+      headers: {
+        Location: "/login",
+      },
+    });
+  }
+}
+
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route errorElement={<ErrorBoundary />}>
+      <Route loader={loader}>
+        <Route path="/" element={<AppLayout />}>
+          <Route index element={<Home />} />
+        </Route>
+      </Route>
+      <Route element={<Auth />}>
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+      </Route>
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="*" element={<NotFound />} />
+    </Route>
+  )
+);
 
 function App() {
   return (
     <div className="App">
-      <Toaster />
-      <Routes>
-        <Route path="/" element={<AppLayout />}>
-          <Route index element={<Home />} />
-        </Route>
-        <Route path="/login" element={<AuthRoute.Login />} />
-        <Route path="/signup" element={<AuthRoute.Signup />} />
-        <Route path="/forgot-password" element={<AuthRoute.ForgotPassword />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+      <RouterProvider router={router} fallbackElement={<Lazy />} />
     </div>
   );
 }
