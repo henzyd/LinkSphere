@@ -4,9 +4,9 @@ import Wrapper from "~/layouts/app/wrapper";
 
 const App = () => {
   return (
-    <div>
+    <div className="flex flex-col min-h-screen">
       <NavBar />
-      <main className="bg-AppBG ">
+      <main className="bg-AppBG flex-auto">
         <Wrapper>
           <Outlet />
         </Wrapper>

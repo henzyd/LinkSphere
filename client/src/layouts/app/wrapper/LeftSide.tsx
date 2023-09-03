@@ -17,14 +17,14 @@ const LeftSide: React.FC = () => {
     },
   ];
   return (
-    <aside className="bg-white flex flex-col rounded-lg overflow-hidden shadow h-fit sticky top-[100px]">
+    <aside className="bg-white flex flex-col rounded-lg overflow-hidden shadow h-fit sticky top-[100px] w-full">
       {data.map((item, index) => (
         <div
           key={index + 1}
-          className="bg-transparent px-4 cursor-pointer hover:bg-[#F5F5F5]"
+          className="bg-transparent px-4 cursor-pointer hover:bg-[#F5F5F5] w-full"
         >
           <div
-            className={`flex items-center gap relative justify-center gap-6 py-6  ${
+            className={`flex items-center gap relative justify-center gap-6 py-6 w-full  ${
               data.length === index + 1 ? "" : "border-b"
             }`}
           >
