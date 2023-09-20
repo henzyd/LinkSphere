@@ -27,9 +27,7 @@ const NavBar = () => {
             <input
               placeholder="Search..."
               className={`outline-0 w-[300px] bg-transparent py-2 px-2 text-sm border-l border-transparent transition duration-200 ${
-                isSearchFocused
-                  ? "border-[#BDBDBD] bg-white rounded-tr-md rounded-br-md"
-                  : ""
+                isSearchFocused ? "border-[#BDBDBD] bg-white rounded-tr-md rounded-br-md" : ""
               }`}
               type="text"
               onFocus={() => setIsSearchFocused(true)}

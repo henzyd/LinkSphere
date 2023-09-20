@@ -37,14 +37,13 @@ const router = createBrowserRouter(
     <Route errorElement={<ErrorBoundary />}>
       <Route loader={loader}>
         <Route
-          path="/"
           element={
             <Suspense fallback={<HomeLoader />}>
               <AppLayout />
             </Suspense>
           }
         >
-          <Route index element={<Home />} />
+          <Route path="/" element={<Home />} />
         </Route>
       </Route>
       <Route element={<Auth />}>
