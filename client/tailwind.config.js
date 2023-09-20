@@ -7,7 +7,10 @@ export default {
         Primary: "#0055FF",
         Secondary: "#10D876",
         Tertiary: "#343a40",
-        TextBlack: "#111",
+        Text: {
+          Black: "#111",
+          Black2: "#00000099",
+        },
         AppBG: "#f6f6f6",
         IconColor: "#303030",
       },
