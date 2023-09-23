@@ -72,6 +72,11 @@ const theme = createTheme({
         transition: true,
       },
     },
+    MuiTooltip: {
+      defaultProps: {
+        arrow: true,
+      },
+    },
   },
 });
 

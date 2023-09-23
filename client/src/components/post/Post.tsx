@@ -27,6 +27,7 @@ const Post = () => {
               <span>{"surfiya"}</span>
               <span>{"Zakir"}</span>
             </p>
+            {/* A users name should be shown in the post not their first name and last name */}
             <p className="text-sm text-[#B0B8BF]">{"2:30pm"}</p>
           </div>
         </div>
