@@ -6,10 +6,11 @@ h3,
 h4,
 h5,
 h6,
-p {
-  color: #111;
+p,
+button,
+span {
+  color: #111111e2;
   font-family: "Noto Sans", sans-serif;
-  font-weight: 500 !important;
 }
 
 .App {

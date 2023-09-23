@@ -8,7 +8,7 @@ export default {
         Secondary: "#10D876",
         Tertiary: "#343a40",
         Text: {
-          Black: "#111",
+          Black: "#111111e2",
           Black2: "#00000099",
         },
         AppBG: "#f6f6f6",

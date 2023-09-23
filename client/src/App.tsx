@@ -6,7 +6,7 @@ import {
   createRoutesFromElements,
 } from "react-router-dom";
 import "./App.css";
-import { Home } from "./pages";
+import { Chats, Home, PostDetails, Profile, Requests, Settings } from "./pages";
 import NotFound from "./pages/NotFound";
 import AppLayout from "./layouts/app";
 import ErrorBoundary from "./components/ErrorBoundary";
@@ -44,6 +44,11 @@ const router = createBrowserRouter(
           }
         >
           <Route path="/" element={<Home />} />
+          <Route path="/chats" element={<Chats />} />
+          <Route path="/requests" element={<Requests />} />
+          <Route path="/settings" element={<Settings />} />
+          <Route path="/posts/:postId" element={<PostDetails />} />
+          <Route path="/:tag" element={<Profile />} />
         </Route>
       </Route>
       <Route element={<Auth />}>

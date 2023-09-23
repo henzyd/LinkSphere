@@ -9,7 +9,7 @@ const Home = () => {
       <main className="flex flex-col gap-4">
         <Create />
         <hr className="h-[1px] bg-neutral-400 rounded-full w-[86%] mx-auto" />
-        {postsData.length > 0 ? <Post /> : <Empty />}
+        {postsData.length > 0 ? postsData.map((item) => <Post {...item} />) : <Empty />}
       </main>
     </>
   );
