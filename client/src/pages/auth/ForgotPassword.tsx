@@ -5,7 +5,7 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import Seo from "~/components/Seo";
 import AuthWrapper from "~/components/AuthWrapper";
-import Input from "~/components/Input";
+import FormField from "~/components/FormField";
 import Button from "~/components/Button";
 
 const ValidationSchema = Yup.object().shape({
@@ -21,10 +21,7 @@ const ForgotPassword = () => {
 
   return (
     <>
-      <Seo
-        title="Forgot Password"
-        description="Can't remember your password? change it"
-      />
+      <Seo title="Forgot Password" description="Can't remember your password? change it" />
       <AuthWrapper
         illustrationImg="https://res.cloudinary.com/dkok98flj/image/upload/v1688055933/illustrations/undraw_Forgot_password_re_hxwm_qzq5tj.png"
         illustrationImgAlt="forgot-password"
@@ -48,13 +45,11 @@ const ForgotPassword = () => {
                 onSubmit={handleSubmit}
                 className="flex flex-col justify-center items-center w-full gap-[0.55rem]"
               >
-                <h1 className="text-[1.5rem] font-bold text-center">
-                  Forgot Password?
-                </h1>
+                <h1 className="text-[1.5rem] font-bold text-center">Forgot Password?</h1>
                 <p className="text-base mb-4 !text-Tertiary text-center">
                   No worries, we'll send you reset instructions
                 </p>
-                <Input
+                <FormField
                   type="email"
                   name="email"
                   id="forgot-password-email-input"
@@ -85,9 +80,7 @@ const ForgotPassword = () => {
           </Formik>
         ) : (
           <div className="flex flex-col justify-center items-center w-full gap-[0.55rem]">
-            <h1 className="text-[1.5rem] font-bold text-center">
-              Check your email
-            </h1>
+            <h1 className="text-[1.5rem] font-bold text-center">Check your email</h1>
             <p className="text-base mb-5 !text-Tertiary flex flex-col items-center">
               We sent a password reset link to <br />{" "}
               <span className="text-xl">{instructionsSent.email}</span>

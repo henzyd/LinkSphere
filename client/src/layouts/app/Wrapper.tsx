@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { BsChatRightDots } from "react-icons/bs";
 import { IoGitPullRequestOutline, IoSettingsOutline } from "react-icons/io5";
 
@@ -28,14 +28,18 @@ const Wrapper: React.FC<WrapperProps> = ({ children }) => {
   return (
     <section
       id="Wrapper"
-      className="flex gap-8 p-7 px-12 h-[inherit] max-w-screen-LargeLaptop mx-auto pb-12 relative flex-grow"
+      className="flex gap-8 p-7 px-12 pb-0 h-[inherit] max-w-screen-LargeLaptop mx-auto relative flex-grow"
     >
       <aside className="bg-white flex flex-col rounded-lg overflow-hidden shadow h-fit sticky top-[100px] w-[250px]">
         {data.map((item, index) => (
-          <Link
+          <NavLink
             key={index + 1}
             to={item.to}
-            className="bg-transparent px-4 cursor-pointer hover:bg-[#F5F5F5] w-full"
+            className={({ isActive }) =>
+              `bg-transparent px-4 cursor-pointer hover:bg-[#F5F5F5] w-full ${
+                isActive && "!bg-[#F5F5F5]"
+              }`
+            }
           >
             <div
               className={`flex items-center gap relative justify-center gap-6 py-6 w-full ${
@@ -45,10 +49,10 @@ const Wrapper: React.FC<WrapperProps> = ({ children }) => {
               <item.icon className="text-[1.3rem] text-IconColor" />
               <p className="text-[0.9rem]">{item.title}</p>
             </div>
-          </Link>
+          </NavLink>
         ))}
       </aside>
-      <main className="flex flex-col w-full">{children}</main>
+      <main className="flex flex-col w-full pb-8">{children}</main>
     </section>
   );
 };

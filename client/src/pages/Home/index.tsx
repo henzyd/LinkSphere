@@ -7,7 +7,7 @@ const Home = () => {
   return (
     <>
       <Seo title="Home" description="Home page" />
-      <div className="flex gap-8">
+      <div className="flex gap-8 pb-12">
         <main className="flex flex-col gap-4 w-full">
           <Create />
           <hr className="h-[1px] bg-neutral-400 rounded-full w-[86%] mx-auto" />

@@ -6,7 +6,7 @@ import { FcGoogle } from "react-icons/fc";
 import * as Yup from "yup";
 import { Formik } from "formik";
 import Seo from "~/components/Seo";
-import Input from "~/components/Input";
+import FormField from "~/components/FormField";
 import Button from "~/components/Button";
 import AuthWrapper from "~/components/AuthWrapper";
 import useLoginMutation from "~/redux/mutations/auth/login";
@@ -54,11 +54,9 @@ const Login = () => {
               onSubmit={handleSubmit}
               className="flex flex-col justify-center items-center w-full gap-[0.55rem]"
             >
-              <h1 className="text-[1.5rem] font-bold mb-2 text-center">
-                Login into your account
-              </h1>
+              <h1 className="text-[1.5rem] font-bold mb-2 text-center">Login into your account</h1>
               <div className="flex flex-col gap-4 w-full">
-                <Input
+                <FormField
                   id="login-email-input"
                   label="Email Address"
                   required
@@ -66,7 +64,7 @@ const Login = () => {
                   type="email"
                   data-testid="login-email-input"
                 />
-                <Input
+                <FormField
                   id="login-password-input"
                   label="Password"
                   type={showPassword ? "text" : "password"}
@@ -117,16 +115,11 @@ const Login = () => {
         </Formik>
         <p className="text-sm mt-4 self-start">
           Don't have an account?{" "}
-          <Link
-            to="/signup"
-            className=" !text-Primary !font-bold hover:underline"
-          >
+          <Link to="/signup" className=" !text-Primary !font-bold hover:underline">
             Signup
           </Link>
         </p>
-        <p className="text-sm mt-4 mb-6">
-          Or, Login in with your social account
-        </p>
+        <p className="text-sm mt-4 mb-6">Or, Login in with your social account</p>
         <Button
           variant="contained"
           color="primary"

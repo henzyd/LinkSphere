@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  OutlinedInput,
-  InputLabel,
-  OutlinedInputProps,
-  FormControl,
-} from "@mui/material";
+import { OutlinedInput, InputLabel, OutlinedInputProps, FormControl } from "@mui/material";
 import { ErrorMessage, Field, FieldConfig, FieldProps } from "formik";
 import { twMerge } from "tailwind-merge";
 
@@ -14,7 +9,7 @@ interface InputProps extends OutlinedInputProps, FieldConfig {
   value?: string;
 }
 
-const Input: React.FC<InputProps> = ({ label, className, ...props }) => {
+const FormField: React.FC<InputProps> = ({ label, className, ...props }) => {
   return (
     <FormControl className="w-full">
       <Field {...props}>
@@ -22,14 +17,10 @@ const Input: React.FC<InputProps> = ({ label, className, ...props }) => {
           <>
             <InputLabel
               htmlFor={props.id}
-              className={`!text-sm ${
-                meta.touched && !!meta.error ? "!text-red-500" : ""
-              }`}
+              className={`!text-sm ${meta.touched && !!meta.error ? "!text-red-500" : ""}`}
             >
               {label}
-              {props.required && (
-                <span className="!text-[#d32f2f] !text-[0.9rem] pl-1">*</span>
-              )}
+              {props.required && <span className="!text-[#d32f2f] !text-[0.9rem] pl-1">*</span>}
             </InputLabel>
             <OutlinedInput
               {...props}
@@ -37,7 +28,7 @@ const Input: React.FC<InputProps> = ({ label, className, ...props }) => {
               className={twMerge(
                 `w-full !placeholder:text-base `,
                 meta.touched && !!meta.error ? "!border-red-500" : "",
-                className
+                className,
               )}
             />
             <ErrorMessage
@@ -53,4 +44,4 @@ const Input: React.FC<InputProps> = ({ label, className, ...props }) => {
   );
 };
 
-export default Input;
+export default FormField;
