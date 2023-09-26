@@ -24,16 +24,70 @@ const ChatDetails = ({ goBack }: ChatDetailsProps) => {
   }
 
   return (
-    <div className="shadow rounded-md bg-white h-full relative flex flex-col overflow-hidden">
-      <header className="p-2 z-10 grid grid-cols-[1fr,3fr,1fr] items-center border-b bg-white sticky">
+    <div className="shadow rounded-md bg-white h-[100%] relative flex flex-col overflow-hidden">
+      <header className="p-2 z-10 grid grid-cols-[1fr,3fr,1fr] items-center border-b bg-white sticky flex-shrink-0">
         <IconButton onClick={goBack} className="w-fit">
           <IoArrowBackOutline size={20} />
         </IconButton>
         <p className="text-center font-bold text-base">{"Henzyd"}</p>
         <div></div>
       </header>
-      <div className="flex-grow overflow-y-auto"></div>
-      <footer className="w-full bg-white border-t flex items-center justify-between py-0 p-2">
+      <div className=" overflow-y-auto bg-ChatBackground h-[calc(100vh-244px)]">
+        <div className="flex flex-col gap-2 p-2">
+          <div className="flex flex-col gap-2">
+            <p className="text-center text-xs text-gray-500">{"Today"}</p>
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center justify-end">
+                <div className="flex flex-col gap-1 p-2 rounded-md bg-Primary relative [&_p]:text-white before:w-3 before:h-3 before:absolute before:right-0 before:top-0 before:border-r-[10px] before:border-b-[10px] before:bg-Primary">
+                  <p className="text-sm">{"Hello"}</p>
+                  <p className="text-xs">{"12:00"}</p>
+                </div>
+              </div>
+              <div className="flex items-center">
+                <div className="flex flex-col gap-1 p-2 rounded-md bg-white text-black">
+                  <p className="text-sm">{"Hi"}</p>
+                  <p className="text-xs">{"12:00"}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-col gap-2">
+            <p className="text-center text-xs text-gray-500">{"Yesterday"}</p>
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center justify-end">
+                <div className="flex flex-col gap-1 p-2 rounded-md bg-Primary text-white">
+                  <p className="text-sm">{"Hello"}</p>
+                  <p className="text-xs">{"12:00"}</p>
+                </div>
+              </div>
+              <div className="flex items-center">
+                <div className="flex flex-col gap-1 p-2 rounded-md bg-gray-100">
+                  <p className="text-sm">{"Hi"}</p>
+                  <p className="text-xs">{"12:00"}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-col gap-2">
+            <p className="text-center text-xs text-gray-500">{"Yesterday"}</p>
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center justify-end">
+                <div className="flex flex-col gap-1 p-2 rounded-md bg-blue-500 text-white">
+                  <p className="text-sm">{"Hello"}</p>
+                  <p className="text-xs">{"12:00"}</p>
+                </div>
+              </div>
+              <div className="flex items-center">
+                <div className="flex flex-col gap-1 p-2 rounded-md bg-gray-100">
+                  <p className="text-sm">{"Hi"}</p>
+                  <p className="text-xs">{"12:00"}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <footer className="w-full bg-white border-t flex items-center justify-between py-0 p-2 flex-shrink-0">
         <ClickAwayListener onClickAway={() => setAttachAnchorEl(null)}>
           <div>
             <IconButton

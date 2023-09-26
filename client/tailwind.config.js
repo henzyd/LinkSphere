@@ -14,6 +14,9 @@ export default {
         AppBG: "#f6f6f6",
         IconColor: "#303030",
       },
+      backgroundImage: {
+        ChatBackground: "linear-gradient(27deg, #4c88ff2b, #ff0d0d24)",
+      },
       screens: {
         SmallPhones: { max: "380px" },
         // => @media (max-width: 380px) { ... }
