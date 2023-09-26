@@ -17,7 +17,9 @@ const FormField: React.FC<InputProps> = ({ label, className, ...props }) => {
           <>
             <InputLabel
               htmlFor={props.id}
-              className={`!text-sm ${meta.touched && !!meta.error ? "!text-red-500" : ""}`}
+              className={`!text-sm bg-white !px-[0.4rem] ${
+                meta.touched && !!meta.error ? "!text-red-500" : ""
+              }`}
             >
               {label}
               {props.required && <span className="!text-[#d32f2f] !text-[0.9rem] pl-1">*</span>}

@@ -16,6 +16,7 @@ import HomeLoader from "./components/loaders/Home";
 import Login from "./pages/auth/Login";
 import Signup from "./pages/auth/Signup";
 import ForgotPassword from "./pages/auth/ForgotPassword";
+import ResetPassword from "./pages/auth/ResetPassword";
 
 async function loader() {
   try {
@@ -36,6 +37,12 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <Route errorElement={<ErrorBoundary />}>
       <Route loader={loader}>
+        <Route element={<Auth />}>
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password/:token/:userId" element={<ResetPassword />} />
+        </Route>
         <Route
           element={
             <Suspense fallback={<HomeLoader />}>
@@ -50,12 +57,6 @@ const router = createBrowserRouter(
           <Route path="/posts/:postId" element={<PostDetails />} />
           <Route path="/:tag" element={<Profile />} />
         </Route>
-      </Route>
-      <Route element={<Auth />}>
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/reset-password" element={<ForgotPassword />} />
       </Route>
       <Route path="*" element={<NotFound />} />
     </Route>,

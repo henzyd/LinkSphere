@@ -66,7 +66,7 @@ const ForgotPassword = () => {
                   Send reset link
                 </Button>
 
-                <div
+                <button
                   className="flex items-center cursor-pointer gap-2 mt-4"
                   onClick={() => {
                     navigate("/login");
@@ -74,7 +74,7 @@ const ForgotPassword = () => {
                 >
                   <IoArrowBack />
                   <p className="text-base">Back to login</p>
-                </div>
+                </button>
               </form>
             )}
           </Formik>
@@ -90,7 +90,7 @@ const ForgotPassword = () => {
             </Button>
             <p className="!text-Tertiary mt-5 text-base">
               Didin't receive the email?{" "}
-              <span
+              <button
                 className="!text-Primary cursor-pointer"
                 onClick={() => {
                   setInstructionsSent({
@@ -100,9 +100,9 @@ const ForgotPassword = () => {
                 }}
               >
                 Click to resend
-              </span>
+              </button>
             </p>
-            <div
+            <button
               className="flex items-center cursor-pointer gap-2 mt-4"
               onClick={() => {
                 navigate("/login");
@@ -110,7 +110,7 @@ const ForgotPassword = () => {
             >
               <IoArrowBack />
               <p className="text-base">Back to login</p>
-            </div>
+            </button>
           </div>
         )}
       </AuthWrapper>

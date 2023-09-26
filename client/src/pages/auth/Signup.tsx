@@ -52,7 +52,7 @@ const Signup = () => {
               email: values.email,
               password: values.password,
             });
-            navigate("/");
+            navigate("/otp");
           }}
           validateOnBlur={false}
         >
