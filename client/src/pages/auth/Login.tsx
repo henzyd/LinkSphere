@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { IconButton, Checkbox, FormControlLabel } from "@mui/material";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
 import * as Yup from "yup";
 import { Formik } from "formik";
@@ -77,7 +77,7 @@ const Login = () => {
                       onClick={() => setShowPassword((prev) => !prev)}
                       edge="end"
                     >
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                      {showPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
                     </IconButton>
                   }
                 />

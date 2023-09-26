@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { IconButton } from "@mui/material";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { Link, useNavigate } from "react-router-dom";
+import { IconButton } from "@mui/material";
 import { FcGoogle } from "react-icons/fc";
+import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
 import * as Yup from "yup";
 import { Formik } from "formik";
 import useSignupMutation from "~/redux/mutations/auth/signup";
@@ -98,7 +98,7 @@ const Signup = () => {
                     }
                     edge="end"
                   >
-                    {showPassword.password ? <VisibilityOff /> : <Visibility />}
+                    {showPassword.password ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
                   </IconButton>
                 }
               />
@@ -122,7 +122,7 @@ const Signup = () => {
                     }
                     edge="end"
                   >
-                    {showPassword.confirmPassword ? <VisibilityOff /> : <Visibility />}
+                    {showPassword.confirmPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
                   </IconButton>
                 }
               />
