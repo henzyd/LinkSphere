@@ -63,6 +63,20 @@ const theme = createTheme({
         },
       },
     },
+    MuiPopper: {
+      defaultProps: {
+        placement: "bottom-end",
+        style: {
+          marginTop: "50rem",
+        },
+        transition: true,
+      },
+    },
+    MuiTooltip: {
+      defaultProps: {
+        arrow: true,
+      },
+    },
   },
 });
 

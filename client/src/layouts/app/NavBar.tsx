@@ -1,12 +1,14 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { IconButton, Tooltip } from "@mui/material";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import { FiSearch } from "react-icons/fi";
 import { BsFillPersonFill } from "react-icons/bs";
 import { HiHome } from "react-icons/hi2";
-import Logo from "../../components/Logo";
+import Logo from "~/components/Logo";
 
 const NavBar = () => {
+  const navigate = useNavigate();
   const [isSearchFocused, setIsSearchFocused] = useState(false);
 
   return (
@@ -34,20 +36,20 @@ const NavBar = () => {
               onBlur={() => setIsSearchFocused(false)}
             />
           </form>
-          <Tooltip title="Home" arrow>
-            <IconButton>
+          <Tooltip title="Home">
+            <IconButton onClick={() => navigate("/")}>
               <HiHome className="text-2xl text-IconColor" />
             </IconButton>
           </Tooltip>
         </div>
 
         <div className="flex items-center gap-4 pr-6">
-          <Tooltip title="Notification" arrow>
+          <Tooltip title="Notification">
             <IconButton>
               <IoMdNotificationsOutline className="text-2xl text-IconColor" />
             </IconButton>
           </Tooltip>
-          <Tooltip title="Profile" arrow>
+          <Tooltip title="Profile">
             <IconButton>
               <BsFillPersonFill className="text-2xl text-IconColor" />
             </IconButton>

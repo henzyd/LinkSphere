@@ -1,6 +1,7 @@
 import Seo from "../components/Seo";
 import Button from "../components/Button";
-import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
+// import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
+import { HiArrowNarrowLeft } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
 
 const NotFound = () => {
@@ -21,8 +22,7 @@ const NotFound = () => {
           />
         </figure>
         <p className="mt-6 mb-2 text-center MediumPhones:text-sm">
-          We couldn't find what you are looking for. Let's find a better place
-          for you to go.
+          We couldn't find what you are looking for. Let's find a better place for you to go.
         </p>
         <div className="flex items-center gap-8">
           <Button
@@ -38,9 +38,7 @@ const NotFound = () => {
             onClick={() => {
               navigate(-1);
             }}
-            startIcon={
-              <KeyboardBackspaceIcon className="!fill-white MediumPhones:!w-4" />
-            }
+            startIcon={<HiArrowNarrowLeft className="!fill-white MediumPhones:!w-4" />}
           >
             Go Back
           </Button>

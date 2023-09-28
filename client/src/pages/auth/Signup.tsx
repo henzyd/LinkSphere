@@ -1,13 +1,13 @@
 import { useState } from "react";
-import { IconButton } from "@mui/material";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { Link, useNavigate } from "react-router-dom";
+import { IconButton } from "@mui/material";
 import { FcGoogle } from "react-icons/fc";
+import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
 import * as Yup from "yup";
 import { Formik } from "formik";
 import useSignupMutation from "~/redux/mutations/auth/signup";
 import Seo from "~/components/Seo";
-import Input from "~/components/Input";
+import FormField from "~/components/FormField";
 import Button from "~/components/Button";
 import AuthWrapper from "~/components/AuthWrapper";
 
@@ -52,7 +52,7 @@ const Signup = () => {
               email: values.email,
               password: values.password,
             });
-            navigate("/");
+            navigate("/otp");
           }}
           validateOnBlur={false}
         >
@@ -61,17 +61,15 @@ const Signup = () => {
               onSubmit={handleSubmit}
               className="flex flex-col justify-center items-center w-full gap-[1rem]"
             >
-              <h1 className="text-[1.5rem] font-bold mb-2 text-center">
-                Create an account
-              </h1>
-              <Input
+              <h1 className="text-[1.5rem] font-bold mb-2 text-center">Create an account</h1>
+              <FormField
                 id="signup-username-input"
                 data-testid="signup-username-input"
                 label="Username"
                 name="username"
                 placeholder="someone"
               />
-              <Input
+              <FormField
                 type="email"
                 required
                 id="signup-email-input"
@@ -80,7 +78,7 @@ const Signup = () => {
                 placeholder="someone@gmail.com"
                 data-testid="signup-email-input"
               />
-              <Input
+              <FormField
                 id="signup-password-input"
                 label="Password"
                 type={showPassword ? "text" : "password"}
@@ -100,11 +98,11 @@ const Signup = () => {
                     }
                     edge="end"
                   >
-                    {showPassword.password ? <VisibilityOff /> : <Visibility />}
+                    {showPassword.password ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
                   </IconButton>
                 }
               />
-              <Input
+              <FormField
                 id="signup-confirm-password-input"
                 label="Confirm Password"
                 type={showPassword ? "text" : "password"}
@@ -124,11 +122,7 @@ const Signup = () => {
                     }
                     edge="end"
                   >
-                    {showPassword.confirmPassword ? (
-                      <VisibilityOff />
-                    ) : (
-                      <Visibility />
-                    )}
+                    {showPassword.confirmPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
                   </IconButton>
                 }
               />
