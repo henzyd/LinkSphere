@@ -29,7 +29,7 @@ const FormField: React.FC<InputProps> = ({ label, className, ...props }) => {
               {...field}
               className={twMerge(
                 `w-full !placeholder:text-base `,
-                meta.touched && !!meta.error ? "!border-red-500" : "",
+                meta.touched && !!meta.error ? "[&_fieldset]:!border-red-500" : "",
                 className,
               )}
             />

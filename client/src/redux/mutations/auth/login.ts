@@ -19,8 +19,9 @@ function useLoginMutation() {
 
   const login = async (values: Record<"email" | "password", string>) => {
     try {
-      await trigger(values).unwrap();
+      const response = await trigger(values).unwrap();
       notifySuccess("Login Successful");
+      return response;
     } catch (error) {
       if (isApiErrorResponse(error)) {
         if (error.status === 400) {
