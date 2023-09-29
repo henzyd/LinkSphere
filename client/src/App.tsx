@@ -14,8 +14,8 @@ import Lazy from "./components/loaders/Lazy";
 import Auth from "./layouts/Auth";
 import HomeLoader from "./components/loaders/Home";
 import Login from "./pages/auth/Login";
-import Signup from "./pages/auth/Signup";
-import ForgotPassword from "./pages/auth/ForgotPassword";
+import Signup from "./pages/auth/signup";
+import ForgotPassword from "./pages/auth/forgot-password";
 import ResetPassword from "./pages/auth/ResetPassword";
 
 async function loader() {

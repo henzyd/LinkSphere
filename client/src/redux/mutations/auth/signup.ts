@@ -17,12 +17,11 @@ const _signupEndpoint = authApi.injectEndpoints({
 function useSignupMutation() {
   const [trigger, result] = _signupEndpoint.useSignupMutation();
 
-  const signup = async (
-    values: Record<"email" | "password" | "username", string>
-  ) => {
+  const signup = async (values: Record<"email" | "password" | "username", string>) => {
     try {
-      await trigger(values).unwrap();
+      const response = await trigger(values).unwrap();
       notifySuccess("Signup successfully");
+      return response;
     } catch (error) {
       if (isApiErrorResponse(error)) {
         if (error.status === 400) {
