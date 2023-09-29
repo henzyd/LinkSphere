@@ -80,10 +80,7 @@ const ForgotPassword = () => {
             )}
           </Formik>
         ) : (
-          <Success
-            instructionsSent={instructionsSent}
-            setInstructionsSent={(data) => setInstructionsSent(data)}
-          />
+          <Success email={instructionsSent.email} />
         )}
       </AuthWrapper>
     </>
