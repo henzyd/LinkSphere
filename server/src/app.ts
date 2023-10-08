@@ -7,8 +7,8 @@ import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import AppError from "./utils/appError";
 import globalErrorHandler from "./controllers/errorHandler";
-import { googleOauthProvider } from "./controllers/authentication";
-import authRoute from "./routes/authentication";
+import googleOauthProvider from "./controllers/passport/google";
+import authRoute from "./routes/auth";
 import prisma from "./db";
 // import { authorization } from "./middleware/authentication";
 // import fs from "fs";
@@ -40,6 +40,14 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
+
+//? Note: This is a temporary fix for the session error
+app.use(function (req, res, next) {
+  if (!req.session) {
+    return next(new Error("Oh no")); //handle error
+  }
+  next(); //otherwise continue
+});
 
 passport.use(
   new GoogleStrategy(
@@ -81,18 +89,6 @@ app.delete("/users", (req, res) => {
 //?
 
 app.use("/auth", authRoute);
-app.get("/test", async (req, res, next) => {
-  console.log("In test route");
-
-  res.cookie("token", "1q2w3e4r5t1q2w3e4r5t", {
-    maxAge: 604800000, // 7 days
-    httpOnly: true,
-  });
-  res.status(200).json({
-    status: "success",
-    message: "All users deleted",
-  });
-});
 
 app.all("*", (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));

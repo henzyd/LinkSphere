@@ -10,7 +10,7 @@ import {
   resetPasswordConfirm,
   getGoogleAuthUrl,
   googleSignup,
-} from "../controllers/authentication";
+} from "../controllers/auth";
 import { authorization } from "../middleware/authentication";
 import { signAccessToken, signRefreshToken } from "../utils/jwt";
 
@@ -81,55 +81,18 @@ router.post(
 );
 router.get(
   "/google",
-  passport.authenticate("google", { scope: ["profile", "email", "openid"] })
+  passport.authenticate("google", { scope: ["profile", "email"] })
 );
 router.get(
   "/google/callback",
-  // async (req: Request, res: Response, next: NextFunction) => {
-  //   console.log("In google callback before \n", req.user);
-
-  //   const accessToken = signAccessToken("123");
-  //   const refreshToken = signRefreshToken("123");
-
-  //   res.cookie("refreshToken", refreshToken, {
-  //     httpOnly: true,
-  //     secure: process.env.NODE_ENV === "production",
-  //     // sameSite: "none",
-  //   });
-
-  //   res.cookie("accessToken", accessToken, {
-  //     httpOnly: true,
-  //     secure: process.env.NODE_ENV === "production",
-  //     // sameSite: "none",
-  //   });
-  //   next();
-  // },
   passport.authenticate("google", {
     failureRedirect: `/auth/google/faliure`,
-    // successRedirect: `${process.env.CLIENT_BASE_URL}`,
-    // successReturnToOrRedirect: `${process.env.CLIENT_BASE_URL}`,
   }),
   (req: Request, res: Response) => {
     console.log("In google callback \n", req.user);
-    // res.cookie("accessToken", (req.user as { id: string })?.id, {
-    //   httpOnly: true,
-    //   secure: true,
-    //   sameSite: "none",
-    // });
 
-    // res.cookie("accessToken", "123");
-    res.cookie("authToken", "your-auth-token", {
-      // maxAge: 604800000,
-      expires: new Date(Date.now() + 604800000), // 7 days
-      // domain: "",
-      // secure: true,
-      httpOnly: true,
-    });
-
-    //accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fauth%2Fgoogle%2Fcallback&scope=profile%20email%20openid&client_id=777565418314-hr8lif0d5d4jtesn8f7s7vk74dnsbrof.apps.googleusercontent.com&service=lso&o2v=2&theme=glif&flowName=GeneralOAuthFlow
-    res.redirect(`${process.env.CLIENT_BASE_URL}`);
-    // https: res.redirect(`http://127.0.0.1:5173/dashboard`);
-    // res.json({ message: "In google callback" });
+    res.send(req.user);
+    // res.redirect(`${req.protocol}://${req.hostname}/?token=${req.user}`);
   }
 );
 router.get("/google/faliure", (req: Request, res: Response) => {
