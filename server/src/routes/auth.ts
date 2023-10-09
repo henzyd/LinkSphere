@@ -11,7 +11,7 @@ import {
   getGoogleAuthUrl,
   googleSignup,
 } from "../controllers/auth";
-import { authorization } from "../middleware/authentication";
+import { authorization } from "../middleware/auth";
 import { signAccessToken, signRefreshToken } from "../utils/jwt";
 
 const router = express.Router();

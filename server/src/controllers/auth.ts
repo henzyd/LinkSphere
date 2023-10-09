@@ -6,7 +6,11 @@ import crypto from "crypto";
 import { google } from "googleapis";
 import { OAuth2Client } from "google-auth-library";
 import catchAsync from "../utils/catchAsync";
-import { customErrorFormatter, hashPasswordHandler } from "../utils/helper";
+import {
+  customErrorFormatter,
+  exclude,
+  hashPasswordHandler,
+} from "../utils/helper";
 import prisma from "../db";
 import AppError from "../utils/appError";
 import { signAccessToken, signRefreshToken } from "../utils/jwt";
@@ -31,9 +35,26 @@ const signup = catchAsync(
 
     const { username, email, password } = req.body;
 
+    const user = await prisma.user.findFirst({
+      where: {
+        OR: [
+          {
+            username: username,
+          },
+          {
+            email: email,
+          },
+        ],
+      },
+    });
+
+    if (user) {
+      return next(new AppError("User already exist", 400));
+    }
+
     const hashedPassword = await hashPasswordHandler(password);
 
-    const user = await prisma.user.create({
+    const newUser = await prisma.user.create({
       data: {
         username,
         email,
@@ -43,12 +64,12 @@ const signup = catchAsync(
 
     try {
       await sendWelcomeMail(email, {
-        name: user.username,
-        email: user.email,
+        name: newUser.username,
+        email: newUser.email,
       });
     } catch (error) {
       console.log(error);
-      return next(new AppError("Failed to send email", 500));
+      return next(new AppError("Failed to send welcome email", 500));
     }
 
     res.status(200).json({
@@ -67,69 +88,50 @@ const login = catchAsync(
 
     const { email, password } = req.body;
 
-    //? Check if user exists
     const user = await prisma.user.findUnique({
       where: {
         email,
       },
-      select: {
-        id: true,
-        username: true,
-        email: true,
-        password: true,
-      },
     });
+
     if (!user) {
       return next(new AppError("User does not exist", 404));
     }
 
-    //? Check if password is correct
-    const isPasswordCorrect = await bcrypt.compare(
-      password,
-      user.password as string
-    );
+    console.log(user);
+
+    if (!user.password) {
+      return next(new AppError("Invalid credentials", 400));
+    }
+
+    const isPasswordCorrect = await bcrypt.compare(password, user.password);
 
     if (!isPasswordCorrect) {
       return next(new AppError("Invalid credentials", 400));
     }
 
-    //? Update the lastLogin field of the user to the current date
-    const updatedUser = await prisma.user.update({
-      where: {
-        id: user.id,
-      },
-      data: {
-        lastLogin: new Date(),
-      },
-      select: {
-        id: true,
-        username: true,
-        email: true,
-      },
-    });
+    const updatedUser = exclude(
+      await prisma.user.update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          lastLogin: new Date(),
+        },
+      }),
+      ["password"]
+    );
 
-    const accessToken = signAccessToken(user.id);
-    const refreshToken = signRefreshToken(user.id);
-
-    res.cookie("refreshToken", refreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      // sameSite: "none",
-    });
-
-    res.cookie("accessToken", accessToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      // sameSite: "none",
-    });
+    const accessToken = signAccessToken(updatedUser.id);
+    const refreshToken = signRefreshToken(updatedUser.id);
 
     res.status(200).json({
       status: "success",
       message: "User logged in successfully",
       data: {
         ...updatedUser,
-        // accessToken,
-        // refreshToken,
+        accessToken,
+        refreshToken,
       },
     });
   }

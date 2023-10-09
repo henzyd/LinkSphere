@@ -26,14 +26,12 @@ interface AuthenticatedRequest extends Request {
  */
 const authorization = catchAsync(
   async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-    // const authHeader = req.headers.authorization;
-    // if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    //   return next(new AppError("Not authorized", 401));
-    // }
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return next(new AppError("Not authorized", 401));
+    }
 
-    // const token = authHeader.split(" ")[1];
-
-    const { accessToken: token } = req.cookies;
+    const token = authHeader.split(" ")[1];
 
     if (!token) {
       return next(new AppError("Not authorized", 401));
@@ -48,7 +46,6 @@ const authorization = catchAsync(
 
     const { userId } = decoded as { userId: string; iat: number; exp: number };
 
-    // Retrieve the user from the database using the userId from the token
     const user = await prisma.user.findUnique({
       where: {
         id: userId,
@@ -59,7 +56,6 @@ const authorization = catchAsync(
       return next(new AppError("Invalid token", 401));
     }
 
-    // Assign the user to the _currentUser property in the request object
     req._currentUser = user;
 
     next();
