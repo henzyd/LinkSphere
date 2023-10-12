@@ -8,8 +8,8 @@ import {
   refreshAccessToken,
   resetPassword,
   resetPasswordConfirm,
-  getGoogleAuthUrl,
-  googleSignup,
+  // getGoogleAuthUrl,
+  // googleSignup,
 } from "../controllers/auth";
 import { authorization } from "../middleware/auth";
 import { signAccessToken, signRefreshToken } from "../utils/jwt";
@@ -41,37 +41,37 @@ router.post(
   signup
 );
 router.post("/login", [emailVaidator(), passwordValidator()], login);
-router.post(
-  "/getGoogleAuthUrl",
-  [
-    body("authType")
-      .trim()
-      .notEmpty()
-      .isIn(["signup", "login"])
-      .withMessage("Invalid authType. Only signup and login are allowed"),
-  ],
-  getGoogleAuthUrl
-);
-router.post(
-  "/googleSignup",
-  [
-    body("code")
-      .isString()
-      .withMessage("Code must be a string")
-      .trim()
-      .notEmpty()
-      .withMessage("Code is required"),
-  ],
-  googleSignup
-);
+// router.post(
+//   "/getGoogleAuthUrl",
+//   [
+//     body("authType")
+//       .trim()
+//       .notEmpty()
+//       .isIn(["signup", "login"])
+//       .withMessage("Invalid authType. Only signup and login are allowed"),
+//   ],
+//   getGoogleAuthUrl
+// );
+// router.post(
+//   "/googleSignup",
+//   [
+//     body("code")
+//       .isString()
+//       .withMessage("Code must be a string")
+//       .trim()
+//       .notEmpty()
+//       .withMessage("Code is required"),
+//   ],
+//   googleSignup
+// );
 router.post("/logout", authorization, [refreshTokenValidator()], logout);
 router.post("/refresh-token", [refreshTokenValidator()], refreshAccessToken);
 router.post("/reset-password", [emailVaidator()], resetPassword);
 router.post(
   "/reset-password-confirm",
   [
-    query("token").trim().notEmpty().withMessage("Token is required"),
-    query("id").trim().notEmpty().withMessage("Id is required"),
+    body("userId").trim().notEmpty().withMessage("User id is required"),
+    body("token").trim().notEmpty().withMessage("Token is required"),
     body("newPassword")
       .trim()
       .isLength({ min: 8 })

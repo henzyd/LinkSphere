@@ -3,8 +3,9 @@ import { validationResult } from "express-validator";
 import bcrypt from "bcryptjs";
 import { JwtPayload, verify as JwtVerify } from "jsonwebtoken";
 import crypto from "crypto";
-import { google } from "googleapis";
-import { OAuth2Client } from "google-auth-library";
+import ms from "ms";
+// import { google } from "googleapis";
+// import { OAuth2Client } from "google-auth-library";
 import catchAsync from "../utils/catchAsync";
 import {
   customErrorFormatter,
@@ -16,15 +17,15 @@ import AppError from "../utils/appError";
 import { signAccessToken, signRefreshToken } from "../utils/jwt";
 import { sendPasswordResetMail, sendWelcomeMail } from "../utils/email";
 
-const SCOPES = [
-  "email",
-  "profile",
-  "https://www.googleapis.com/auth/userinfo.profile",
-  "https://www.googleapis.com/auth/userinfo.email",
-  "openid",
-];
+// const SCOPES = [
+//   "email",
+//   "profile",
+//   "https://www.googleapis.com/auth/userinfo.profile",
+//   "https://www.googleapis.com/auth/userinfo.email",
+//   "openid",
+// ];
 
-let oAuth2Client: OAuth2Client;
+// let oAuth2Client: OAuth2Client;
 
 const signup = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -98,8 +99,6 @@ const login = catchAsync(
       return next(new AppError("User does not exist", 404));
     }
 
-    console.log(user);
-
     if (!user.password) {
       return next(new AppError("Invalid credentials", 400));
     }
@@ -137,83 +136,83 @@ const login = catchAsync(
   }
 );
 
-const getGoogleAuthUrl = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
-    const errors = validationResult(req).formatWith(customErrorFormatter);
-    if (!errors.isEmpty()) {
-      return next(new AppError("Invalid request data", 400, errors.array()));
-    }
+// const getGoogleAuthUrl = catchAsync(
+//   async (req: Request, res: Response, next: NextFunction) => {
+//     const errors = validationResult(req).formatWith(customErrorFormatter);
+//     if (!errors.isEmpty()) {
+//       return next(new AppError("Invalid request data", 400, errors.array()));
+//     }
 
-    // res.header("Referrer-Policy", "no-referrer-when-downgrade"); //? Remove this in production
+//     // res.header("Referrer-Policy", "no-referrer-when-downgrade"); //? Remove this in production
 
-    oAuth2Client = new google.auth.OAuth2(
-      process.env.GOOGLE_CLIENT_ID,
-      process.env.GOOGLE_CLIENT_SECRET,
-      `http://localhost:5000/oauth`
-    );
+//     oAuth2Client = new google.auth.OAuth2(
+//       process.env.GOOGLE_CLIENT_ID,
+//       process.env.GOOGLE_CLIENT_SECRET,
+//       `http://localhost:5000/oauth`
+//     );
 
-    // console.log(oAuth2Client.credentials, "oAuth2Client");
+//     // console.log(oAuth2Client.credentials, "oAuth2Client");
 
-    const authorizeUrl = oAuth2Client.generateAuthUrl({
-      access_type: "offline",
-      scope: "https://www.googleapis.com/auth/userinfo.profile openid",
-      // scope: SCOPES,
-      // prompt: "consent",
-      approval_prompt: "force",
-    });
+//     const authorizeUrl = oAuth2Client.generateAuthUrl({
+//       access_type: "offline",
+//       scope: "https://www.googleapis.com/auth/userinfo.profile openid",
+//       // scope: SCOPES,
+//       // prompt: "consent",
+//       approval_prompt: "force",
+//     });
 
-    res.status(200).json({
-      status: "success",
-      message: "Google OAuth url generated successfully",
-      data: {
-        url: authorizeUrl,
-      },
-    });
-  }
-);
+//     res.status(200).json({
+//       status: "success",
+//       message: "Google OAuth url generated successfully",
+//       data: {
+//         url: authorizeUrl,
+//       },
+//     });
+//   }
+// );
 
-const googleSignup = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
-    const errors = validationResult(req).formatWith(customErrorFormatter);
-    if (!errors.isEmpty()) {
-      return next(new AppError("Invalid request data", 400, errors.array()));
-    }
+// const googleSignup = catchAsync(
+//   async (req: Request, res: Response, next: NextFunction) => {
+//     const errors = validationResult(req).formatWith(customErrorFormatter);
+//     if (!errors.isEmpty()) {
+//       return next(new AppError("Invalid request data", 400, errors.array()));
+//     }
 
-    const { code } = req.body;
+//     const { code } = req.body;
 
-    const oAuth2Client = new OAuth2Client(
-      process.env.GOOGLE_CLIENT_ID,
-      process.env.GOOGLE_CLIENT_SECRET,
-      `${process.env.CLIENT_BASE_URL}/oauth`
-    );
+//     const oAuth2Client = new OAuth2Client(
+//       process.env.GOOGLE_CLIENT_ID,
+//       process.env.GOOGLE_CLIENT_SECRET,
+//       `${process.env.CLIENT_BASE_URL}/oauth`
+//     );
 
-    let response;
-    try {
-      response = await oAuth2Client.getToken(code);
-      console.log(response, "response");
-    } catch (error: any) {
-      console.log(error.message, "error.message");
-      return next(new AppError("Invalid code", 400));
-    }
-    // oAuth2Client.setCredentials(response.tokens);
-    // console.log(oAuth2Client, "oAuth2Client");
+//     let response;
+//     try {
+//       response = await oAuth2Client.getToken(code);
+//       console.log(response, "response");
+//     } catch (error: any) {
+//       console.log(error.message, "error.message");
+//       return next(new AppError("Invalid code", 400));
+//     }
+//     // oAuth2Client.setCredentials(response.tokens);
+//     // console.log(oAuth2Client, "oAuth2Client");
 
-    // const { data ://} = await oAuth2Client.request({
-    //   url: "httpswww.googleapis.com/oauth2/v2/userinfo",
-    // });
-    // const user = await oAuth2Client.verifyIdToken({
-    //   idToken: response?.tokens?.id_token || "",
-    //   audience: process.env.GOOGLE_CLIENT_ID,
-    // });
-    // console.log(user, "user");
+//     // const { data ://} = await oAuth2Client.request({
+//     //   url: "httpswww.googleapis.com/oauth2/v2/userinfo",
+//     // });
+//     // const user = await oAuth2Client.verifyIdToken({
+//     //   idToken: response?.tokens?.id_token || "",
+//     //   audience: process.env.GOOGLE_CLIENT_ID,
+//     // });
+//     // console.log(user, "user");
 
-    // const { email, name } = user.getPayload() as {
-    //   email: string;
-    //   name: string;
-    // };
-    // console.log(user.getPayload(), "user.getPayload()");
-  }
-);
+//     // const { email, name } = user.getPayload() as {
+//     //   email: string;
+//     //   name: string;
+//     // };
+//     // console.log(user.getPayload(), "user.getPayload()");
+//   }
+// );
 
 const logout = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -237,12 +236,12 @@ const logout = catchAsync(
         },
       });
     } catch (error) {
-      return next(new AppError("User is already logged out", 400));
+      return next(new AppError("Token already blacklisted", 400));
     }
 
     res.status(200).json({
       status: "success",
-      message: "User logged out successfully",
+      message: "Logged out successfully",
     });
   }
 );
@@ -263,7 +262,6 @@ const refreshAccessToken = catchAsync(
       return next(new AppError("Invalid token", 400));
     }
 
-    // Check if the token is blacklisted
     const blacklistedToken = await prisma.blacklistedToken.findUnique({
       where: {
         token: refreshToken,
@@ -316,15 +314,9 @@ const resetPassword = catchAsync(
       return next(new AppError("User does not exist", 404));
     }
 
-    //? Generate a reset token and send it to the user's email
     const token = crypto.randomBytes(32).toString("hex");
-    console.log(token, "token");
 
-    const TOKEN_EXPIRATION = 24 * 60 * 60 * 1000; // 24 hours
-    console.log(TOKEN_EXPIRATION, "TOKEN_EXPIRATION");
-
-    const tokenExpiration = Date.now() + TOKEN_EXPIRATION;
-    console.log(tokenExpiration, "tokenExpiration");
+    const tokenExpiration = Date.now() + ms("2h");
 
     const resetPasswordToken = await prisma.resetPasswordToken.create({
       data: {
@@ -337,18 +329,12 @@ const resetPassword = catchAsync(
         },
       },
     });
-    console.log(resetPasswordToken, "resetPasswordToken");
 
-    const resetPasswordUrl = `${req.protocol}://${req.get(
-      "host"
-    )}/reset-password-confirm?token=${resetPasswordToken.token}&id=${user.id}`;
-    console.log(resetPasswordUrl, "resetPasswordUrl");
+    const resetPasswordUrl = `${req.headers.referer}reset-password?token=${resetPasswordToken.token}&userId=${user.id}`;
 
-    //? Send the reset token to the user's email
     try {
       await sendPasswordResetMail(email, resetPasswordUrl);
     } catch (error) {
-      console.log(error);
       return next(new AppError("Failed to send email", 500));
     }
 
@@ -366,8 +352,7 @@ const resetPasswordConfirm = catchAsync(
       return next(new AppError("Invalid request data", 400, errors.array()));
     }
 
-    const { token, id } = JSON.parse(JSON.stringify(req.query));
-    const { newPassword } = req.body;
+    const { userId, token, newPassword } = req.body;
 
     const resetPasswordToken = await prisma.resetPasswordToken.findUnique({
       where: {
@@ -377,6 +362,8 @@ const resetPasswordConfirm = catchAsync(
         user: true,
       },
     });
+
+    console.log(resetPasswordToken, "resetPasswordToken");
 
     if (!resetPasswordToken) {
       return next(new AppError("Invalid token", 400));
@@ -391,14 +378,14 @@ const resetPasswordConfirm = catchAsync(
     try {
       await prisma.user.update({
         where: {
-          id,
+          id: userId,
         },
         data: {
           password: hashedPassword,
         },
       });
     } catch (error) {
-      return next(new AppError("Invalid id", 400));
+      return next(new AppError("User not found", 404));
     }
 
     await prisma.resetPasswordToken.delete({
@@ -417,8 +404,8 @@ const resetPasswordConfirm = catchAsync(
 export {
   signup,
   login,
-  getGoogleAuthUrl,
-  googleSignup,
+  // getGoogleAuthUrl,
+  // googleSignup,
   logout,
   refreshAccessToken,
   resetPassword,

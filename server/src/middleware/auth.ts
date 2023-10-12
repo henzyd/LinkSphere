@@ -34,6 +34,16 @@ const authorization = catchAsync(
     const token = authHeader.split(" ")[1];
 
     if (!token) {
+      return next(new AppError("No token provided", 401));
+    }
+
+    const blacklistedToken = await prisma.blacklistedToken.findUnique({
+      where: {
+        token,
+      },
+    });
+
+    if (blacklistedToken) {
       return next(new AppError("Not authorized", 401));
     }
 
