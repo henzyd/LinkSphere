@@ -15,7 +15,11 @@ import {
 import prisma from "../db";
 import AppError from "../utils/appError";
 import { signAccessToken, signRefreshToken } from "../utils/jwt";
-import { sendPasswordResetMail, sendWelcomeMail } from "../utils/email";
+import {
+  sendOtpMail,
+  sendPasswordResetMail,
+  sendWelcomeMail,
+} from "../utils/email";
 
 // const SCOPES = [
 //   "email",
@@ -63,14 +67,27 @@ const signup = catchAsync(
       },
     });
 
+    const otp = await prisma.oTP.create({
+      data: {
+        code: Math.floor(100000 + Math.random() * 900000),
+        expiresAt: new Date(Date.now() + ms("5m")),
+        user: {
+          connect: {
+            id: newUser.id,
+          },
+        },
+      },
+    });
+
     try {
-      await sendWelcomeMail(email, {
-        name: newUser.username,
-        email: newUser.email,
+      await sendOtpMail({
+        email: newUser?.email,
+        name: newUser?.username,
+        code: otp.code,
       });
     } catch (error) {
       console.log(error);
-      return next(new AppError("Failed to send welcome email", 500));
+      return next(new AppError("Failed to send otp email", 500));
     }
 
     res.status(200).json({
@@ -101,6 +118,10 @@ const login = catchAsync(
 
     if (!user.password) {
       return next(new AppError("Invalid credentials", 400));
+    }
+
+    if (!user.isVerified) {
+      return next(new AppError("User not verified", 400));
     }
 
     const isPasswordCorrect = await bcrypt.compare(password, user.password);
@@ -363,8 +384,6 @@ const resetPasswordConfirm = catchAsync(
       },
     });
 
-    console.log(resetPasswordToken, "resetPasswordToken");
-
     if (!resetPasswordToken) {
       return next(new AppError("Invalid token", 400));
     }
@@ -401,6 +420,113 @@ const resetPasswordConfirm = catchAsync(
   }
 );
 
+const verifyOtp = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const errors = validationResult(req).formatWith(customErrorFormatter);
+    if (!errors.isEmpty()) {
+      return next(new AppError("Invalid request data", 400, errors.array()));
+    }
+
+    const { code } = req.body;
+
+    const otpRecord = await prisma.oTP.findFirst({
+      where: {
+        code,
+      },
+      include: {
+        user: true,
+      },
+    });
+
+    if (!otpRecord) {
+      return next(new AppError("Invalid code", 400));
+    }
+
+    if (otpRecord.expiresAt < new Date()) {
+      return next(new AppError("Code expired", 400));
+    }
+
+    await prisma.oTP.delete({
+      where: {
+        id: otpRecord.id,
+      },
+    });
+
+    await prisma.user.update({
+      where: {
+        id: otpRecord.user.id,
+      },
+      data: {
+        isVerified: true,
+      },
+    });
+
+    try {
+      await sendWelcomeMail({
+        email: otpRecord.user.email,
+        name: otpRecord.user.username,
+      });
+    } catch (error) {
+      console.log(error);
+      return next(new AppError("Failed to send welcome email", 500));
+    }
+
+    res.status(200).json({
+      status: "success",
+      message: "User verified successfully",
+    });
+  }
+);
+
+const requestNewOtp = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const errors = validationResult(req).formatWith(customErrorFormatter);
+    if (!errors.isEmpty()) {
+      return next(new AppError("Invalid request data", 400, errors.array()));
+    }
+
+    const { email } = req.body;
+
+    const user = await prisma.user.findUnique({
+      where: {
+        email,
+      },
+    });
+
+    if (!user) {
+      return next(new AppError("User does not exist", 404));
+    }
+
+    const otp = await prisma.oTP.create({
+      data: {
+        code: Math.floor(100000 + Math.random() * 900000),
+        expiresAt: new Date(Date.now() + ms("5m")),
+        user: {
+          connect: {
+            id: user.id,
+          },
+        },
+      },
+    });
+
+    try {
+      await sendOtpMail({
+        email: user.email,
+        name: user.username,
+        code: otp.code,
+      });
+    } catch (error) {
+      console.log(error);
+      return next(new AppError("Failed to send otp email", 500));
+    }
+
+    res.status(200).json({
+      status: "success",
+      message: "OTP sent successfully",
+    });
+  }
+);
+
 export {
   signup,
   login,
@@ -410,4 +536,6 @@ export {
   refreshAccessToken,
   resetPassword,
   resetPasswordConfirm,
+  verifyOtp,
+  requestNewOtp,
 };

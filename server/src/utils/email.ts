@@ -57,20 +57,19 @@ const mailOptions = {
   context: {},
 };
 
-async function sendWelcomeMail(
-  email: string,
-  data: {
-    name: string;
-    email: string;
-  }
-) {
+async function sendWelcomeMail({
+  name,
+  email,
+}: {
+  name: string;
+  email: string;
+}) {
   mailOptions.to = email;
   mailOptions.subject =
     "Welcome to LinkSphere - Let's Connect and Get Creative!";
   mailOptions.template = "welcome";
   mailOptions.context = {
-    name: data.name,
-    email: data.email,
+    name,
   };
 
   const info = await transporter.sendMail(mailOptions);
@@ -89,4 +88,25 @@ async function sendPasswordResetMail(email: string, url: string) {
   console.log("Email sent:", info.messageId, info);
 }
 
-export { sendWelcomeMail, sendPasswordResetMail };
+async function sendOtpMail({
+  name,
+  email,
+  code,
+}: {
+  name: string;
+  code: number;
+  email: string;
+}) {
+  mailOptions.to = email;
+  mailOptions.subject = "LinkSphere - Verify Your Account";
+  mailOptions.template = "otp";
+  mailOptions.context = {
+    name,
+    code,
+  };
+
+  const info = await transporter.sendMail(mailOptions);
+  console.log("Email sent:", info.messageId, info);
+}
+
+export { sendWelcomeMail, sendPasswordResetMail, sendOtpMail };

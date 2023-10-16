@@ -1,5 +1,5 @@
-import express, { NextFunction, Request, Response } from "express";
-import { body, query } from "express-validator";
+import express, { Request, Response } from "express";
+import { body } from "express-validator";
 import passport from "passport";
 import {
   login,
@@ -8,11 +8,13 @@ import {
   refreshAccessToken,
   resetPassword,
   resetPasswordConfirm,
+  verifyOtp,
+  requestNewOtp,
   // getGoogleAuthUrl,
   // googleSignup,
 } from "../controllers/auth";
 import { authorization } from "../middleware/auth";
-import { signAccessToken, signRefreshToken } from "../utils/jwt";
+// import { signAccessToken, signRefreshToken } from "../utils/jwt";
 
 const router = express.Router();
 
@@ -79,6 +81,18 @@ router.post(
   ],
   resetPasswordConfirm
 );
+router.post(
+  "/verify-otp",
+  [
+    body("code")
+      .notEmpty()
+      .isInt()
+      .isLength({ min: 6, max: 6 })
+      .withMessage("Invalid OTP code, must be 6 digits long"),
+  ],
+  verifyOtp
+);
+router.post("/resend-otp", [emailVaidator()], requestNewOtp);
 router.get(
   "/google",
   passport.authenticate("google", { scope: ["profile", "email"] })

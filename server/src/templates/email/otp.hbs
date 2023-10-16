@@ -14,20 +14,17 @@
       href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       rel="stylesheet"
     />
-
-    <title>Reset Password</title>
+    <title>Verify User</title>
     <style type="text/css">
       h1, h2, h3, h4, h5, h6, p { color: #222222; font-family: "Work Sans",
       sans-serif; margin: 0; } html { width: 100%; } body { margin: 0; padding:
-      0; width: 100%; } p { text-align: start; line-height: 180%;
-      letter-spacing: -0.064px; font-size: 14px; } .header { width: 180px; }
-      table { width: 80%; padding: 16px; margin: 0 auto; } td { padding: 4px 0;
-      } .reset-link { text-align: start; width: fit-content; background-color:
-      #003bb2; color: #ffffff; padding: 10px 20px; border-radius: 4px;
-      text-decoration: none; } .footer { padding: 15px 0 30px 0; } .footer img {
-      width: 160px; } @media only screen and (max-width: 767px) { .header {
-      width: 160px; } table { width: 100%; padding: 16px; } } @media only screen
-      and (max-width: 450px) { table { padding: 12px; } }
+      0; width: 100%; } p { text-align: center; line-height: 180%;
+      letter-spacing: -0.064px; font-size: 14px; } .code { text-align: center; }
+      .header { width: 180px; } table { width: 80%; padding: 16px; margin: 0
+      auto; } td { padding: 4px 0; } .footer { padding: 15px 0 30px 0; } .footer
+      img { width: 160px; } @media only screen and (max-width: 767px) { .header
+      { width: 160px; } table { width: 100%; padding: 16px; } } @media only
+      screen and (max-width: 450px) { table { padding: 12px; } }
     </style>
   </head>
   <body>
@@ -47,46 +44,37 @@
         </td>
       </tr>
       <tr>
-        <td align="center">
+        <td>
           <h1
             style="
               font-weight: 400;
               font-size: 17px;
               padding-bottom: 20px;
-              text-align: start;
+              padding-left: 1%;
             "
           >
-            Hello,
+            Hi
+            {{name}}👋,
           </h1>
-        </td>
-      </tr>
-      <tr>
-        <td>
           <p>
-            We received a request to reset your password for your LinkSphere
-            account. To proceed with the password reset, please click on the
-            link below:
+            To proceed further with your signup process please enter the otp
+            below.
           </p>
         </td>
       </tr>
       <tr>
-        <td align="center" style="padding: 20px 0">
-          <a class="reset-link" href="{{url}}">Reset Password</a>
+        <td style="padding: 0">
+          <h3 class="code">{{code}}</h3>
         </td>
       </tr>
       <tr>
         <td>
-          <p>
-            If you did not initiate this request, please disregard this email.
-            Your password will remain unchanged.
-            <br />
-            Thank you for using LinkSphere.
-          </p>
+          <p>Please note that this code will expire in 5 minutes.</p>
         </td>
       </tr>
       <tr>
         <td>
-          <p style="padding: 25px 0 0 0">
+          <p style="padding: 30px 0 0 0; text-align: start">
             Best regards,
             <br />
             The LinkSphere Team
@@ -107,10 +95,9 @@
           <p
             style="
               color: #667085;
-              text-align: center;
               font-size: 10px;
               line-height: 0;
-              padding-top: 15px;
+              padding-top: 16px;
             "
           >
             © 2023 LinkSphere. All Rights Reserved.
