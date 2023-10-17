@@ -85,7 +85,7 @@ async function sendPasswordResetMail(email: string, url: string) {
   };
 
   const info = await transporter.sendMail(mailOptions);
-  console.log("Email sent:", info.messageId, info);
+  console.log("Email sent:", info.messageId);
 }
 
 async function sendOtpMail({
@@ -106,7 +106,7 @@ async function sendOtpMail({
   };
 
   const info = await transporter.sendMail(mailOptions);
-  console.log("Email sent:", info.messageId, info);
+  console.log("Email sent:", info.messageId);
 }
 
 export { sendWelcomeMail, sendPasswordResetMail, sendOtpMail };

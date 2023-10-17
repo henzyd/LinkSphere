@@ -18,9 +18,15 @@ model User {
   lastLogin           DateTime?
   createdAt           DateTime             @default(now())
   updatedAt           DateTime             @updatedAt
+  role                Role                 @default(user)
   oauthProviders      OAuthProvider[]      @relation("oauthProviders")
   resetPasswordTokens ResetPasswordToken[] @relation("resetPasswordTokens")
   otps                OTP[]                @relation("otps")
+}
+
+enum Role {
+  user
+  admin
 }
 
 model OAuthProvider {
