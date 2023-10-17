@@ -1,17 +1,8 @@
-import { Request, Response, NextFunction } from "express";
+import { Response, NextFunction } from "express";
 import { verify as JwtVerify, JwtPayload } from "jsonwebtoken";
-import { User } from "@prisma/client";
 import catchAsync from "../utils/catchAsync";
 import AppError from "../utils/appError";
 import prisma from "../db";
-
-/**
- * Custom interface to include the _currentUser property in the Request object.
- * Extends the base Request interface from Express.
- */
-interface AuthenticatedRequest extends Request {
-  _currentUser?: User;
-}
 
 /**
  * Authorization middleware function to authenticate and authorize requests.
@@ -64,6 +55,23 @@ const authorization = catchAsync(
 
     if (!user) {
       return next(new AppError("Invalid token", 401));
+    }
+
+    if (!user.isVerified) {
+      return next(
+        new AppError(
+          "Email not verified. Please verify your email to continue",
+          401
+        )
+      );
+    }
+
+    if (user.isBlocked) {
+      return next(new AppError("Your account has been blocked", 403));
+    }
+
+    if (user.isDeleted) {
+      return next(new AppError("Your account has been deleted", 403));
     }
 
     req._currentUser = user;

@@ -1,5 +1,4 @@
 import bcrypt from "bcryptjs";
-import { CustomError } from "../types";
 
 /**
  * Formats the express-validator error message

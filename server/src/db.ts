@@ -19,7 +19,7 @@ const prisma = new PrismaClient({
     await prisma.$connect();
     console.log("Connected to db");
   } catch (error) {
-    console.error("Error occured on db connection");
+    console.error("Error occured on db connection\n", error);
   }
 })();
 

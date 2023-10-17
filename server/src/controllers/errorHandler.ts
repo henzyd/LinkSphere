@@ -1,5 +1,5 @@
 import AppError from "../utils/appError";
-import { Response, Request, NextFunction } from "express";
+import type { Response, Request, NextFunction } from "express";
 
 // function handleCastingErrorDB(err) {
 //   const message = `Invalid ${err.path}: ${err.value}`;
@@ -35,11 +35,13 @@ function sendErrorDev(err: AppError, prodError: AppError, res: Response) {
     productionError: prodError.isOperational
       ? {
           status: prodError.status,
+          statusCode: prodError.statusCode,
           message: prodError.message,
           validationErrors: prodError.validationErrors,
         }
       : {
           status: "error",
+          statusCode: 500,
           message: "Something went very wrong!",
         },
   });

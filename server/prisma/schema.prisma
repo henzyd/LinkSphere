@@ -11,9 +11,15 @@ model User {
   id                  String               @id @default(uuid())
   username            String               @unique
   email               String               @unique
-  firstName           String?
-  lastName            String?
+  firstName           String?              @db.VarChar(240)
+  lastName            String?              @db.VarChar(240)
+  phoneNumber         String?              @unique
+  country             String?
+  city                String?
+  about               String?              @db.VarChar(1200)
   isVerified          Boolean              @default(false)
+  isBlocked           Boolean              @default(false)
+  isDeleted           Boolean              @default(false)
   password            String?
   lastLogin           DateTime?
   createdAt           DateTime             @default(now())

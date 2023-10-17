@@ -8,8 +8,11 @@ import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import AppError from "./utils/appError";
 import globalErrorHandler from "./controllers/errorHandler";
 import googleOauthProvider from "./controllers/passport/google";
-import authRoute from "./routes/auth";
 import prisma from "./db";
+
+//? Routes
+import authRoute from "./routes/auth";
+import UserRoute from "./routes/user";
 // import { authorization } from "./middleware/authentication";
 // import fs from "fs";
 // import moment from "moment";
@@ -90,6 +93,7 @@ app.delete("/users", (req, res) => {
 //?
 
 app.use("/auth", authRoute);
+app.use("/users", UserRoute);
 
 app.all("*", (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));

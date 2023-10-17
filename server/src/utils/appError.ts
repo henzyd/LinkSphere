@@ -1,5 +1,3 @@
-import { CustomError } from "../types";
-
 /**
  * Custom error class for application-specific errors.
  * Extends the built-in Error class.
