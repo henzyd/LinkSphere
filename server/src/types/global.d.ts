@@ -1,17 +1,28 @@
-import type { User } from "@prisma/client";
-import type { Request } from "express";
-
 declare global {
-  interface CustomError {
-    field: string;
-    message: string;
-  }
+  namespace NodeJS {
+    interface ProcessEnv {
+      NODE_ENV: "development" | "production";
+      PORT: string;
+      CLIENT_BASE_URL: string;
+      BASE_URL: string;
 
-  /**
-   * Custom interface to include the _currentUser property in the Request object.
-   * Extends the base Request interface from Express.
-   */
-  type AuthenticatedRequest = Request & {
-    _currentUser?: User;
-  };
+      DATABASE_URL: string;
+      JWT_SECRET: string;
+      PASSWORD_SALT: string;
+
+      GOOGLE_CLIENT_ID: string;
+      GOOGLE_CLIENT_SECRET: string;
+
+      AUTH_EMAIL: string;
+      EMAIL_HOST: string;
+      EMAIL_PORT: string;
+      EMAIL_USERNAME: string;
+      EMAIL_PASSWORD: string;
+
+      GMAIL_EMAIL: string;
+      GMAIL_PASSWORD: string;
+
+      SESSION_SECRET: string;
+    }
+  }
 }

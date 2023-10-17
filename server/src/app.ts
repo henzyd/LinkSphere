@@ -2,13 +2,20 @@ import express from "express";
 import morgan from "morgan";
 import cors from "cors";
 // import cookieParser from "cookie-parser";
-import session from "express-session";
+import session from "express-session"; //! deprecated
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
+import {
+  BASE_URL,
+  GOOGLE_CLIENT_ID,
+  GOOGLE_CLIENT_SECRET,
+  NODE_ENV,
+  SESSION_SECRET,
+} from "./env";
+import prisma from "./db";
 import AppError from "./utils/appError";
 import globalErrorHandler from "./controllers/errorHandler";
 import googleOauthProvider from "./controllers/passport/google";
-import prisma from "./db";
 
 //? Routes
 import authRoute from "./routes/auth";
@@ -19,7 +26,7 @@ import UserRoute from "./routes/user";
 
 const app = express();
 
-if (process.env.NODE_ENV === "development") {
+if (NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
 
@@ -33,7 +40,7 @@ app.use(express.urlencoded({ extended: true }));
 // app.use(cookieParser());
 app.use(
   session({
-    secret: "secret",
+    secret: SESSION_SECRET,
     resave: true,
     saveUninitialized: true,
     cookie: {
@@ -56,9 +63,9 @@ app.use(function (req, res, next) {
 passport.use(
   new GoogleStrategy(
     {
-      clientID: process.env.GOOGLE_CLIENT_ID as string,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
-      callbackURL: `${process.env.BASE_URL}/auth/google/callback`,
+      clientID: GOOGLE_CLIENT_ID,
+      clientSecret: GOOGLE_CLIENT_SECRET,
+      callbackURL: `${BASE_URL}/auth/google/callback`,
     },
     googleOauthProvider
   )
@@ -77,7 +84,7 @@ passport.deserializeUser<any>((user, done) => {
 app.get("/", (req, res) => {
   res.status(200).json({
     status: "success",
-    message: `Welcome to the LinkSphere server <${process.env.NODE_ENV}>`,
+    message: `Welcome to the LinkSphere server <${NODE_ENV}>`,
   });
 });
 

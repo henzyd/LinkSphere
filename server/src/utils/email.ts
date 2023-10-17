@@ -3,25 +3,35 @@ import hbs, {
   NodemailerExpressHandlebarsOptions,
 } from "nodemailer-express-handlebars";
 import path from "path";
+import {
+  AUTH_EMAIL,
+  EMAIL_HOST,
+  EMAIL_PASSWORD,
+  EMAIL_PORT,
+  EMAIL_USERNAME,
+  GMAIL_EMAIL,
+  GMAIL_PASSWORD,
+  NODE_ENV,
+} from "../env";
 
 let transporter: nodemailerTransporter;
-if (process.env.NODE_ENV === "production") {
+if (NODE_ENV === "production") {
   transporter = nodemailer.createTransport({
     service: "gmail",
     secure: true,
     auth: {
-      user: process.env.GMAIL_EMAIL,
-      pass: process.env.GMAIL_PASSWORD,
+      user: GMAIL_EMAIL,
+      pass: GMAIL_PASSWORD,
     },
   });
 } else {
   transporter = nodemailer.createTransport({
-    host: process.env.EMAIL_HOST,
-    port: Number(process.env.EMAIL_PORT),
+    host: EMAIL_HOST,
+    port: Number(EMAIL_PORT),
     secure: false,
     auth: {
-      user: process.env.EMAIL_USERNAME,
-      pass: process.env.EMAIL_PASSWORD,
+      user: EMAIL_USERNAME,
+      pass: EMAIL_PASSWORD,
     },
   });
 }
@@ -46,11 +56,7 @@ const handlebarOptions: NodemailerExpressHandlebarsOptions = {
 transporter.use("compile", hbs(handlebarOptions));
 
 const mailOptions = {
-  from: `${
-    process.env.NODE_ENV === "production"
-      ? process.env.GMAIL_EMAIL
-      : process.env.AUTH_EMAIL
-  }`,
+  from: `${NODE_ENV === "production" ? GMAIL_EMAIL : AUTH_EMAIL}`,
   to: "",
   subject: "",
   template: "",

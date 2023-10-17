@@ -1,12 +1,13 @@
 import jwt from "jsonwebtoken";
+import { JWT_SECRET, NODE_ENV } from "../env";
 
 /**
  * @param {String} id
  * @description Sign an access token
  */
 function signAccessToken(id: string) {
-  return jwt.sign({ userId: id }, process.env.JWT_SECRET as string, {
-    expiresIn: process.env.NODE_ENV === "production" ? "5m" : "1d",
+  return jwt.sign({ userId: id }, JWT_SECRET, {
+    expiresIn: NODE_ENV === "production" ? "5m" : "1d",
   });
 }
 
@@ -15,7 +16,7 @@ function signAccessToken(id: string) {
  * @description Sign an refresh token
  */
 function signRefreshToken(id: string) {
-  return jwt.sign({ userId: id }, process.env.JWT_SECRET as string, {
+  return jwt.sign({ userId: id }, JWT_SECRET, {
     expiresIn: "14d",
   });
 }

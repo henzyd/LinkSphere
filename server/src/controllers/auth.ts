@@ -20,6 +20,7 @@ import {
   sendPasswordResetMail,
   sendWelcomeMail,
 } from "../utils/email";
+import { JWT_SECRET } from "../env";
 
 // const SCOPES = [
 //   "email",
@@ -245,7 +246,7 @@ const logout = catchAsync(
     const { refreshToken } = req.body;
 
     try {
-      JwtVerify(refreshToken, process.env.JWT_SECRET as string);
+      JwtVerify(refreshToken, JWT_SECRET);
     } catch (error) {
       return next(new AppError("Invalid token", 400));
     }
@@ -278,7 +279,7 @@ const refreshAccessToken = catchAsync(
 
     let decoded: JwtPayload | string;
     try {
-      decoded = JwtVerify(refreshToken, process.env.JWT_SECRET as string);
+      decoded = JwtVerify(refreshToken, JWT_SECRET);
     } catch (error) {
       return next(new AppError("Invalid token", 400));
     }

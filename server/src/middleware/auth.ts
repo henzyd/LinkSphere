@@ -3,6 +3,7 @@ import { verify as JwtVerify, JwtPayload } from "jsonwebtoken";
 import catchAsync from "../utils/catchAsync";
 import AppError from "../utils/appError";
 import prisma from "../db";
+import { JWT_SECRET } from "../env";
 
 /**
  * Authorization middleware function to authenticate and authorize requests.
@@ -40,7 +41,7 @@ const authorization = catchAsync(
 
     let decoded: JwtPayload | string;
     try {
-      decoded = JwtVerify(token, process.env.JWT_SECRET as string);
+      decoded = JwtVerify(token, JWT_SECRET);
     } catch (error) {
       return next(error);
     }

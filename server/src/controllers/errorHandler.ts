@@ -1,5 +1,6 @@
-import AppError from "../utils/appError";
 import type { Response, Request, NextFunction } from "express";
+import AppError from "../utils/appError";
+import { NODE_ENV } from "../env";
 
 // function handleCastingErrorDB(err) {
 //   const message = `Invalid ${err.path}: ${err.value}`;
@@ -92,9 +93,9 @@ function globalErrorHandler(
     prodError = handleJWTExpiredError(err);
   }
 
-  if (process.env.NODE_ENV === "development") {
+  if (NODE_ENV === "development") {
     return sendErrorDev(err, prodError, res);
-  } else if (process.env.NODE_ENV === "production") {
+  } else if (NODE_ENV === "production") {
     return sendErrorProd(prodError, res);
   }
 }
