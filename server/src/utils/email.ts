@@ -3,24 +3,35 @@ import hbs, {
   NodemailerExpressHandlebarsOptions,
 } from "nodemailer-express-handlebars";
 import path from "path";
+import {
+  AUTH_EMAIL,
+  EMAIL_HOST,
+  EMAIL_PASSWORD,
+  EMAIL_PORT,
+  EMAIL_USERNAME,
+  GMAIL_EMAIL,
+  GMAIL_PASSWORD,
+  NODE_ENV,
+} from "../env";
 
 let transporter: nodemailerTransporter;
-if (process.env.NODE_ENV === "production") {
+if (NODE_ENV === "production") {
   transporter = nodemailer.createTransport({
     service: "gmail",
+    secure: true,
     auth: {
-      user: process.env.GMAIL_EMAIL,
-      pass: process.env.GMAIL_PASSWORD,
+      user: GMAIL_EMAIL,
+      pass: GMAIL_PASSWORD,
     },
   });
 } else {
   transporter = nodemailer.createTransport({
-    host: process.env.EMAIL_HOST,
-    port: Number(process.env.EMAIL_PORT),
-    // secure: false,
+    host: EMAIL_HOST,
+    port: Number(EMAIL_PORT),
+    secure: false,
     auth: {
-      user: process.env.EMAIL_USERNAME,
-      pass: process.env.EMAIL_PASSWORD,
+      user: EMAIL_USERNAME,
+      pass: EMAIL_PASSWORD,
     },
   });
 }
@@ -28,6 +39,7 @@ if (process.env.NODE_ENV === "production") {
 transporter.verify((error, success) => {
   if (error) {
     console.log("Error: ", error);
+    throw error;
   }
 });
 
@@ -43,26 +55,27 @@ const handlebarOptions: NodemailerExpressHandlebarsOptions = {
 
 transporter.use("compile", hbs(handlebarOptions));
 
-async function sendWelcomeMail(
-  email: string,
-  data: {
-    name: string;
-    email: string;
-  }
-) {
-  const mailOptions = {
-    from: `${
-      process.env.NODE_ENV === "production"
-        ? process.env.GMAIL_EMAIL
-        : process.env.EMAIL_USERNAME
-    }`,
-    to: email,
-    subject: "Welcome to LinkSphere - Let's Connect and Get Creative!",
-    template: "welcome",
-    context: {
-      name: data.name,
-      email: data.email,
-    },
+const mailOptions = {
+  from: `${NODE_ENV === "production" ? GMAIL_EMAIL : AUTH_EMAIL}`,
+  to: "",
+  subject: "",
+  template: "",
+  context: {},
+};
+
+async function sendWelcomeMail({
+  name,
+  email,
+}: {
+  name: string;
+  email: string;
+}) {
+  mailOptions.to = email;
+  mailOptions.subject =
+    "Welcome to LinkSphere - Let's Connect and Get Creative!";
+  mailOptions.template = "welcome";
+  mailOptions.context = {
+    name,
   };
 
   const info = await transporter.sendMail(mailOptions);
@@ -70,22 +83,36 @@ async function sendWelcomeMail(
 }
 
 async function sendPasswordResetMail(email: string, url: string) {
-  const mailOptions = {
-    from: `${
-      process.env.NODE_ENV === "production"
-        ? process.env.GMAIL_EMAIL
-        : process.env.EMAIL_USERNAME
-    }`,
-    to: email,
-    subject: "LinkSphere - Password Reset",
-    template: "resetPassword",
-    context: {
-      url,
-    },
+  mailOptions.to = email;
+  mailOptions.subject = "LinkSphere - Password Reset";
+  mailOptions.template = "resetPassword";
+  mailOptions.context = {
+    url,
   };
 
   const info = await transporter.sendMail(mailOptions);
   console.log("Email sent:", info.messageId);
 }
 
-export { sendWelcomeMail, sendPasswordResetMail };
+async function sendOtpMail({
+  name,
+  email,
+  code,
+}: {
+  name: string;
+  code: number;
+  email: string;
+}) {
+  mailOptions.to = email;
+  mailOptions.subject = "LinkSphere - Verify Your Account";
+  mailOptions.template = "otp";
+  mailOptions.context = {
+    name,
+    code,
+  };
+
+  const info = await transporter.sendMail(mailOptions);
+  console.log("Email sent:", info.messageId);
+}
+
+export { sendWelcomeMail, sendPasswordResetMail, sendOtpMail };

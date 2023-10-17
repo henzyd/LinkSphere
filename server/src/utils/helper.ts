@@ -1,5 +1,5 @@
 import bcrypt from "bcryptjs";
-import { CustomError } from "../types";
+import { PASSWORD_SALT } from "../env";
 
 /**
  * Formats the express-validator error message
@@ -24,7 +24,25 @@ const customErrorFormatter = ({ path, msg }: any): CustomError => {
  * @returns {Promise<string>} - The hashed password
  */
 const hashPasswordHandler = async (password: string): Promise<string> => {
-  return await bcrypt.hash(password, Number(process.env.PASSWORD_SALT));
+  return await bcrypt.hash(password, Number(PASSWORD_SALT));
 };
 
-export { customErrorFormatter, hashPasswordHandler };
+/**
+ * Creates a new object by excluding specified keys from the original object.
+ *
+ * @template T - The type of the original object.
+ * @template Key - The type of keys to exclude.
+ * @param {T} user - The original object from which keys will be excluded.
+ * @param {Key[]} keys - An array of keys to exclude from the original object.
+ * @returns {Omit<T, Key>} A new object that is a copy of the original object with specified keys excluded.
+ */
+function exclude<T extends Record<string, any>, Key extends keyof T>(
+  user: T,
+  keys: Key[]
+): Omit<T, Key> {
+  return Object.fromEntries(
+    Object.entries(user).filter(([key]) => !keys.includes(key as Key))
+  ) as Omit<T, Key>;
+}
+
+export { customErrorFormatter, hashPasswordHandler, exclude };

@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import { DATABASE_URL, NODE_ENV } from "./env";
 
 const prisma = new PrismaClient({
   log: [
@@ -9,7 +10,7 @@ const prisma = new PrismaClient({
   ],
   datasources: {
     db: {
-      url: process.env.DATABASE_URL,
+      url: DATABASE_URL,
     },
   },
 });
@@ -19,12 +20,12 @@ const prisma = new PrismaClient({
     await prisma.$connect();
     console.log("Connected to db");
   } catch (error) {
-    console.error("Error occured on db connection");
+    console.error("Error occured on db connection\n", error);
   }
 })();
 
 prisma.$on("query", (e) => {
-  if (process.env.NODE_ENV === "production") {
+  if (NODE_ENV === "production") {
     console.log("--------------------------------------------------");
     console.log("Query: " + e.query);
     console.log("Params: " + e.params);

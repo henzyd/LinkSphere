@@ -1,11 +1,3 @@
-// import { PrismaClient } from "@prisma/client";
-
-import { CustomError } from "../types";
-
-// import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
-
-// const prisma = new PrismaClient();
-
 /**
  * Custom error class for application-specific errors.
  * Extends the built-in Error class.

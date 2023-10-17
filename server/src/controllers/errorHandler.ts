@@ -1,5 +1,6 @@
+import type { Response, Request, NextFunction } from "express";
 import AppError from "../utils/appError";
-import { Response, Request, NextFunction } from "express";
+import { NODE_ENV } from "../env";
 
 // function handleCastingErrorDB(err) {
 //   const message = `Invalid ${err.path}: ${err.value}`;
@@ -35,11 +36,13 @@ function sendErrorDev(err: AppError, prodError: AppError, res: Response) {
     productionError: prodError.isOperational
       ? {
           status: prodError.status,
+          statusCode: prodError.statusCode,
           message: prodError.message,
           validationErrors: prodError.validationErrors,
         }
       : {
           status: "error",
+          statusCode: 500,
           message: "Something went very wrong!",
         },
   });
@@ -90,9 +93,9 @@ function globalErrorHandler(
     prodError = handleJWTExpiredError(err);
   }
 
-  if (process.env.NODE_ENV === "development") {
+  if (NODE_ENV === "development") {
     return sendErrorDev(err, prodError, res);
-  } else if (process.env.NODE_ENV === "production") {
+  } else if (NODE_ENV === "production") {
     return sendErrorProd(prodError, res);
   }
 }
