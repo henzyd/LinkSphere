@@ -52,6 +52,9 @@ const authorization = catchAsync(
       where: {
         id: userId,
       },
+      include: {
+        profile: true,
+      },
     });
 
     if (!user) {

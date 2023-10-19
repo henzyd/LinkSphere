@@ -1,4 +1,4 @@
-import type { User } from "@prisma/client";
+import type { User, UserProfile } from "@prisma/client";
 import type { Request } from "express";
 
 declare global {
@@ -12,6 +12,8 @@ declare global {
    * Extends the base Request interface from Express.
    */
   type AuthenticatedRequest = Request & {
-    _currentUser?: User;
+    _currentUser?: User & {
+      profile: UserProfile | null;
+    };
   };
 }

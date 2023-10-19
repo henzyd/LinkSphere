@@ -11,12 +11,6 @@ model User {
   id                  String               @id @default(uuid())
   username            String               @unique
   email               String               @unique
-  firstName           String?              @db.VarChar(240)
-  lastName            String?              @db.VarChar(240)
-  phoneNumber         String?              @unique
-  country             String?
-  city                String?
-  about               String?              @db.VarChar(1200)
   isVerified          Boolean              @default(false)
   isBlocked           Boolean              @default(false)
   isDeleted           Boolean              @default(false)
@@ -24,10 +18,25 @@ model User {
   lastLogin           DateTime?
   createdAt           DateTime             @default(now())
   updatedAt           DateTime             @updatedAt
+  profile             UserProfile?
   role                Role                 @default(user)
   oauthProviders      OAuthProvider[]      @relation("oauthProviders")
   resetPasswordTokens ResetPasswordToken[] @relation("resetPasswordTokens")
   otps                OTP[]                @relation("otps")
+}
+
+model UserProfile {
+  id               String  @id @default(uuid())
+  firstName        String? @db.VarChar(240)
+  lastName         String? @db.VarChar(240)
+  phoneNumber      String? @unique
+  country          String?
+  city             String?
+  about            String? @db.VarChar(1200)
+  avatar           String?
+  avatarBackground String?
+  user             User    @relation(fields: [userId], references: [id])
+  userId           String  @unique
 }
 
 enum Role {

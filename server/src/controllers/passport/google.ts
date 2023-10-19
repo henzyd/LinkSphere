@@ -63,9 +63,13 @@ const googleOauthProvider = async (
         data: {
           username: profile.displayName,
           email: profile.emails?.[0].value || "",
-          firstName: profile.name?.givenName,
-          lastName: profile.name?.familyName,
           lastLogin: new Date(),
+          profile: {
+            create: {
+              firstName: profile.name?.givenName || "",
+              lastName: profile.name?.familyName || "",
+            },
+          },
           oauthProviders: {
             create: {
               provider: "google",
