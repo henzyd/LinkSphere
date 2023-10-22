@@ -24,7 +24,7 @@ const ChatDetails = ({ goBack }: ChatDetailsProps) => {
   }
 
   return (
-    <div className="shadow rounded-md bg-white h-[100%] relative flex flex-col overflow-hidden">
+    <div className="shadow rounded-md rounded-bl-none rounded-br-none bg-white h-[100%] relative flex flex-col overflow-hidden w-[80%] mx-auto">
       <header className="p-2 z-10 grid grid-cols-[1fr,3fr,1fr] items-center border-b bg-white sticky flex-shrink-0">
         <IconButton onClick={goBack} className="w-fit">
           <IoArrowBackOutline size={20} />
@@ -32,7 +32,7 @@ const ChatDetails = ({ goBack }: ChatDetailsProps) => {
         <p className="text-center font-bold text-base">{"Henzyd"}</p>
         <div></div>
       </header>
-      <div className=" overflow-y-auto bg-ChatBackground h-[calc(100vh-244px)]">
+      <div className=" overflow-y-auto bg-ChatBackground h-[calc(100vh-210px)]">
         <div className="flex flex-col gap-2 p-2">
           <div className="flex flex-col gap-2">
             <p className="text-center text-xs text-gray-500">{"Today"}</p>

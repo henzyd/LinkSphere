@@ -52,7 +52,7 @@ const Wrapper: React.FC<WrapperProps> = ({ children }) => {
           </NavLink>
         ))}
       </aside>
-      <main className="flex flex-col w-full pb-8">{children}</main>
+      <main className="flex flex-col w-full">{children}</main>
     </section>
   );
 };

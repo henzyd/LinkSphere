@@ -10,7 +10,7 @@ const description =
 const image =
   "https://res.cloudinary.com/dkok98flj/image/upload/v1634472023/illustrations/undraw_social_friends_nsbv.svg";
 const video =
-  "https://res.cloudinary.com/dkok98flj/video/upload/v1634472023/illustrations/undraw_social_friends_nsbv.svg";
+  "https://res.cloudinary.com/dkok98flj/video/upload/v1634472023/illustrations/undraw_social_friends_nsbv.svg"; //! Not working
 
 const Post = () => {
   const [menuAnchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null);
