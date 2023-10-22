@@ -14,7 +14,8 @@ const Chats = () => {
       <Seo title="Chats" description="Your list of chats are shown here" />
       {!chatDetailsData && (
         <div className="pb-8 w-[80%] mx-auto">
-          <div className="shadow w-full min-h-full bg-white rounded-lg">
+          <div className="shadow w-full min-h-full bg-white rounded-lg py-6 flex flex-col gap-4">
+            <h1 className="text-2xl pl-6 font-bold">Chats</h1>
             {chatData.length > 0 ? (
               <div className="flex flex-col w-full overflow-y-auto h-full">
                 {chatData.map((item: any, index) => (
