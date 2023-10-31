@@ -430,12 +430,9 @@ const verifyOtp = catchAsync(
 
     const { code } = req.body;
 
-    const otpRecord = await prisma.oTP.findFirst({
+    const otpRecord = await prisma.oTP.findUnique({
       where: {
         code,
-      },
-      include: {
-        user: true,
       },
     });
 
@@ -453,9 +450,9 @@ const verifyOtp = catchAsync(
       },
     });
 
-    await prisma.user.update({
+    const updatedUser = await prisma.user.update({
       where: {
-        id: otpRecord.user.id,
+        id: otpRecord.userId,
       },
       data: {
         isVerified: true,
@@ -464,8 +461,8 @@ const verifyOtp = catchAsync(
 
     try {
       await sendWelcomeMail({
-        email: otpRecord.user.email,
-        name: otpRecord.user.username,
+        email: updatedUser.email,
+        name: updatedUser.username,
       });
     } catch (error) {
       console.log(error);
@@ -496,6 +493,10 @@ const requestNewOtp = catchAsync(
 
     if (!user) {
       return next(new AppError("User does not exist", 404));
+    }
+
+    if (user.isVerified) {
+      return next(new AppError("User already verified", 400));
     }
 
     const otp = await prisma.oTP.create({
