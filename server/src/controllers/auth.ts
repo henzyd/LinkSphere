@@ -65,6 +65,9 @@ const signup = catchAsync(
         username,
         email,
         password: hashedPassword,
+        profile: {
+          create: {},
+        },
       },
     });
 

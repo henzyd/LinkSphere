@@ -1,4 +1,4 @@
-import { Response, NextFunction } from "express";
+import { Request, Response, NextFunction } from "express";
 import { verify as JwtVerify, JwtPayload } from "jsonwebtoken";
 import catchAsync from "../utils/catchAsync";
 import AppError from "../utils/appError";
@@ -11,13 +11,13 @@ import { JWT_SECRET } from "../env";
  * decodes the token, and retrieves the associated user from the database.
  * If successful, assigns the user to the _currentUser property in the request object.
  *
- * @param {AuthenticatedRequest} req - The Express request object.
+ * @param {Request} req - The Express request object.
  * @param {Response} res - The Express response object.
  * @param {NextFunction} next - The Express next function.
  * @returns {Promise<void>} - Promise that resolves when the middleware finishes execution.
  */
 const authorization = catchAsync(
-  async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+  async (req: Request, res: Response, next: NextFunction) => {
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return next(new AppError("Not authorized", 401));

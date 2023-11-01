@@ -1,7 +1,7 @@
 import express from "express";
 import { body } from "express-validator";
 import { authorization } from "../middleware/auth";
-import { getUser, updateUser } from "../controllers/user";
+import { getUser, updateUserProfile } from "../controllers/user";
 
 const router = express.Router();
 
@@ -16,7 +16,7 @@ router.patch(
       .isMobilePhone("any")
       .withMessage("Invalid phone number"),
   ],
-  updateUser
+  updateUserProfile
 );
 
 export default router;

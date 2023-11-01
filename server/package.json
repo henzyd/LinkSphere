@@ -6,10 +6,10 @@
   "scripts": {
     "start:dev": "set NODE_ENV=development&& nodemon src/index.ts",
     "start:prod": "set NODE_ENV=production&& node dist/index.js",
-    "prismaStudio:dev": "dotenv -e .env.development -- npx prisma studio",
-    "prismaStudio:prod": "dotenv -e .env.production -- npx prisma studio",
-    "prismaMigrate:dev": "dotenv -e .env.development -- npx prisma migrate dev",
-    "prismaMigrate:prod": "dotenv -e .env.production -- npx prisma migrate dev",
+    "studio:dev": "dotenv -e .env.development -- npx prisma studio",
+    "studio:prod": "dotenv -e .env.production -- npx prisma studio",
+    "migrate:dev": "dotenv -e .env.development -- npx prisma migrate dev",
+    "migrate:prod": "dotenv -e .env.production -- npx prisma migrate dev",
     "build": "tsc && cpy \"src/templates/**/*\" \"dist/templates\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
