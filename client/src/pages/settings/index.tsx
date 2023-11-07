@@ -19,7 +19,7 @@ const Settings = () => {
       title: "Change Password",
     },
     {
-      to: "/notifications",
+      to: "/notification",
       icon: IoMdNotificationsOutline,
       title: "Notification",
     },

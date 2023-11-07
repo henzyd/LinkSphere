@@ -6,7 +6,16 @@ import {
   createRoutesFromElements,
 } from "react-router-dom";
 import "./App.css";
-import { Chats, Home, PostDetails, Profile, Requests, Settings, UpdateProfile } from "./pages";
+import {
+  Chats,
+  Home,
+  Notification,
+  PostDetails,
+  Profile,
+  Requests,
+  Settings,
+  UpdateProfile,
+} from "./pages";
 import NotFound from "./pages/NotFound";
 import AppLayout from "./layouts/app";
 import ErrorBoundary from "./components/ErrorBoundary";
@@ -52,6 +61,7 @@ const router = createBrowserRouter(
           <Route path="/requests" element={<Requests />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/settings/update-profile" element={<UpdateProfile />} />
+          <Route path="/settings/notification" element={<Notification />} />
           <Route path="/posts/:postId" element={<PostDetails />} />
           <Route path="/:tag" element={<Profile />} />
         </Route>
