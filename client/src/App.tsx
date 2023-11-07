@@ -6,17 +6,14 @@ import {
   createRoutesFromElements,
 } from "react-router-dom";
 import "./App.css";
-import { Chats, Home, PostDetails, Profile, Requests, Settings } from "./pages";
+import { Chats, Home, PostDetails, Profile, Requests, Settings, UpdateProfile } from "./pages";
 import NotFound from "./pages/NotFound";
 import AppLayout from "./layouts/app";
 import ErrorBoundary from "./components/ErrorBoundary";
 import Lazy from "./components/loaders/Lazy";
 import Auth from "./layouts/Auth";
 import HomeLoader from "./components/loaders/Home";
-import Login from "./pages/auth/Login";
-import Signup from "./pages/auth/signup";
-import ForgotPassword from "./pages/auth/forgot-password";
-import ResetPassword from "./pages/auth/ResetPassword";
+import { ForgotPassword, Login, ResetPassword, Signup } from "./pages/auth";
 
 async function loader() {
   try {
@@ -54,6 +51,7 @@ const router = createBrowserRouter(
           <Route path="/chats" element={<Chats />} />
           <Route path="/requests" element={<Requests />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/settings/update-profile" element={<UpdateProfile />} />
           <Route path="/posts/:postId" element={<PostDetails />} />
           <Route path="/:tag" element={<Profile />} />
         </Route>

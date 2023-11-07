@@ -4,6 +4,7 @@ import { IoMdNotificationsOutline } from "react-icons/io";
 import { FiChevronRight } from "react-icons/fi";
 import Seo from "~/components/Seo";
 import { IoLogOutOutline } from "react-icons/io5";
+import PageWrapper from "~/components/PageWrapper";
 
 const Settings = () => {
   const data = [
@@ -27,12 +28,12 @@ const Settings = () => {
   return (
     <>
       <Seo title="Settings" description="Settings page" />
-      <div className="w-[80%] mx-auto bg-white rounded-lg flex flex-col gap-4 shadow py-6">
+      <PageWrapper>
         <h1 className="text-2xl pl-6 font-bold">Settings</h1>
         <div>
           {data.map((item, index) => (
             <Link
-              to={item.to}
+              to={`.${item.to}`}
               key={index + 1}
               className="flex items-center hover:bg-[#F5F5F5] px-6"
             >
@@ -50,7 +51,7 @@ const Settings = () => {
             <span className="text-Text-Black2 text-base">Logout</span>
           </button>
         </div>
-      </div>
+      </PageWrapper>
     </>
   );
 };
