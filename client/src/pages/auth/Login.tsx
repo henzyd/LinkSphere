@@ -9,7 +9,7 @@ import Seo from "~/components/Seo";
 import FormField from "~/components/FormField";
 import Button from "~/components/Button";
 import AuthWrapper from "~/components/AuthWrapper";
-import useLoginMutation from "~/redux/mutations/auth/login";
+import useLoginMutation from "~/redux/api/auth/login";
 
 const loginValidationSchema = Yup.object().shape({
   email: Yup.string().email("Email is not valid").required("Email is required"),
