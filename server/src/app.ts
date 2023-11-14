@@ -2,7 +2,7 @@ import express from "express";
 import morgan from "morgan";
 import cors from "cors";
 // import cookieParser from "cookie-parser";
-import session from "express-session"; //! deprecated
+// import session from "express-session"; //! deprecated
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import {
@@ -38,17 +38,17 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 // app.use(cookieParser());
-app.use(
-  session({
-    secret: SESSION_SECRET,
-    resave: true,
-    saveUninitialized: true,
-    cookie: {
-      secure: true,
-      httpOnly: true,
-    },
-  })
-);
+// app.use(
+//   session({
+//     secret: SESSION_SECRET,
+//     resave: true,
+//     saveUninitialized: true,
+//     cookie: {
+//       secure: true,
+//       httpOnly: true,
+//     },
+//   })
+// );
 app.use(passport.initialize());
 app.use(passport.session());
 
