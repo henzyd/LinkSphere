@@ -2023,7 +2023,7 @@ ms@2.1.2:
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.2.tgz#d09d1f357b443f493382a8eb3ccd183872ae6009"
   integrity sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==
 
-mui-one-time-password-input@^2.0.0:
+mui-one-time-password-input@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/mui-one-time-password-input/-/mui-one-time-password-input-2.0.1.tgz#b4fd48a230156ea8b68ee7b97e6f991eb96b98d2"
   integrity sha512-VIp4bSHUpX2GK5VSzAoi8leRnZLcXUQ+T3mR+HHY8T/+31hfe3nR2OPPLHEB79Rp+91HWDaWkD6DQ7JMveX9gQ==

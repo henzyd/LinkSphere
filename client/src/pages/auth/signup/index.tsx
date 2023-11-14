@@ -75,8 +75,8 @@ const Signup = () => {
                 if (data) {
                   setSignedUp({
                     data: {
-                      email: values.email,
-                      username: values.username,
+                      email: values.email || "",
+                      username: values.username || "",
                     },
                     status: true,
                   });
