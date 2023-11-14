@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { IconButton } from "@mui/material";
 import { Formik } from "formik";
 import { IoArrowBackOutline } from "react-icons/io5";
+import { AiFillCamera } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import Button from "~/components/Button";
@@ -20,14 +21,22 @@ const validationSchema = Yup.object().shape({
 const UpdateProfile = () => {
   const navigate = useNavigate();
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_, setData] = useState({
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const [formData, setFormData] = useState<{
+    file: File | null;
+    firstName: string;
+    lastName: string;
+    email: string;
+    username: string;
+  }>({
     file: null,
     firstName: "",
     lastName: "",
     email: "",
     username: "",
   });
+  const [profileImgHovering, setProfileImgHovering] = useState(false);
 
   return (
     <>
@@ -45,10 +54,49 @@ const UpdateProfile = () => {
           <h1 className="text-base font-medium">Update Profile</h1>
         </header>
         <main className="flex flex-col gap-8 p-8">
-          <div className="mx-auto border border-gray-400 rounded-md w-[200px] p-4">
-            <figure className="w-full">
-              <img src={Profile} alt="default-profile" className="w-full h-full object-cover" />
+          <div
+            className="mx-auto border border-gray-400 w-[200px] h-[200px] rounded-full relative overflow-hidden"
+            onMouseEnter={() => setProfileImgHovering(true)}
+            onMouseLeave={() => setProfileImgHovering(false)}
+          >
+            <figure
+              className={`w-full h-full overflow-hidden flex justify-center items-center ${
+                profileImgHovering ? "blur-sm" : "blur-none"
+              }`}
+            >
+              {formData.file ? (
+                <img
+                  src={URL.createObjectURL(formData.file)}
+                  alt="default-profile"
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <img
+                  src={Profile}
+                  alt="default-profile"
+                  className="w-[70%] aspect-square object-contain"
+                />
+              )}
             </figure>
+            <button
+              className={`w-full rounded-full absolute top-0 left-0 flex justify-center items-center aspect-square bg-zinc-300 transition-all border-0 ${
+                profileImgHovering ? "opacity-60" : "opacity-0"
+              }`}
+              onClick={() => fileInputRef.current?.click()}
+            >
+              <input
+                type="file"
+                onChange={(e) => {
+                  if (e.target.files) {
+                    setFormData((prev) => ({ ...prev, file: e.target.files?.[0] || null }));
+                  }
+                }}
+                ref={fileInputRef}
+                accept="image/png, image/jpg, image/jpeg"
+                className="hidden"
+              />
+              <AiFillCamera className="text-[4rem] text-zinc-800" />
+            </button>
           </div>
           <Formik
             initialValues={{
@@ -58,7 +106,7 @@ const UpdateProfile = () => {
               lastName: "",
             }}
             onSubmit={(values) => {
-              setData((prev) => ({
+              setFormData((prev) => ({
                 ...prev,
                 ...values,
               }));
@@ -67,14 +115,28 @@ const UpdateProfile = () => {
             validateOnBlur={false}
           >
             {({ handleSubmit, isSubmitting }) => (
-              <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-                <div className="grid grid-cols-2 gap-5 gap-y-8">
+              <form onSubmit={handleSubmit} className="gird grid-cols-2 gap-6">
+                <div className="grid grid-cols-2 gap-5">
                   <FormField label="Username" name="username" data-testid="username" />
                   <FormField label="Email Address" name="email" type="email" data-testid="email" />
                   <FormField label="First Name" name="firstName" data-testid="firstName" />
                   <FormField label="Last Name" name="lastName" data-testid="lastName" />
+                  <FormField
+                    label="Address"
+                    containerClassName="col-span-2"
+                    name="address"
+                    data-testid="address"
+                  />
+                  <FormField
+                    containerClassName="col-span-2"
+                    label="Description"
+                    name="description"
+                    multiline
+                    rows={6}
+                    data-testid="description"
+                  />
                 </div>
-                <div className="flex items-center justify-end">
+                <div className="flex items-center justify-end mt-6">
                   <Button type="submit" className="w-fit" loading={isSubmitting}>
                     Save
                   </Button>

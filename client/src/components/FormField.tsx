@@ -7,11 +7,12 @@ interface InputProps extends OutlinedInputProps, FieldConfig {
   "data-testid": string;
   name: string;
   value?: string;
+  containerClassName?: string;
 }
 
-const FormField: React.FC<InputProps> = ({ label, className, ...props }) => {
+const FormField: React.FC<InputProps> = ({ label, className, containerClassName, ...props }) => {
   return (
-    <FormControl className="w-full">
+    <FormControl className={twMerge(`w-full`, containerClassName)}>
       <Field {...props}>
         {({ field, meta }: FieldProps) => (
           <>
