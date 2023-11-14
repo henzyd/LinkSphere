@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import { body } from "express-validator";
-import passport from "passport";
+// import passport from "passport";
 import {
   login,
   signup,
@@ -93,24 +93,24 @@ router.post(
   verifyOtp
 );
 router.post("/resend-otp", [emailVaidator()], requestNewOtp);
-router.get(
-  "/google",
-  passport.authenticate("google", { scope: ["profile", "email"] })
-);
-router.get(
-  "/google/callback",
-  passport.authenticate("google", {
-    failureRedirect: `/auth/google/faliure`,
-  }),
-  (req: Request, res: Response) => {
-    console.log("In google callback \n", req.user);
+// router.get(
+//   "/google",
+//   passport.authenticate("google", { scope: ["profile", "email"] })
+// );
+// router.get(
+//   "/google/callback",
+//   passport.authenticate("google", {
+//     failureRedirect: `/auth/google/faliure`,
+//   }),
+//   (req: Request, res: Response) => {
+//     console.log("In google callback \n", req.user);
 
-    res.send(req.user);
-    // res.redirect(`${req.protocol}://${req.hostname}/?token=${req.user}`);
-  }
-);
-router.get("/google/faliure", (req: Request, res: Response) => {
-  res.json({ message: "Google authentication failed" });
-});
+//     res.send(req.user);
+//     // res.redirect(`${req.protocol}://${req.hostname}/?token=${req.user}`);
+//   }
+// );
+// router.get("/google/faliure", (req: Request, res: Response) => {
+//   res.json({ message: "Google authentication failed" });
+// });
 
 export default router;
