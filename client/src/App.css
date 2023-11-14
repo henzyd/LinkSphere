@@ -7,8 +7,7 @@ h4,
 h5,
 h6,
 p,
-button,
-span {
+button {
   color: #111111e2;
   font-family: "Noto Sans", sans-serif;
 }

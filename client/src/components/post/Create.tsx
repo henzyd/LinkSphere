@@ -1,8 +1,7 @@
+import { TextareaAutosize, IconButton } from "@mui/material";
 import { FiEdit } from "react-icons/fi";
-import TextareaAutosize from "@mui/base/TextareaAutosize";
 import { HiPhoto } from "react-icons/hi2";
 import { BsFillPlayBtnFill } from "react-icons/bs";
-import { IconButton } from "@mui/material";
 import Button from "../Button";
 
 const Create = () => {
@@ -36,7 +35,9 @@ const Create = () => {
             </span>
           </IconButton>
         </div>
-        <Button color="primary">Post</Button>
+        <Button className="!w-fit !px-10" color="primary">
+          Post
+        </Button>
       </div>
     </section>
   );

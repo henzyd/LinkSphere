@@ -5,3 +5,8 @@ interface ApiErrorResponse {
     validationErrors?: Record<"field" | "message", string>[];
   };
 }
+
+interface CurrentUser {
+  id: string;
+  firstName: string;
+}

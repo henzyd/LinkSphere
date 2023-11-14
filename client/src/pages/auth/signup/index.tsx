@@ -5,7 +5,7 @@ import { FcGoogle } from "react-icons/fc";
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
 import * as Yup from "yup";
 import { Formik } from "formik";
-import useSignupMutation from "~/redux/mutations/auth/signup";
+import useSignupMutation from "~/redux/api/auth/signup";
 import Seo from "~/components/Seo";
 import FormField from "~/components/FormField";
 import Button from "~/components/Button";
@@ -75,8 +75,8 @@ const Signup = () => {
                 if (data) {
                   setSignedUp({
                     data: {
-                      email: values.email,
-                      username: values.username,
+                      email: values.email || "",
+                      username: values.username || "",
                     },
                     status: true,
                   });
