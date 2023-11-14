@@ -23,6 +23,7 @@ model User {
   oauthProviders      OAuthProvider[]      @relation("oauthProviders")
   resetPasswordTokens ResetPasswordToken[] @relation("resetPasswordTokens")
   otps                OTP[]                @relation("otps")
+  posts               Post[]               @relation("posts")
 }
 
 model UserProfile {
@@ -75,4 +76,27 @@ model OTP {
   expiresAt DateTime
   user      User     @relation("otps", fields: [userId], references: [id])
   userId    String
+}
+
+model Post {
+  id        String   @id @default(uuid())
+  media     Media[]  @relation("media")
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+  user      User     @relation("posts", fields: [userId], references: [id])
+  userId    String
+}
+
+model Media {
+  id         String    @id @default(uuid())
+  url        String
+  type       MediaType
+  uploadedAt DateTime  @default(now())
+  post       Post      @relation("media", fields: [postId], references: [id])
+  postId     String
+}
+
+enum MediaType {
+  image
+  video
 }

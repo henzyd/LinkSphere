@@ -3,8 +3,8 @@ import morgan from "morgan";
 import cors from "cors";
 // import cookieParser from "cookie-parser";
 // import session from "express-session"; //! deprecated
-import passport from "passport";
-import { Strategy as GoogleStrategy } from "passport-google-oauth20";
+// import passport from "passport";
+// import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import {
   BASE_URL,
   GOOGLE_CLIENT_ID,
@@ -15,7 +15,7 @@ import {
 import prisma from "./db";
 import AppError from "./utils/appError";
 import globalErrorHandler from "./controllers/errorHandler";
-import googleOauthProvider from "./controllers/passport/google";
+// import googleOauthProvider from "./controllers/passport/google";
 
 //? Routes
 import authRoute from "./routes/auth";
@@ -49,37 +49,37 @@ app.use(express.urlencoded({ extended: true }));
 //     },
 //   })
 // );
-app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.initialize());
+// app.use(passport.session());
 
-//? Note: This is a temporary fix for the session error
-app.use(function (req, res, next) {
-  if (!req.session) {
-    return next(new Error("Oh no")); //handle error
-  }
-  next(); //otherwise continue
-});
+// //? Note: This is a temporary fix for the session error
+// app.use(function (req, res, next) {
+//   if (!req.session) {
+//     return next(new Error("Oh no")); //handle error
+//   }
+//   next(); //otherwise continue
+// });
 
-passport.use(
-  new GoogleStrategy(
-    {
-      clientID: GOOGLE_CLIENT_ID,
-      clientSecret: GOOGLE_CLIENT_SECRET,
-      callbackURL: `${BASE_URL}/auth/google/callback`,
-    },
-    googleOauthProvider
-  )
-);
+// passport.use(
+//   new GoogleStrategy(
+//     {
+//       clientID: GOOGLE_CLIENT_ID,
+//       clientSecret: GOOGLE_CLIENT_SECRET,
+//       callbackURL: `${BASE_URL}/auth/google/callback`,
+//     },
+//     googleOauthProvider
+//   )
+// );
 
-passport.serializeUser((user, done) => {
-  // Serialize the user data
-  done(null, user);
-});
+// passport.serializeUser((user, done) => {
+//   // Serialize the user data
+//   done(null, user);
+// });
 
-passport.deserializeUser<any>((user, done) => {
-  // Deserialize the user data
-  done(null, user);
-});
+// passport.deserializeUser<any>((user, done) => {
+//   // Deserialize the user data
+//   done(null, user);
+// });
 
 app.get("/", (req, res) => {
   res.status(200).json({
