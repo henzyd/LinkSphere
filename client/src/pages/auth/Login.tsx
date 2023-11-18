@@ -40,11 +40,13 @@ const Login = () => {
           }}
           validationSchema={loginValidationSchema}
           onSubmit={async (values) => {
-            await login({
+            const response = await login({
               email: values.email,
               password: values.password,
             });
-            navigate("/");
+            if (response) {
+              navigate("/");
+            }
           }}
           validateOnBlur={false}
         >
