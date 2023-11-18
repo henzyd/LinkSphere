@@ -22,9 +22,10 @@ const Otp: React.FC<OtpProps> = ({ userData }) => {
 
   return (
     <div className="flex flex-col justify-center items-center w-full gap-[0.55rem]">
-      <h1 className="text-[1.5rem] font-bold text-center">Enter Code</h1>
-      <p className="text-base mb-4 !text-Tertiary text-center">
-        We sent a code to <span className="font-semibold">{userData.email}</span>
+      <h1 className="text-[1.5rem] font-bold text-center MediumPhones:text-lg">Enter OTP</h1>
+      <p className="text-sm mb-4 !text-Tertiary text-center max-w-sm">
+        We sent a code to <span className="font-medium">{userData.email}</span> If you do not
+        receive an email, please check your spam folder
       </p>
       <div className="flex flex-col gap-6 py-4">
         <MuiOtpInput
@@ -67,10 +68,10 @@ const Otp: React.FC<OtpProps> = ({ userData }) => {
           Verify
         </Button>
       </div>
-      <p className="text-base">
+      <p className="text-sm">
         Didn't get a code?{" "}
         <button
-          className="text-Primary font-semibold text-base"
+          className="text-Primary font-semibold text-sm"
           onClick={async () => {
             await resendOtp({
               email: userData.email,

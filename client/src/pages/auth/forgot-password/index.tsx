@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { IoArrowBack } from "react-icons/io5";
 import { Formik } from "formik";
 import * as Yup from "yup";
+import { useForgotPasswordMutation } from "~/redux/api/auth/password";
 import Seo from "~/components/Seo";
 import AuthWrapper from "~/components/AuthWrapper";
 import FormField from "~/components/FormField";
@@ -20,6 +21,8 @@ const ForgotPassword = () => {
     email: "",
   });
 
+  const { forgotPassword } = useForgotPasswordMutation();
+
   return (
     <>
       <Seo title="Forgot Password" description="Can't remember your password? change it" />
@@ -34,10 +37,16 @@ const ForgotPassword = () => {
             }}
             validationSchema={ValidationSchema}
             onSubmit={async (values) => {
-              setInstructionsSent({
-                value: true,
+              const response = await forgotPassword({
                 email: values.email,
               });
+
+              if (response) {
+                setInstructionsSent({
+                  value: true,
+                  email: values.email,
+                });
+              }
             }}
             validateOnBlur={false}
           >
@@ -46,8 +55,10 @@ const ForgotPassword = () => {
                 onSubmit={handleSubmit}
                 className="flex flex-col justify-center items-center w-full gap-[0.55rem]"
               >
-                <h1 className="text-[1.5rem] font-bold text-center">Forgot Password?</h1>
-                <p className="text-base mb-4 !text-Tertiary text-center">
+                <h1 className="text-[1.5rem] font-bold text-center MediumPhones:text-lg">
+                  Forgot Password?
+                </h1>
+                <p className="text-sm mb-4 !text-Tertiary text-center">
                   No worries, we'll send you reset instructions
                 </p>
                 <FormField
@@ -74,7 +85,7 @@ const ForgotPassword = () => {
                   }}
                 >
                   <IoArrowBack />
-                  <p className="text-base">Back to login</p>
+                  <p className="text-sm">Back to login</p>
                 </button>
               </form>
             )}

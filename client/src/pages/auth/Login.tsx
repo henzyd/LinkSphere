@@ -56,7 +56,9 @@ const Login = () => {
               onSubmit={handleSubmit}
               className="flex flex-col justify-center items-center w-full gap-[0.55rem]"
             >
-              <h1 className="text-[1.5rem] font-bold mb-2 text-center">Login into your account</h1>
+              <h1 className="text-[1.5rem] font-bold mb-2 text-center MediumPhones:text-lg">
+                Login into your account
+              </h1>
               <div className="flex flex-col gap-4 w-full">
                 <FormField
                   id="login-email-input"
