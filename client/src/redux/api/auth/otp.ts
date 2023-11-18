@@ -52,7 +52,7 @@ function useResendOtpMutation() {
   const resendOtp = async (values: { email: string }) => {
     try {
       const response = await trigger(values).unwrap();
-      notifySuccess("A new otp has been sent to your mail");
+      notifySuccess("An otp has been sent to your mail");
       return response;
     } catch (error) {
       if (isAxiosError(error)) {
