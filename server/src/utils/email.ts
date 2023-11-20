@@ -38,7 +38,7 @@ if (NODE_ENV === "production") {
 
 transporter.verify((error, success) => {
   if (error) {
-    console.log("Error: ", error);
+    console.error("Error: ", error);
     throw error;
   }
 });
