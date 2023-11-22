@@ -13,7 +13,11 @@ const store = configureStore({
     [userApi.reducerPath]: userApi.reducer,
   },
   middleware: (getDefaultMiddleware) => {
-    return getDefaultMiddleware().concat(authApi.middleware).concat(userApi.middleware);
+    return getDefaultMiddleware({
+      serializableCheck: false,
+    })
+      .concat(authApi.middleware)
+      .concat(userApi.middleware);
   },
 });
 

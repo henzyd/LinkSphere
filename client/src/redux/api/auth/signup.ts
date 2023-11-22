@@ -1,4 +1,4 @@
-import { isApiErrorResponse } from "~/utils/helpers";
+import { isAxiosError } from "axios";
 import { notifyError, notifySuccess } from "~/utils/toast";
 import authApi from ".";
 
@@ -8,7 +8,7 @@ const _signupEndpoint = authApi.injectEndpoints({
       query: (credentials) => ({
         url: "/signup",
         method: "POST",
-        body: credentials,
+        data: credentials,
       }),
     }),
   }),
@@ -23,12 +23,15 @@ function useSignupMutation() {
       notifySuccess("Signup successfully");
       return response;
     } catch (error) {
-      if (isApiErrorResponse(error)) {
-        if (error.status === 400) {
-          if (error.data.validationErrors) {
-            notifyError(error.data.validationErrors[0].message);
-          } else if (error.data.message) {
-            const message: string = error.data.message.toLowerCase();
+      if (isAxiosError(error)) {
+        const status = error.response?.status;
+        const data = error.response?.data;
+
+        if (status === 400) {
+          if (data.validationErrors) {
+            notifyError(data.validationErrors[0].message);
+          } else if (data.message) {
+            const message: string = data.message.toLowerCase();
             if (message.includes("duplicate")) {
               if (message.includes("email")) {
                 notifyError("Signup failed, Email already exists");

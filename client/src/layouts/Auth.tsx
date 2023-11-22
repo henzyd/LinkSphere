@@ -10,7 +10,7 @@ const Auth = () => {
         <div className="flex items-center gap-4">
           <Link to="/login">
             <Button
-              className="MediumPhones:!p-2 MediumPhones:!rounded MediumPhones:!text-xs"
+              className="!p-3 MediumPhones:!p-2 MediumPhones:!rounded MediumPhones:!text-xs"
               variant="contained"
               color="info"
             >
@@ -19,7 +19,7 @@ const Auth = () => {
           </Link>
           <Link to="/signup">
             <Button
-              className="MediumPhones:!p-2 MediumPhones:!rounded MediumPhones:!text-xs"
+              className="!p-3 MediumPhones:!p-2 MediumPhones:!rounded MediumPhones:!text-xs"
               variant="contained"
               color="primary"
             >

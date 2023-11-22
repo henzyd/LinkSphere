@@ -2,22 +2,18 @@ import type { Response, Request, NextFunction } from "express";
 import AppError from "../utils/appError";
 import { NODE_ENV } from "../env";
 
-// function handleCastingErrorDB(err) {
-//   const message = `Invalid ${err.path}: ${err.value}`;
-//   return new AppError(message, 400);
-// }
-
 function handleDuplicateFieldDB(err: any) {
   const value = err.meta.target[err.meta.target.length - 1]; //? Get the last element of the target array
   const message = `Duplicate field value: ${value}.`;
   return new AppError(message, 400);
 }
 
-// function handleValidationErrorDB(err) {
-//   const errors = Object.values(err.errors).map((el) => el.message);
-//   const message = `Invalid input data. ${errors.join(". ")}`;
-//   return new AppError(message, 400);
-// }
+function handleMultipleFileUploadError(err: any) {
+  return new AppError(
+    `File upload for the '${err.field}' field has exceeded the allowed limit.`,
+    400
+  );
+}
 
 function handleJWTError(err: any) {
   return new AppError("Invalid Token", 401);
@@ -80,15 +76,16 @@ function globalErrorHandler(
     prodError = handleDuplicateFieldDB(prodError);
   }
 
-  // if (err instanceof mongoose.Error.CastError) {
-  //   prodError = handleCastingErrorDB(err);
-  // }
-  // if (err instanceof mongoose.Error.ValidationError) {
-  //   prodError = handleValidationErrorDB(err);
-  // }
+  if (prodError.name === "MulterError") {
+    if (prodError.code === "LIMIT_UNEXPECTED_FILE") {
+      prodError = handleMultipleFileUploadError(prodError);
+    }
+  }
+
   if (err.name === "JsonWebTokenError") {
     prodError = handleJWTError(err);
   }
+
   if (err.name === "TokenExpiredError") {
     prodError = handleJWTExpiredError(err);
   }
