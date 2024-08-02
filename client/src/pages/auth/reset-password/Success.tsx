@@ -1,34 +1,26 @@
 import { useNavigate } from "react-router-dom";
 import { IoArrowBack } from "react-icons/io5";
-import Button from "~/components/Button";
+import Congratulation from "~/assets/gifs/congratulation.gif";
 
-interface SuccessProps {
-  email: string;
-}
-
-const Success: React.FC<SuccessProps> = ({ email }) => {
+export default function Success() {
   const navigate = useNavigate();
+
   return (
     <div className="flex flex-col justify-center items-center w-full gap-6">
       <div className="flex flex-col gap-1">
         <h1 className="text-[1.5rem] font-bold text-center MediumPhones:text-lg">
-          Check your email
+          Password reset successful
         </h1>
         <p className="text-sm !text-Tertiary text-center max-w-sm">
-          We sent a password reset link to <span className="font-medium">{email}.</span> If you do
-          not receive an email, please check your spam folder
+          Your password has been successfully reset.
         </p>
       </div>
-      <Button
-        color="info"
-        type="submit"
-        className="w-full !p-4"
-        onClick={() => {
-          window.location.href = "mailto:";
-        }}
-      >
-        Open email app
-      </Button>
+      <img
+        src={Congratulation}
+        className="w-32 h-32 mx-auto mb-5"
+        alt="Congratulation gif"
+        width="250"
+      />
       <button
         className="flex items-center cursor-pointer gap-2 mt-4"
         onClick={() => {
@@ -40,6 +32,4 @@ const Success: React.FC<SuccessProps> = ({ email }) => {
       </button>
     </div>
   );
-};
-
-export default Success;
+}

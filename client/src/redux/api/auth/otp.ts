@@ -1,6 +1,6 @@
-import { isApiErrorResponse } from "~/utils/helpers";
 import { notifyError, notifySuccess } from "~/utils/toast";
 import authApi from ".";
+import { isAxiosError } from "axios";
 
 const _otpEndpoint = authApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -8,14 +8,14 @@ const _otpEndpoint = authApi.injectEndpoints({
       query: (credentials) => ({
         url: "/verify-otp",
         method: "POST",
-        body: credentials,
+        data: credentials,
       }),
     }),
     resendOtp: builder.mutation({
       query: (credentials) => ({
         url: "/resend-otp",
         method: "POST",
-        body: credentials,
+        data: credentials,
       }),
     }),
   }),
@@ -30,10 +30,13 @@ function useVerifyOtpMutation() {
       notifySuccess("Account verified successfully!");
       return response;
     } catch (error) {
-      if (isApiErrorResponse(error)) {
-        if (error.status === 400) {
-          if (error.data.validationErrors) {
-            notifyError(error.data.validationErrors[0].message);
+      if (isAxiosError(error)) {
+        const status = error.response?.status;
+        const data = error.response?.data;
+
+        if (status === 400) {
+          if (data.validationErrors) {
+            notifyError(data.validationErrors[0].message);
           }
         }
       }
@@ -49,13 +52,16 @@ function useResendOtpMutation() {
   const resendOtp = async (values: { email: string }) => {
     try {
       const response = await trigger(values).unwrap();
-      notifySuccess("A new otp has been sent to your mail");
+      notifySuccess("An otp has been sent to your mail");
       return response;
     } catch (error) {
-      if (isApiErrorResponse(error)) {
-        if (error.status === 400) {
-          if (error.data.validationErrors) {
-            notifyError(error.data.validationErrors[0].message);
+      if (isAxiosError(error)) {
+        const status = error.response?.status;
+        const data = error.response?.data;
+
+        if (status === 400) {
+          if (data.validationErrors) {
+            notifyError(data.validationErrors[0].message);
           }
         }
       }

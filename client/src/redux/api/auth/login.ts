@@ -1,5 +1,5 @@
+import { isAxiosError } from "axios";
 import authApi from ".";
-import { isApiErrorResponse } from "~/utils/helpers";
 import { notifyError, notifySuccess } from "~/utils/toast";
 
 const _loginEndpoint = authApi.injectEndpoints({
@@ -8,7 +8,7 @@ const _loginEndpoint = authApi.injectEndpoints({
       query: (credentials) => ({
         url: "/login",
         method: "POST",
-        body: credentials,
+        data: credentials,
       }),
     }),
   }),
@@ -23,15 +23,20 @@ function useLoginMutation() {
       notifySuccess("Login Successful");
       return response;
     } catch (error) {
-      if (isApiErrorResponse(error)) {
-        if (error.status === 400) {
-          if (error.data.validationErrors) {
-            notifyError(error.data.validationErrors[0].message);
-          } else if (error.data.message) {
-            const message: string = error.data.message.toLowerCase();
+      if (isAxiosError(error)) {
+        const status = error.response?.status;
+        const data = error.response?.data;
+
+        if (status === 400) {
+          if (data.validationErrors) {
+            notifyError(data.validationErrors[0].message);
+          } else if (data.message === "User not verified") {
+            notifyError("You have not verified your account");
+          } else {
+            const message: string = data.message.toLowerCase();
             if (message.includes("duplicate")) {
               if (message.includes("email")) {
-                notifyError("Login failed, Email already exists");
+                notifyError("Login failed, email already exists");
               }
             }
           }

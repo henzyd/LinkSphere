@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, ReactNode, Fragment } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { IconButton, Checkbox, FormControlLabel } from "@mui/material";
+import { isAxiosError } from "axios";
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
 import * as Yup from "yup";
@@ -10,6 +11,7 @@ import FormField from "~/components/FormField";
 import Button from "~/components/Button";
 import AuthWrapper from "~/components/AuthWrapper";
 import useLoginMutation from "~/redux/api/auth/login";
+import { useResendOtpMutation } from "~/redux/api/auth/otp";
 
 const loginValidationSchema = Yup.object().shape({
   email: Yup.string().email("Email is not valid").required("Email is required"),
@@ -23,7 +25,46 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
-  const { login } = useLoginMutation();
+  const { login, result } = useLoginMutation();
+  const { error } = result;
+  const { resendOtp, result: resendOtpResult } = useResendOtpMutation();
+
+  function handleActivationError(email: string): ReactNode {
+    if (!error) return <Fragment />;
+
+    if (isAxiosError(error)) {
+      const errorMsg = error.response?.data.message;
+
+      if (errorMsg === "User not verified") {
+        return (
+          <div className="w-full flex items-center gap-3 mb-2">
+            <p className={`text-red-600 font-medium text-xs pl-1`}>
+              Your account has not been verified
+            </p>
+            <Button
+              loading={resendOtpResult.isLoading}
+              className="w-fit !p-2"
+              onClick={async () => {
+                const data = await resendOtp({ email });
+
+                if (data) {
+                  navigate("/signup");
+                  // setSignupState({
+                  //   email,
+                  //   signuped: true,
+                  // });
+                }
+              }}
+            >
+              Verify
+            </Button>
+          </div>
+        );
+      }
+    }
+
+    return <Fragment />;
+  }
 
   return (
     <>
@@ -40,11 +81,13 @@ const Login = () => {
           }}
           validationSchema={loginValidationSchema}
           onSubmit={async (values) => {
-            await login({
+            const response = await login({
               email: values.email,
               password: values.password,
             });
-            navigate("/");
+            if (response) {
+              navigate("/");
+            }
           }}
           validateOnBlur={false}
         >
@@ -54,7 +97,9 @@ const Login = () => {
               onSubmit={handleSubmit}
               className="flex flex-col justify-center items-center w-full gap-[0.55rem]"
             >
-              <h1 className="text-[1.5rem] font-bold mb-2 text-center">Login into your account</h1>
+              <h1 className="text-[1.5rem] font-bold mb-2 text-center MediumPhones:text-lg">
+                Login into your account
+              </h1>
               <div className="flex flex-col gap-4 w-full">
                 <FormField
                   id="login-email-input"
@@ -101,6 +146,7 @@ const Login = () => {
                   Forgot your password?
                 </Link>
               </div>
+              {handleActivationError(values.email)}
               <Button
                 variant="contained"
                 color="info"
